@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 #endif
 using System;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Unimake.Business.DFe.Utility;
 using Unimake.Business.DFe.Xml.NFe;
@@ -26,6 +27,40 @@ namespace Unimake.Business.DFe.Servicos.NFCe
         /// </summary>
         private void MontarQrCode()
         {
+            //GAT TECNOLOGIA
+            EnviNFe = new EnviNFe().LerXML<EnviNFe>(ConteudoXML);           
+            String qr_code = "";
+            String urlQrCode_original = "";
+            String urlChave_original = "";
+
+            Regex regex_qrcode = new Regex("(<qrCode>)(.*?)(</qrCode>)");
+            Regex regex_url_consulta = new Regex("(<urlChave>)(.*?)(</urlChave>)");
+            Match match_qrcode = regex_qrcode.Match(ConteudoXML.InnerXml);
+            Match match_url_consulta = regex_url_consulta.Match(ConteudoXML.InnerXml);
+            if (match_qrcode.Success)
+            {
+                qr_code = match_qrcode.Groups[2].Value;
+            }
+            // Regex regex_cHashQRCode = new Regex("(<![[]CDATA[[])(.*?)(chNFe.*?)(cIdToken=)(.*?)(&cHashQRCode=)(.{40})(.*)");
+            Regex regex_cHashQRCode = new Regex("(.*?)([?]p=.*)");
+            //Regex regex_cIdTokenCSC = new Regex("(cIdToken=)(.*?)(&cHashQRCode=)(.*?)");
+            Match match_cIdTokenCSC = regex_cHashQRCode.Match(qr_code);
+            if (match_cIdTokenCSC.Success)
+            {
+                urlQrCode_original = match_cIdTokenCSC.Groups[1].Value;
+                // result.idToken= match_cIdTokenCSC.Groups[5].Value;
+                //  result.CSC = match_cIdTokenCSC.Groups[7].Value.Trim();
+            }
+            if (match_url_consulta.Success)
+            {
+                urlChave_original = match_url_consulta.Groups[2].Value;
+            }
+            else
+            {
+                urlChave_original = urlQrCode_original;
+            }
+           
+
             if (ConteudoXML.GetElementsByTagName("enviNFe").Count <= 0)
             {
                 throw new Exception("A tag obrigatória <enviNFe> não foi localizada no XML.");
@@ -41,6 +76,22 @@ namespace Unimake.Business.DFe.Servicos.NFCe
             foreach (XmlNode nodeNFe in nodeListNFe)
             {
                 var elementNFe = (XmlElement)nodeNFe;
+
+                //GAT TECNOLOGIA
+              
+                if (elementNFe.GetElementsByTagName("infNFeSupl").Count > 0)
+                {
+               
+                    // Encontrar todas as ocorrências da tag infNFeSupl
+                    XmlNodeList infNFeSuplNodes = ConteudoXML.GetElementsByTagName("infNFeSupl");
+
+                    while (infNFeSuplNodes.Count > 0)
+                    {
+                        XmlNode nodeToRemove = infNFeSuplNodes[0];
+                        nodeToRemove.ParentNode.RemoveChild(nodeToRemove);
+                    }
+                   
+                }
 
                 if (elementNFe.GetElementsByTagName("infNFeSupl").Count <= 0)
                 {
@@ -144,10 +195,18 @@ namespace Unimake.Business.DFe.Servicos.NFCe
                         TipoEmissao = (TipoEmissao)(int)tpEmis,
                         CodigoNumerico = cNF
                     };
-                    var chave = XMLUtility.MontarChaveNFe(ref conteudoChaveDFe);
-
+                    var chave = XMLUtility.MontarChaveNFe(ref conteudoChaveDFe);                   
                     var urlQrCode = (Configuracoes.TipoAmbiente == TipoAmbiente.Homologacao ? Configuracoes.UrlQrCodeHomologacao : Configuracoes.UrlQrCodeProducao);
                     var urlChave = (Configuracoes.TipoAmbiente == TipoAmbiente.Homologacao ? Configuracoes.UrlChaveHomologacao : Configuracoes.UrlChaveProducao);
+                    //GAT TECNOLOGIA
+                    if (!urlChave_original.Equals(""))
+                    {
+                        urlChave = urlChave_original;
+                    }
+                    if (!urlQrCode_original.Equals(""))
+                    {
+                        urlQrCode = urlQrCode_original;
+                    }
                     string paramLinkQRCode;
 
                     if (tpEmis == TipoEmissao.ContingenciaOffLine)
