@@ -209,65 +209,151 @@ namespace Unimake.Business.DFe.Xml.NFe
         [XmlAttribute(AttributeName = "versao", DataType = "token")]
         public string Versao { get; set; }
 
+#if INTEROP
+        [XmlElement("ide", Order = 1)]
+#else
         [XmlElement("ide")]
+#endif
         public Ide Ide { get; set; }
 
+#if INTEROP
+        [XmlElement("emit", Order = 2)]
+#else
         [XmlElement("emit")]
+#endif
         public Emit Emit { get; set; }
 
         /// <summary>
         /// Esta TAG é de uso exclusivo do FISCO, não precisa gerar nada, só temos ela para caso de alguma necessidade de desserialização.
         /// </summary>
+#if INTEROP
+        [XmlElement("avulsa", Order = 3)]
+#else
         [XmlElement("avulsa")]
+#endif
         public Avulsa Avulsa { get; set; }
 
+#if INTEROP
+        [XmlElement("dest", Order = 4)]
+#else
         [XmlElement("dest")]
+#endif
         public Dest Dest { get; set; }
 
+#if INTEROP
+        [XmlElement("retirada", Order = 5)]
+#else
         [XmlElement("retirada")]
+#endif
         public Retirada Retirada { get; set; }
 
+#if INTEROP
+        [XmlElement("entrega", Order = 6)]
+#else
         [XmlElement("entrega")]
+#endif
         public Entrega Entrega { get; set; }
 
+#if INTEROP
+        [XmlElement("autXML", Order = 7)]
+#else
         [XmlElement("autXML")]
+#endif
         public List<AutXML> AutXML { get; set; }
 
+#if INTEROP
+        [XmlElement("det", Order = 8)]
+#else
         [XmlElement("det")]
+#endif
         public List<Det> Det { get; set; }
 
+#if INTEROP
+        [XmlElement("total", Order = 9)]
+#else
         [XmlElement("total")]
+#endif
         public Total Total { get; set; }
 
+#if INTEROP
+        [XmlElement("transp", Order = 10)]
+#else
         [XmlElement("transp")]
+#endif
         public Transp Transp { get; set; }
 
+#if INTEROP
+        [XmlElement("cobr", Order = 11)]
+#else
         [XmlElement("cobr")]
+#endif
         public Cobr Cobr { get; set; }
 
+#if INTEROP
+        [XmlElement("pag", Order = 12)]
+#else
         [XmlElement("pag")]
+#endif
         public Pag Pag { get; set; }
 
+#if INTEROP
+        [XmlElement("infIntermed", Order = 13)]
+#else
         [XmlElement("infIntermed")]
+#endif
         public InfIntermed InfIntermed { get; set; }
 
+#if INTEROP
+        [XmlElement("infAdic", Order = 14)]
+#else
         [XmlElement("infAdic")]
+#endif
         public InfAdic InfAdic { get; set; }
 
+#if INTEROP
+        [XmlElement("exporta", Order = 15)]
+#else
         [XmlElement("exporta")]
+#endif
         public Exporta Exporta { get; set; }
 
+#if INTEROP
+        [XmlElement("compra", Order = 16)]
+#else
         [XmlElement("compra")]
+#endif
         public Compra Compra { get; set; }
 
+#if INTEROP
+        [XmlElement("cana", Order = 17)]
+#else
         [XmlElement("cana")]
+#endif
         public Cana Cana { get; set; }
 
+#if INTEROP
+        [XmlElement("infRespTec", Order = 18)]
+#else
         [XmlElement("infRespTec")]
+#endif
         public InfRespTec InfRespTec { get; set; }
 
+#if INTEROP
+        [XmlElement("infSolicNFF", Order = 19)]
+#else
         [XmlElement("infSolicNFF")]
+#endif
         public InfSolicNFF InfSolicNFF { get; set; }
+
+        /// <summary>
+        /// Grupo de tags de produtos agropecuários: animais, vegetais e florestais
+        /// </summary>
+#if INTEROP
+        [XmlElement("agropecuario", Order = 20)]
+#else
+        [XmlElement("agropecuario")]
+#endif
+        public Agropecuario Agropecuario { get; set; }
 
         [XmlAttribute(AttributeName = "Id", DataType = "ID")]
         public string Id
@@ -301,6 +387,11 @@ namespace Unimake.Business.DFe.Xml.NFe
                 };
                 ChaveField = XMLUtility.MontarChaveNFe(ref conteudoChaveDFe);
                 Ide.CDV = conteudoChaveDFe.DigitoVerificador;
+
+                if (InfRespTec != null)
+                {
+                    InfRespTec.GerarHashCSRT(ChaveField);
+                }
 
                 return ChaveField;
             }
@@ -903,7 +994,9 @@ namespace Unimake.Business.DFe.Xml.NFe
 
         public bool ShouldSerializeIEST() => !string.IsNullOrWhiteSpace(IEST);
 
-        public bool ShouldSerializeCNAE() => !string.IsNullOrWhiteSpace(CNAE);
+        public bool ShouldSerializeIM() => !string.IsNullOrWhiteSpace(IM);
+
+        public bool ShouldSerializeCNAE() => !string.IsNullOrWhiteSpace(CNAE) && !string.IsNullOrWhiteSpace(IM);
 
         #endregion
     }
@@ -2691,10 +2784,10 @@ namespace Unimake.Business.DFe.Xml.NFe
         public string Dist { get; set; }
 
         [XmlElement("anoMod")]
-        public int AnoMod { get; set; }
+        public string AnoMod { get; set; }
 
         [XmlElement("anoFab")]
-        public int AnoFab { get; set; }
+        public string AnoFab { get; set; }
 
         [XmlElement("tpPint")]
         public string TpPint { get; set; }
@@ -7614,8 +7707,13 @@ namespace Unimake.Business.DFe.Xml.NFe
         [XmlElement("placa")]
         public string Placa { get; set; }
 
+#if INTEROP
         [XmlElement("UF")]
-        public UFBrasil UF { get; set; }
+        public UFBrasil UF { get; set; } = UFBrasil.NaoDefinido;
+#else
+        [XmlElement("UF")]
+        public UFBrasil? UF { get; set; }
+#endif
 
         [XmlElement("RNTC")]
         public string RNTC { get; set; }
@@ -7623,6 +7721,8 @@ namespace Unimake.Business.DFe.Xml.NFe
         #region ShouldSerialize
 
         public bool ShouldSerializeRNTC() => !string.IsNullOrWhiteSpace(RNTC);
+
+        public bool ShouldSerializeUF() => UF != null && UF != UFBrasil.NaoDefinido;
 
         #endregion
     }
@@ -8656,6 +8756,7 @@ namespace Unimake.Business.DFe.Xml.NFe
     public class InfRespTec
     {
         private string XContatoField;
+        private string HashCSRTField;
 
         [XmlElement("CNPJ")]
         public string CNPJ { get; set; }
@@ -8676,14 +8777,55 @@ namespace Unimake.Business.DFe.Xml.NFe
         [XmlElement("idCSRT")]
         public string IdCSRT { get; set; }
 
-        [XmlElement("hashCSRT", DataType = "base64Binary")]
-        public byte[] HashCSRT { get; set; }
+        /// <summary>
+        /// Você pode informar o conteúdo já convertido para Sha1Hash + Base64, ou pode informar somente a concatenação do CSRT + Chave de Acesso que a DLL já converte para Sha1Hash + Base64
+        /// </summary>
+        [XmlElement("hashCSRT")]
+        public string HashCSRT
+        {
+
+            get
+            {
+                if (string.IsNullOrWhiteSpace(HashCSRTField) || Converter.IsSHA1Base64(HashCSRTField))
+                {
+                    return HashCSRTField;
+                }
+                else
+                {
+                    return Converter.CalculateSHA1Hash(HashCSRTField);
+                }
+            }
+            set => HashCSRTField = value;
+        }
+
+        /// <summary>
+        /// Esta propriedade deve ser utilizada para informar o CSRT sem o hast, informando ela a DLL irá gerar o conteúdo da tag hashCSRT automaticamente
+        /// </summary>
+        [XmlIgnore]
+        public string CSRT { get; set; }
+
+        /// <summary>
+        /// Gerar o conteúdo da tag HashCSRT
+        /// </summary>
+        /// <param name="chaveAcesso"></param>
+        public void GerarHashCSRT(string chaveAcesso)
+        {
+            if (string.IsNullOrWhiteSpace(CSRT))
+            {
+                return;
+            }
+
+            if (!Converter.IsSHA1Base64(HashCSRT))
+            {
+                HashCSRT = Converter.CalculateSHA1Hash(CSRT + chaveAcesso);
+            }
+        }
 
         #region ShouldSerialize
 
         public bool ShouldSerializeIdCSRT() => !string.IsNullOrWhiteSpace(IdCSRT);
 
-        public bool ShouldSerializeHashCSRT() => HashCSRT != null;
+        public bool ShouldSerializeHashCSRT() => !string.IsNullOrWhiteSpace(HashCSRT);
 
         #endregion
     }
@@ -8715,5 +8857,100 @@ namespace Unimake.Business.DFe.Xml.NFe
 
         [XmlElement("urlChave")]
         public string UrlChave { get; set; }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.Agropecuario")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public class Agropecuario
+    {
+        /// <summary>
+        /// Grupo de defensivo agrícola / agrotóxico
+        /// </summary>
+        [XmlElement("defensivo")]
+        public Defensivo Defensivo { get; set; }
+
+        /// <summary>
+        /// Grupo de Guia de Trânsito
+        /// </summary>
+        [XmlElement("guiaTransito")]
+        public GuiaTransito GuiaTransito { get; set; }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.Defensivo")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+
+    public class Defensivo
+    {
+        /// <summary>
+        /// Informar o número da receita ou receituário de aplicação do defensivo
+        /// </summary>
+        [XmlElement("nReceituario")]
+        public string NReceituario { get; set; }
+
+        /// <summary>
+        /// Informar o CPF do Responsável Técnico legalmente habilitado, como engenheiro agrônomo, engenheiro florestal e técnico agrícola.
+        /// </summary>
+        [XmlElement("CPFRespTec")]
+        public string CPFRespTec { get; set; }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.GuiaTransito")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public class GuiaTransito
+    {
+        /// <summary>
+        /// Tipo da guia
+        /// </summary>
+        [XmlElement("tpGuia")]
+        public TipoGuiaTransito TpGuia { get; set; }
+
+        /// <summary>
+        /// UF de emissão da guia
+        /// </summary>
+#if INTEROP
+        [XmlElement("UF")]
+        public UFBrasil UFGuia { get; set; } = UFBrasil.NaoDefinido;
+#else
+        [XmlElement("UF")]
+        public UFBrasil? UFGuia { get; set; }
+#endif
+
+        /// <summary>
+        /// Informar sempre que houver a série da guia
+        /// </summary>
+        [XmlElement("serieGuia")]
+        public string SerieGuia { get; set; }
+
+        /// <summary>
+        /// Número da Guia
+        /// </summary>
+        [XmlElement("nGuia")]
+        public string NGuia { get; set; }
+
+        #region ShouldSerialize
+
+#if INTEROP
+        public bool ShouldSerializeUFGuia() => UFGuia != UFBrasil.NaoDefinido;
+#else
+        public bool ShouldSerializeUFGuia() => UFGuia != null;
+#endif
+        public bool ShouldSerializeSerieGuia() => !string.IsNullOrWhiteSpace(SerieGuia);
+
+        #endregion
     }
 }

@@ -17,7 +17,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     {
         private static CultureInfo InfoField = new CultureInfo("pt-BR");
 
-        public static CultureInfo Info 
+        public static CultureInfo Info
         {
             get
             {
@@ -28,6 +28,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         }
     }
 
+    /// <summary>
+    /// Informações de identificação do evento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento")]
@@ -46,6 +49,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public string VerProc { get; set; }
     }
 
+    /// <summary>
+    /// Informações de identificação do contribuinte 
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeContri")]
@@ -54,13 +60,34 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [Serializable()]
     public class IdeContri
     {
+        /// <summary>
+        /// Preencher com o código correspondente ao tipo de inscrição do contribuinte:
+        /// 1 - CNPJ;
+        /// 2 - CPF.
+        /// </summary>
         [XmlElement("tpInsc")]
         public TiposInscricao TpInsc { get; set; }
 
+        /// <summary>
+        /// Informar o número de inscrição do contribuinte de acordo com o tipo de
+        /// inscrição indicado no campo { tpInsc }.
+        /// Validação: Se {tpInsc
+        /// } for igual a[1], deve ser um número de CNPJ válido.
+        /// Se
+        /// { tpInsc } for igual a[2], deve ser um CPF válido.
+        /// Se for um CNPJ deve ser informada a raiz/base de oito posições, exceto se a
+        /// natureza jurídica do contribuinte declarante for de Administração Pública
+        /// Direta Federal, ou seja, [101-5, 104-0, 107-4, 116-3 ou 134-1], situação em
+        /// que o campo deve ser informado com o CNPJ completo (14 posições).
+        /// </summary>
         [XmlElement("nrInsc")]
         public string NrInsc { get; set; }
     }
 
+    /// <summary>
+    /// Informações sobre os tipos de serviços
+    /// constantes da nota fiscal
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoTpServ")]
@@ -156,13 +183,13 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public double VlrNRetAdic { get; set; }
 
         [XmlElement("vlrNRetAdic")]
-        public string vlrNRetAdicField
+        public string VlrNRetAdicField
         {
             get => VlrNRetAdic.ToString("F2", CultureInfoReinf.Info);
             set => VlrNRetAdic = double.Parse(value.ToString(), CultureInfoReinf.Info);
         }
 
-        #region Should Serialize
+        #region ShouldSerialize
 
         public bool ShouldSerializeVlrRetSubField() => VlrRetSub > 0;
 
@@ -178,9 +205,18 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         public bool ShouldSerializeVlrNRetAdicField() => VlrNRetAdic > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
+    /// <summary>
+    /// Informações de processos relacionados a não retenção de contribuição
+    /// previdenciária.
+    /// Validação: A soma dos valores informados no campo {valorPrinc
+    /// }
+    /// deste
+    /// grupo, com exceção dos valores informados para {indSusp} = [92], deve ser
+    /// igual a {vlrTotalNRetPrinc}
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcRetPr")]
@@ -189,17 +225,19 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [Serializable()]
     public class InfoProcRetPr
     {
+        /// <summary>
+        /// Preencher com o código correspondente ao tipo de processo:
+        /// 1 - Administrativo;
+        /// 2 - Judicial.
+        /// </summary>
         [XmlElement("tpProcRetPrinc")]
         public TipoProcesso TpProcRetPrinc { get; set; }
-
 
         [XmlElement("nrProcRetPrinc")]
         public string NrProcRetPrinc { get; set; }
 
-
         [XmlElement("codSuspPrinc")]
         public string CodSuspPrinc { get; set; }
-
 
         [XmlIgnore]
         public double ValorPrinc { get; set; }
@@ -215,9 +253,18 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         public bool ShouldSerializeCodSuspPrinc() => !string.IsNullOrEmpty(CodSuspPrinc);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
+    /// <summary>
+    /// Informações de processos relacionados a não retenção de contribuição
+    /// previdenciária adicional.
+    /// Validação: A soma dos valores informados no campo { valorAdic}
+    /// deste
+    /// grupo, com exceção dos valores informados para {indSusp
+    /// } = [92], deve ser
+    /// igual a { vlrTotalNRetAdic }.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcRetAd")]
@@ -232,12 +279,27 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         [XmlElement("nrProcRetAdic")]
         public string NrProcRetAdic { get; set; }
 
+        /// <summary>
+        /// - Código do indicativo da suspensão atribuído pelo contribuinte. Este campo
+        /// deve ser utilizado se, num mesmo processo, houver mais de uma matéria
+        /// tributária objeto de contestação e as decisões forem diferentes para cada uma.
+        /// Validação: Preenchimento obrigatório se houver mais de uma informação de
+        /// indicativo de suspensão para um mesmo processo.
+        /// Se informado, deve constar na tabela de processos (R-1070), campo
+        /// {codSusp}
+        ///e deve estar vinculado ao número do processo informado em
+        ///{nrProcRetAdic}.
+        /// </summary>
         [XmlElement("codSuspAdic")]
         public string CodSuspAdic { get; set; }
 
         [XmlIgnore]
         public double ValorAdic { get; set; }
 
+        /// <summary>
+        /// Valor da retenção de contribuição previdenciária adicional que deixou de ser
+        ///efetuada em função de processo administrativo ou judicial.
+        /// </summary>
         [XmlElement("valorAdic")]
         public string ValorAdicField
         {
@@ -249,9 +311,12 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         public bool ShouldSerializeCodSuspAdic() => !string.IsNullOrEmpty(CodSuspAdic);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
+    /// <summary>
+    /// Endereço do beneficiário residente ou domiciliado no exterior
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EndExt")]
@@ -285,23 +350,23 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeDscLograd() => !string.IsNullOrEmpty(DscLograd);
+        public bool ShouldSerializeDscLograd() => !string.IsNullOrEmpty(DscLograd);
 
-        public bool ShouldSereializeNrLograd() => !string.IsNullOrEmpty(NrLograd);
+        public bool ShouldSerializeNrLograd() => !string.IsNullOrEmpty(NrLograd);
 
-        public bool ShouldSereializeComplem() => !string.IsNullOrEmpty(Complem);
+        public bool ShouldSerializeComplem() => !string.IsNullOrEmpty(Complem);
 
-        public bool ShouldSereializeBairro() => !string.IsNullOrEmpty(Bairro);
+        public bool ShouldSerializeBairro() => !string.IsNullOrEmpty(Bairro);
 
-        public bool ShouldSereializeCidade() => !string.IsNullOrEmpty(Cidade);
+        public bool ShouldSerializeCidade() => !string.IsNullOrEmpty(Cidade);
 
-        public bool ShouldSereializeEstado() => !string.IsNullOrEmpty(Estado);
+        public bool ShouldSerializeEstado() => !string.IsNullOrEmpty(Estado);
 
-        public bool ShouldSereializeCodPostal() => !string.IsNullOrEmpty(CodPostal);
+        public bool ShouldSerializeCodPostal() => !string.IsNullOrEmpty(CodPostal);
 
-        public bool ShouldSereializeTelef() => !string.IsNullOrEmpty(Telef);
+        public bool ShouldSerializeTelef() => !string.IsNullOrEmpty(Telef);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 }

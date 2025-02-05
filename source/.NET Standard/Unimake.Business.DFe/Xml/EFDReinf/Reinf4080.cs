@@ -10,6 +10,9 @@ using System.Collections.Generic;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-4080 - Retenção no recebimento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf4080")]
@@ -19,6 +22,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evt4080RetencaoRecebimento/v2_01_02", IsNullable = false)]
     public class Reinf4080 : XMLBase
     {
+        /// <summary>
+        /// Evento Retenção no Recebimento
+        /// </summary>
         [XmlElement("evtRetRec")]
         public EvtRetRec EvtRetRec { get; set; }
 
@@ -26,6 +32,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento Retenção no Recebimento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtRetRec")]
@@ -34,28 +43,28 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class EvtRetRec : ReinfEventoBase
     {
         [XmlElement("ideEvento")]
-        public IdeEventoReinf4080 IdeEvento { get; set; }
+        public IdeEvento4080 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
 
         [XmlElement("ideEstab")]
-        public IdeEstabReinf4080 IdeEstab { get; set; }
+        public IdeEstab4080 IdeEstab { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf4080")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento4080")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf4080 : IdeEventoReinf4010 { }
+    public class IdeEvento4080 : IdeEvento4010 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstabReinf4080")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstab4080")]
     [ComVisible(true)]
 #endif
-    public class IdeEstabReinf4080
+    public class IdeEstab4080
     {
         [XmlElement("tpInscEstab")]
         public TipoInscricaoEstabelecimento TpInscEstab { get; set; }
@@ -173,9 +182,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeObserv() => !string.IsNullOrEmpty(Observ);
+        public bool ShouldSerializeObserv() => !string.IsNullOrEmpty(Observ);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -236,14 +245,8 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         [XmlElement("observ")]
         public string Observ {  get; set; }
 
-        #region ShouldSerialize
-
-        public bool ShouldSereializeObserv() => !string.IsNullOrEmpty(Observ);
-
-        #endregion
-
         [XmlElement("infoProcRet")]
-        public List<InfoProcRetReinf4080> InfoProcRet { get; set; }
+        public List<InfoProcRet4080> InfoProcRet { get; set; }
 
 #if INTEROP
 
@@ -251,11 +254,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddInfoProcRet(InfoProcRetReinf4080 item)
+        public void AddInfoProcRet(InfoProcRet4080 item)
         {
             if (InfoProcRet == null)
             {
-                InfoProcRet = new List<InfoProcRetReinf4080>();
+                InfoProcRet = new List<InfoProcRet4080>();
             }
 
             InfoProcRet.Add(item);
@@ -266,7 +269,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da InfoProcRet</returns>
-        public InfoProcRetReinf4080 GetInfoProcRet(int index)
+        public InfoProcRet4080 GetInfoProcRet(int index)
         {
             if ((InfoProcRet?.Count ?? 0) == 0)
             {
@@ -281,12 +284,17 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         public int GetInfoProcRetCount => (InfoProcRet != null ? InfoProcRet.Count : 0);
 #endif
+
+        #region ShouldSerialize
+        public bool ShouldSerializeObserv() => !string.IsNullOrEmpty(Observ);
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcRetReinf4080")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcRet4080")]
     [ComVisible(true)]
 #endif
-    public class InfoProcRetReinf4080 : InfoProcRetReinf4040 { }
+    public class InfoProcRet4080 : InfoProcRet4040 { }
 }

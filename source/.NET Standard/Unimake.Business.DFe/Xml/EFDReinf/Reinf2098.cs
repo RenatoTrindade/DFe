@@ -9,6 +9,9 @@ using Unimake.Business.DFe.Servicos;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-2098 - Reabertura dos eventos da série R-2000
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2098")]
@@ -18,6 +21,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtReabreEvPer/v2_01_02", IsNullable = false)]
     public class Reinf2098 : XMLBase
     {
+        /// <summary>
+        /// Evento de reabertura de eventos periódicos 
+        /// </summary>
         [XmlElement("evtReabreEvPer")]
         public EvtReabreEvPer EvtReabreEvPer { get; set; }
 
@@ -25,6 +31,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento de reabertura de eventos periódicos 
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtReabreEvPer")]
@@ -33,7 +42,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class EvtReabreEvPer : ReinfEventoBase
     {
         [XmlElement("ideEvento")]
-        public IdeEventoReinf2098 IdeEvento { get; set; }
+        public IdeEvento2098 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
@@ -41,10 +50,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf2098")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento2098")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf2098
+    public class IdeEvento2098
     {
         [XmlIgnore]
 #if INTEROP

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using Unimake.Business.DFe.Servicos;
 
 namespace Unimake.Business.DFe
@@ -27,6 +28,36 @@ namespace Unimake.Business.DFe
         private string _ResponseMediaType;
         private string _CodigoTom;
         private bool _UsaCertificadoDigital;
+        private string _Host;
+        private string _ApiKey;
+        private HttpContent _HttpContent;
+
+        /// <summary>
+        /// HttpContent - Usado para a comunicação web POST
+        /// </summary>
+        public HttpContent HttpContent
+        {
+            get => _HttpContent;
+            set => _HttpContent = value;
+        }
+
+        /// <summary>
+        /// Host - Header API
+        /// </summary>
+        public string ApiKey
+        {
+            get => _ApiKey;
+            set => _ApiKey= value;
+        }
+
+        /// <summary>
+        /// Host - Header API
+        /// </summary>
+        public string Host
+        {
+            get => _Host;
+            set => _Host = value;
+        }
 
         /// <summary>
         /// Utiliza ou não o certificado digital

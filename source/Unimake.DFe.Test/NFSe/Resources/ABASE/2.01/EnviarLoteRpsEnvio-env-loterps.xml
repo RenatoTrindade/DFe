@@ -3,7 +3,7 @@
   <LoteRps Id="ID21" versao="2.01">
     <NumeroLote>21</NumeroLote>
     <CpfCnpj>
-      <Cnpj>24629230000182</Cnpj>
+      <Cnpj>99999999999999</Cnpj>
     </CpfCnpj>
     <InscricaoMunicipal>1167700</InscricaoMunicipal>
     <QuantidadeRps>1</QuantidadeRps>
@@ -40,26 +40,26 @@
             <CodigoCnae>123</CodigoCnae>
             <Discriminacao>Serv.Exp(Arm/Seg): ELQ5155 Cesv: 336748 Nro.Recebimento.: 00575450 11 ESTADIA 297,00 01 MOVTO/SEGURO/ROD. 253,00 01 PERIG. 120,00 Impostos nesta NF: Federais: PIS 0,65%: 4,36 COFINS 3,00%: 20,10 IR 4,80%: 32,16 CSLL 2,88%: 19,30 Municipais: ISS 5,00%: 33,50</Discriminacao>
             <CodigoMunicipio>5003207</CodigoMunicipio>
-            <ExigibilidadeISS>1</ExigibilidadeISS>
+            <ExigibilidadeISS>8</ExigibilidadeISS>
             <MunicipioIncidencia>5003207</MunicipioIncidencia>
           </Servico>
           <Prestador>
             <CpfCnpj>
-              <Cnpj>24629230000182</Cnpj>
+              <Cnpj>99999999999999</Cnpj>
             </CpfCnpj>
             <InscricaoMunicipal>1167700</InscricaoMunicipal>
           </Prestador>
           <Tomador>
             <IdentificacaoTomador>
               <CpfCnpj>
-                <Cnpj>02446899000104</Cnpj>
+                <Cnpj>99999999999999</Cnpj>
               </CpfCnpj>
             </IdentificacaoTomador>
-            <RazaoSocial>TRANSPORTES BORGO S/A.</RazaoSocial>
+            <RazaoSocial>xxxxxxxxxxxx</RazaoSocial>
             <Endereco>
-              <Endereco>AV. FAGUNDES FILHO, 141 - 1 ANDAR</Endereco>
+              <Endereco>xxxxxxxxxxxxxxxxxx</Endereco>
               <Numero>123</Numero>
-              <Bairro>SAO JUDAS</Bairro>
+              <Bairro>xxxxxxxxxxxxxxx</Bairro>
               <CodigoMunicipio>3550308</CodigoMunicipio>
               <Uf>SP</Uf>
               <CodigoPais>1058</CodigoPais>

@@ -6,10 +6,12 @@ using System.Runtime.InteropServices;
 using System;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
-using System.Collections.Generic;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-4099 - Fechamento/reabertura dos eventos da série R-4000
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf4099")]
@@ -19,6 +21,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evt4099FechamentoDirf/v2_01_02", IsNullable = false)]
     public class Reinf4099 : XMLBase
     {
+        /// <summary>
+        /// Evento de fechamento
+        /// </summary>
         [XmlElement("evtFech")]
         public EvtFech EvtFech { get; set; }
 
@@ -26,6 +31,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento de fechamento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtFech")]
@@ -34,66 +42,38 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class EvtFech : ReinfEventoBase
     {
         [XmlElement("ideEvento")]
-        public IdeEventoReinf4099 IdeEvento { get; set; }
+        public IdeEvento4099 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
 
         [XmlElement("ideRespInf")]
-        public IdeRespInfReinf4099 IdeRespInf { get; set; }
+        public IdeRespInf4099 IdeRespInf { get; set; }
 
         [XmlElement("infoFech")]
-        public InfoFechReinf4099 InfoFech { get; set; }
+        public InfoFech4099 InfoFech { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf4099")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento4099")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf4099
-    {
-        [XmlIgnore]
-#if INTEROP
-        public DateTime PerApur { get; set; }
-#else
-        public DateTimeOffset PerApur { get; set; }
-#endif
-
-        [XmlElement("perApur")]
-        public string PerApurField
-        {
-            get => PerApur.ToString("yyyy-MM");
-#if INTEROP
-            set => PerApur = DateTime.Parse(value);
-#else
-            set => PerApur = DateTimeOffset.Parse(value);
-#endif
-        }
-
-        [XmlElement("tpAmb")]
-        public TipoAmbiente TpAmb { get; set; }
-
-        [XmlElement("procEmi")]
-        public ProcessoEmissaoReinf ProcEmi { get; set; }
-
-        [XmlElement("verProc")]
-        public string VerProc { get; set; }
-    }
+    public class IdeEvento4099 : IdeEvento2099 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeRespInfReinf4099")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeRespInf4099")]
     [ComVisible(true)]
 #endif
-    public class IdeRespInfReinf4099 : IdeRespInf { }
+    public class IdeRespInf4099 : IdeRespInf2099 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoFechReinf4099")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoFech4099")]
     [ComVisible(true)]
 #endif
-    public class InfoFechReinf4099
+    public class InfoFech4099
     {
         [XmlElement("fechRet")]
         public FechamentoRetencao FechRet { get; set; }

@@ -7,19 +7,24 @@ using System;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
 using System.Collections.Generic;
-using static Unimake.Business.DFe.Xml.EFDReinf.TipoAjuste;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-2060 - Contribuição previdenciária sobre a receita bruta - CPRB
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2060")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2060 ")]
     [ComVisible(true)]
 #endif
     [Serializable()]
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtInfoCPRB/v2_01_02", IsNullable = false)]
     public class Reinf2060 : XMLBase
     {
+        /// <summary>
+        /// Evento da contribuição previdenciária sobre a receita bruta - CPRB
+        /// </summary>
         [XmlElement("evtCPRB")]
         public EvtCPRB EvtCPRB { get; set; }
 
@@ -27,6 +32,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento da contribuição previdenciária sobre a receita bruta - CPRB
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtCPRB")]
@@ -35,7 +43,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class EvtCPRB : ReinfEventoBase
     {
         [XmlElement("ideEvento")]
-        public IdeEventoReinf2060 IdeEvento { get; set; }
+        public IdeEvento2060 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
@@ -46,35 +54,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf2060")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento2060")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf2060
-    {
-        [XmlElement("indRetif")]
-        public IndicativoRetificacao IndRetif { get; set; }
-
-        [XmlElement("nrRecibo")]
-        public string NrRecibo { get; set; }
-
-        [XmlElement("perApur")]
-        public string PerApur { get; set; }
-
-        [XmlElement("tpAmb")]
-        public TipoAmbiente TpAmb { get; set; }
-
-        [XmlElement("procEmi")]
-        public ProcessoEmissaoReinf ProcEmi { get; set; }
-
-        [XmlElement("verProc")]
-        public string verProc { get; set; }
-
-        #region ShouldSerialize
-
-        public bool ShouldSereializeNrRecibo() => !string.IsNullOrEmpty(NrRecibo);
-
-        #endregion
-    }
+    public class IdeEvento2060 : IdeEvento2055 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
@@ -84,15 +67,15 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class InfoCPRB
     {
         [XmlElement("ideEstab")]
-        public IdeEstabReinf2060 IdeEstab { get; set; }
+        public IdeEstab2060 IdeEstab { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstabReinf2060")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstab2060")]
     [ComVisible(true)]
 #endif
-    public class IdeEstabReinf2060
+    public class IdeEstab2060
     {
 
         [XmlElement("tpInscEstab")]
@@ -173,9 +156,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCPRBSuspTotal() => VlrCPRBSuspTotal > 0;
+        public bool ShouldSerializeVlrCPRBSuspTotalField() => VlrCPRBSuspTotal > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -279,7 +262,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
 
         [XmlElement("infoProc")]
-        public List<InfoProcReinf2060> InfoProc { get; set; }
+        public List<InfoProc2060> InfoProc { get; set; }
 
 #if INTEROP
 
@@ -287,11 +270,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddInfoProc(InfoProcReinf2060 item)
+        public void AddInfoProc(InfoProc2060 item)
         {
             if (InfoProc == null)
             {
-                InfoProc = new List<InfoProcReinf2060>();
+                InfoProc = new List<InfoProc2060>();
             }
 
             InfoProc.Add(item);
@@ -302,7 +285,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da InfoProc</returns>
-        public InfoProcReinf2060 GetInfoProc(int index)
+        public InfoProc2060 GetInfoProc(int index)
         {
             if ((InfoProc?.Count ?? 0) == 0)
             {
@@ -318,11 +301,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public int GetInfoProcCount => (InfoProc != null ? InfoProc.Count : 0);
 #endif
 
-        #region ShoulSerialize
+        #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCPRBapur() => VlrCPRBapur > 0;
+        public bool ShouldSerializeVlrCPRBapurField() => VlrCPRBapur > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -369,39 +352,39 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
         }
 
+
+    }
+
 #if INTEROP
         [ClassInterface(ClassInterfaceType.AutoDual)]
-        [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcReinf2060")]
+        [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProc2060")]
         [ComVisible(true)]
 #endif
-        public class InfoProcReinf2060
+    public class InfoProc2060
+    {
+        [XmlElement("tpProc")]
+        public TipoProcesso TpProc { get; set; }
+
+        [XmlElement("nrProc")]
+        public string NrProc { get; set; }
+
+        [XmlElement("codSusp")]
+        public string CodSusp { get; set; }
+
+        [XmlIgnore]
+        public double VlrCPRBSusp { get; set; }
+
+        [XmlElement("vlrCPRBSusp")]
+        public string VlrCPRBSuspField
         {
-            [XmlElement("tpProc")]
-            public TipoProcesso TpProc { get; set; }
-
-            [XmlElement("nrProc")]
-            public string NrProc { get; set; }
-
-            [XmlElement("codSusp")]
-            public string CodSusp { get; set; } 
-
-            [XmlIgnore]
-            public double VlrCPRBSusp { get; set; }
-
-            [XmlElement("vlrCPRBSusp")]
-            public string VlrCPRBSuspField
-            {
-                get => VlrCPRBSusp.ToString("F2", CultureInfoReinf.Info);
-                set => VlrCPRBSusp = double.Parse(value.ToString(), CultureInfoReinf.Info);
-            }
-
-            #region ShouldSerialize
-
-            public bool ShouldSereializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
-
-            public bool ShouldSerializeVlrCPRBSusp() => VlrCPRBSusp > 0;
-
-            #endregion
+            get => VlrCPRBSusp.ToString("F2", CultureInfoReinf.Info);
+            set => VlrCPRBSusp = double.Parse(value.ToString(), CultureInfoReinf.Info);
         }
+
+        #region ShouldSerialize
+        
+        public bool ShouldSerializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
+
+        #endregion ShouldSerialize
     }
 }

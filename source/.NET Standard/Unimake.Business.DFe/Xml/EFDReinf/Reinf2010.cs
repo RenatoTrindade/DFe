@@ -10,16 +10,21 @@ using Unimake.Business.DFe.Servicos;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-2010 - Retenção de contribuição previdenciária - serviços tomados
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2010")]
     [ComVisible(true)]
 #endif
-
     [Serializable()]
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtTomadorServicos/v2_01_02", IsNullable = false)]
     public class Reinf2010 : XMLBase
     {
+        /// <summary>
+        /// Evento serviços tomados
+        /// </summary>
         [XmlElement("evtServTom")]
         public EvtServTom EvtServTom { get; set; }
 
@@ -35,23 +40,33 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [Serializable()]
     public class EvtServTom : ReinfEventoBase
     {
+        /// <summary>
+        /// Informações de identificação do evento
+        /// </summary>
         [XmlElement("ideEvento")]
-        public IdeEventoReinf2010 IdeEvento { get; set; }
+        public IdeEvento2010 IdeEvento { get; set; }
 
+        /// <summary>
+        /// Informações de identificação do Contribuinte
+        /// </summary>
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
 
+        /// <summary>
+        /// Serviços tomados com cessão de mão de
+        ///obra ou empreitada
+        /// </summary>
         [XmlElement("infoServTom")]
         public InfoServTom InfoServTom { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf2010")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento2010")]
     [ComVisible(true)]
 #endif
     [Serializable()]
-    public class IdeEventoReinf2010
+    public class IdeEvento2010
     {
         [XmlElement("indRetif")]
         public IndicativoRetificacao IndRetif { get; set; }
@@ -65,8 +80,23 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// <summary>
         /// Informar o ano/mês de referência das informações no formato AAAA-MM. Validação: Deve ser um ano/mês válido para o qual haja informações do contribuinte encaminhadas através do evento R-1000.
         /// </summary>
+        [XmlIgnore]
+#if INTEROP
+        public DateTime PerApur { get; set; }
+#else
+        public DateTimeOffset PerApur { get; set; }
+#endif
+
         [XmlElement("perApur")]
-        public string PerApur { get; set; }
+        public string PerApurField
+        {
+            get => PerApur.ToString("yyyy-MM");
+#if INTEROP
+            set => PerApur = DateTime.Parse(value);
+#else
+            set => PerApur = DateTimeOffset.Parse(value);
+#endif
+        }
 
         [XmlElement("tpAmb")]
         public TipoAmbiente TpAmb { get; set; }
@@ -79,11 +109,15 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeNrRecibo() => !string.IsNullOrEmpty(NrRecibo);
+        public bool ShouldSerializeNrRecibo() => !string.IsNullOrEmpty(NrRecibo);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
+    /// <summary>
+    /// Serviços tomados com cessão de mão de
+    /// obra ou empreitada
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoServTom")]
@@ -92,6 +126,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [Serializable()]
     public class InfoServTom
     {
+        /// <summary>
+        /// Identificação do estabelecimento/obra
+        /// contratante dos serviços
+        /// </summary>
         [XmlElement("ideEstabObra")]
         public IdeEstabObra IdeEstabObra { get; set; }
     }
@@ -105,7 +143,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class IdeEstabObra
     {
         [XmlElement("tpInscEstab")]
-        public TipoInscricaoEstabelecimento tpInscEstab { get; set; }
+        public TipoInscricaoEstabelecimento TpInscEstab { get; set; }
 
         /// <summary>
         /// Validação: A inscrição informada deve ser compatível com o {tpInscEstab}.
@@ -200,7 +238,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public IndicativoCPRB IndCPRB { get; set; }
 
         [XmlElement("nfs")]
-        public List<NfsReinf2010> Nfs { get; set; }
+        public List<Nfs2010> Nfs { get; set; }
 
 #if INTEROP
 
@@ -208,11 +246,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddNfs(NfsReinf2010 item)
+        public void AddNfs(Nfs2010 item)
         {
             if (Nfs == null)
             {
-                Nfs = new List<NfsReinf2010>();
+                Nfs = new List<Nfs2010>();
             }
 
             Nfs.Add(item);
@@ -223,7 +261,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da Nfs</returns>
-        public NfsReinf2010 GetNfsReinf2010(int index)
+        public Nfs2010 GetNfs(int index)
         {
             if ((Nfs?.Count ?? 0) == 0)
             {
@@ -236,10 +274,19 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// <summary>
         /// Retorna a quantidade de elementos existentes na lista Nfs
         /// </summary>
-        public int GetNfsReinf2010Count => (Nfs != null ? Nfs.Count : 0);
+        public int GetNfsCount => (Nfs != null ? Nfs.Count : 0);
 
 #endif
 
+        /// <summary>
+        /// Informações de processos relacionados a não retenção de contribuição
+        /// previdenciária.
+        /// Validação: A soma dos valores informados no campo {valorPrinc
+        /// }
+        /// deste
+        /// grupo, com exceção dos valores informados para {indSusp} = [92], deve ser
+        /// igual a {vlrTotalNRetPrinc}
+        /// </summary>
         [XmlElement("infoProcRetPr")]
         public List<InfoProcRetPr> InfoProcRetPr { get; set; }
 
@@ -281,6 +328,15 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #endif
 
+        /// <summary>
+        /// Informações de processos relacionados a não retenção de contribuição
+        /// previdenciária adicional.
+        /// Validação: A soma dos valores informados no campo { valorAdic}
+        /// deste
+        /// grupo, com exceção dos valores informados para {indSusp
+        /// } = [92], deve ser
+        /// igual a { vlrTotalNRetAdic }.
+        /// </summary>
         [XmlElement("infoProcRetAd")]
         public List<InfoProcRetAd> InfoProcRetAd { get; set; }
 
@@ -324,22 +380,22 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrTotalRetAdic() => VlrTotalRetAdic > 0;
-        
-        public bool ShouldSerializeVlrTotalNRetPrinc() => VlrTotalNRetPrinc > 0;
+        public bool ShouldSerializeVlrTotalRetAdicField() => VlrTotalRetAdic > 0;
 
-        public bool ShouldSerializeVlrTotalNRetAdic() => VlrTotalNRetAdic > 0;
+        public bool ShouldSerializeVlrTotalNRetPrincField() => VlrTotalNRetPrinc > 0;
 
-        #endregion
+        public bool ShouldSerializeVlrTotalNRetAdicField() => VlrTotalNRetAdic > 0;
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.NfsReinf2010")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Nfs2010")]
     [ComVisible(true)]
 #endif
     [Serializable()]
-    public class NfsReinf2010
+    public class Nfs2010
     {
         /// <summary>
         /// Informar o número de série da nota fiscal/fatura ou do Recibo Provisório de Serviço - RPS ou de outro documento fiscal válido.Preencher com 0 (zero) caso não exista número de série.
@@ -439,7 +495,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         public bool ShouldSerializeObs() => !string.IsNullOrEmpty(Obs);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 

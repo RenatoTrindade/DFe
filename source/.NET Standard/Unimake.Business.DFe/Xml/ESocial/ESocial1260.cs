@@ -1,51 +1,58 @@
 ﻿#pragma warning disable CS1591
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
+using Unimake.Business.DFe.Utility;
 #if INTEROP
 using System.Runtime.InteropServices;
 #endif
 
 namespace Unimake.Business.DFe.Xml.ESocial
 {
+    /// <summary>
+    /// S-1260 - Comercialização da Produção Rural Pessoa Física
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ESocial1260")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    ///  Comercialização da Produção Rural Pessoa Física
-    /// </summary>
     [Serializable()]
     [XmlRoot("eSocial", Namespace = "http://www.esocial.gov.br/schema/evt/evtComProd/v_S_01_02_00", IsNullable = false)]
-    public class ESocial1260 : XMLBase
+    public class ESocial1260 : XMLBaseESocial
     {
         /// <summary>
-        ///  Evento Comercialização da Produção Rural Pessoa Física
+        /// Evento Comercialização da Produção Rural Pessoa Física
         /// </summary>
         [XmlElement("evtComProd")]
-        public EvtComProdESocial1260 EvtBenPrRP { get; set; }
+        public EvtComProd1260 EvtComProd { get; set; }
+
+        [XmlElement(ElementName = "Signature", Namespace = "http://www.w3.org/2000/09/xmldsig#")]
+        public Signature Signature { get; set; }
 
     }
 
-    #region  EvtComProdESocial1260
-
+    /// <summary>
+    /// Evento Comercialização da Produção Rural Pessoa Física
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.EvtComProdESocial1260")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.EvtComProd1260")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    ///  Evento Comercialização da Produção Rural Pessoa Física
-    /// </summary>
-    public class EvtComProdESocial1260
+    public class EvtComProd1260
     {
+        [XmlAttribute(AttributeName = "Id", DataType = "token")]
+        public string ID { get; set; }
+
         /// <summary>
         /// Informações de identificação do evento
         /// </summary>
         [XmlElement("ideEvento")]
-        public IdeEventoESocial1260 IdeEventoESocial1260 { get; set; }
+        public IdeEvento1260 IdeEvento { get; set; }
 
         /// <summary>
         /// Informações de identificação do empregador
@@ -57,124 +64,45 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// Informação da comercialização de produção
         /// </summary>
         [XmlElement("infoComProd")]
-        public InfoComProdESocial1260 InfoComProdESocial1260 { get; set; }
+        public InfoComProd1260 InfoComProd { get; set; }
     }
 
-    #region  IdeEventoESocial1260 
-
-#if INTEROP
-    [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEventoESocial1260")]
-    [ComVisible(true)]
-#endif
     /// <summary>
     /// Informações de identificação do evento
     /// </summary>
-    public class IdeEventoESocial1260
-    {
-        /// <summary>
-        /// Informe [1] para arquivo original ou [2] para arquivo de retificação.
-        /// </summary>
-        [XmlElement("indRetif")]
-        public IndicativoRetificacao IndRetif { get; set; }
-
-        /// <summary>
-        /// Preencher com o número do recibo do arquivo a ser retificado.
-        /// Validação: O preenchimento é obrigatório se indRetif = [2].
-        /// Deve ser um recibo de entrega válido, correspondente ao arquivo que está sendo retificado.
-        /// </summary>
-        [XmlElement("nrRecibo")]
-        public string NrRecibo { get; set; }
-
-        [XmlIgnore]
-#if INTEROP
-        public DateTime PerApur {get; set; }
-#else
-        /// <summary>
-        /// Informar o mês/ano (formato AAAA-MM) de referência
-        /// das informações, se indApuracao for igual a[1], ou apenas
-        /// o ano(formato AAAA), se indApuracao for igual a[2].
-        /// Validação: Deve ser um mês/ano ou ano válido, igual ou
-        /// posterior ao início da obrigatoriedade dos eventos
-        /// periódicos para o empregador.
-        /// </summary>
-        public DateTimeOffset PerApur { get; set; }
-#endif
-
-        /// <summary>
-        /// Informar o mês/ano (formato AAAA-MM) de referência
-        /// das informações, se indApuracao for igual a[1], ou apenas
-        /// o ano(formato AAAA), se indApuracao for igual a[2].
-        /// Validação: Deve ser um mês/ano ou ano válido, igual ou
-        /// posterior ao início da obrigatoriedade dos eventos
-        /// periódicos para o empregador.
-        /// </summary>
-        [XmlElement("perApur")]
-        public string PerApurField
-        {
-            get => PerApur.ToString("yyyy-MM");
-#if INTEROP
-            set => PerApur = DateTime.Parse(value);
-#else
-            set => PerApur = DateTimeOffset.Parse(value);
-#endif
-        }
-
-        /// <summary>
-        /// Identificação do ambiente
-        /// </summary>
-        [XmlElement("tpAmb")]
-        public TipoAmbiente TpAmb { get; set; }
-
-        /// <summary>
-        /// Processo de emissão do evento.
-        /// </summary>
-        [XmlElement("procEmi")]
-        public ProcEmiESocial ProcEmi { get; set; }
-
-        /// <summary>
-        /// Versão do processo de emissão do evento. Informar a versão do aplicativo emissor do evento.
-        /// </summary>
-        [XmlElement("verProc")]
-        public string VerProc { get; set; }
-
-        #region ShouldSerialize
-        public bool ShouldSerializeNrReciboField() => !string.IsNullOrEmpty(NrRecibo);
-
-        #endregion ShouldSerialize
-    }
-    #endregion IdeEventoESocial1260 
-
-    #region InfoComProdESocial1260
-
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoComProdESocial1260")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEvento1260")]
     [ComVisible(true)]
 #endif
+    public class IdeEvento1260 : IdeEvento1210 { }
+
     /// <summary>
     /// Informação da comercialização de produção
     /// </summary>
-    public class InfoComProdESocial1260
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoComProd1260")]
+    [ComVisible(true)]
+#endif
+    public class InfoComProd1260
     {
         /// <summary>
         /// Identificação do estabelecimento que comercializou a produção
         /// </summary>
         [XmlElement("ideEstabel")]
-        public IdeEstabelESocial1260 IdeEstabESocial1260 { get; set; }
+        public IdeEstabel1260 IdeEstabel { get; set; }
     }
 
-    #region IdeEstabESocial1260
-
-#if INTEROP
-    [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEstabESocial1260")]
-    [ComVisible(true)]
-#endif
     /// <summary>
     /// Identificação do estabelecimento que comercializou a produção
     /// </summary>
-    public class IdeEstabelESocial1260
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEstab1260")]
+    [ComVisible(true)]
+#endif
+    public class IdeEstabel1260
     {
         /// <summary>
         /// Preencher com o número de inscrição no CAEPF do estabelecimento rural.
@@ -188,19 +116,54 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// Valor total da comercialização por "tipo" de comercialização.
         /// </summary>
         [XmlElement("tpComerc")]
-        public TpComerc TpComerc { get; set; }
+        public List<TpComerc> TpComerc { get; set; }
+
+#if INTEROP
+
+        /// <summary>
+        /// Adicionar novo elemento a lista
+        /// </summary>
+        /// <param name="item">Elemento</param>
+        public void AddTpComerc(TpComerc item)
+        {
+            if (TpComerc == null)
+            {
+                TpComerc = new List<TpComerc>();
+            }
+
+            TpComerc.Add(item);
+        }
+
+        /// <summary>
+        /// Retorna o elemento da lista TpComerc (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// </summary>
+        /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
+        /// <returns>Conteúdo do index passado por parâmetro da TpComerc</returns>
+        public TpComerc GetTpComerc(int index)
+        {
+            if ((TpComerc?.Count ?? 0) == 0)
+            {
+                return default;
+            };
+
+            return TpComerc[index];
+        }
+
+        /// <summary>
+        /// Retorna a quantidade de elementos existentes na lista TpComerc
+        /// </summary>
+        public int GetTpComercCount => (TpComerc != null ? TpComerc.Count : 0);
+#endif
     }
 
-    #region TpComerc
-
+    /// <summary>
+    /// Valor total da comercialização por "tipo" de comercialização.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.TpComerc")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Valor total da comercialização por "tipo" de comercialização.
-    /// </summary>
     public class TpComerc
     {
         /// <summary>
@@ -229,8 +192,15 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// Preencher com o valor total da comercialização.
         /// Validação: Deve ser maior que 0 (zero).
         /// </summary>
-        [XmlElement("vrTotCom")]
+        [XmlIgnore]
         public double VrTotCom { get; set; }
+
+        [XmlElement("vrTotCom")]
+        public string VrTotCombField
+        {
+            get => VrTotCom.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrTotCom = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Identificação dos adquirentes da produção.
@@ -244,26 +214,18 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// incidente sobre a comercialização.
         /// </summary>
         [XmlElement("infoProcJud")]
-        public InfoProcJudESocial1260 InfoProcJudESocial1260 { get; set; }
+        public InfoProcJud1260 InfoProcJud { get; set; }
 
-        #region ShouldSerialize 
-
-        public bool ShouldSerializeIdeAdquirField() => IdeAdquir != null;
-        public bool ShouldSerializeInfoProcJudField() => InfoProcJudESocial1260 != null;
-
-        #endregion ShouldSerialize
     }
 
-    #region IdeAdquir
-
+    /// <summary>
+    /// Identificação dos adquirentes da produção.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeAdquir")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Identificação dos adquirentes da produção.
-    /// </summary>
     public class IdeAdquir
     {
         /// <summary>
@@ -287,8 +249,15 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// Preencher com o valor total da comercialização.
         /// Validação: Deve ser maior que 0 (zero).
         /// </summary>
-        [XmlElement("vrComerc")]
+        [XmlIgnore]
         public double VrComerc { get; set; }
+
+        [XmlElement("vrComerc")]
+        public string VrComercField
+        {
+            get => VrComerc.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrComerc = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Detalhamento das notas fiscais relativas à comercialização
@@ -297,24 +266,17 @@ namespace Unimake.Business.DFe.Xml.ESocial
         [XmlElement("nfs")]
         public Nfs Nfs { get; set; }
 
-        #region shouldSerialize
-
-        public bool ShouldSerializeNfsField() => Nfs != null;
-
-        #endregion shouldSerialize
     }
 
-    #region Nfs
-
+    /// <summary>
+    /// Detalhamento das notas fiscais relativas à comercialização
+    /// de produção com o adquirente identificado no grupo superior
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.Nfs")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Detalhamento das notas fiscais relativas à comercialização
-    /// de produção com o adquirente identificado no grupo superior
-    /// </summary>
     public class Nfs
     {
         /// <summary>
@@ -329,21 +291,17 @@ namespace Unimake.Business.DFe.Xml.ESocial
         [XmlElement("nrDocto")]
         public string NrDocto { get; set; }
 
+        /// <summary>
+        /// Data de emissão da nota fiscal/fatura. Validação: O mês/ano da emissão da nota fiscal deve ser
+        /// igual ao mês/ano indicado no registro de abertura do arquivo
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime DtEmisNF { get; set; }
 #else
-        /// <summary>
-        /// Data de emissão da nota fiscal/fatura. Validação: O mês/ano da emissão da nota fiscal deve ser
-        ///igual ao mês/ano indicado no registro de abertura do arquivo
-        /// </summary>
         public DateTimeOffset DtEmisNF { get; set; }
 #endif
 
-        /// <summary>
-        /// Data de emissão da nota fiscal/fatura. Validação: O mês/ano da emissão da nota fiscal deve ser
-        ///igual ao mês/ano indicado no registro de abertura do arquivo
-        /// </summary>
         [XmlElement("dtEmisNF")]
         public string DtEmisNFField
         {
@@ -358,16 +316,29 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// <summary>
         /// Preencher com o valor bruto da(s) nota(s) fiscal(is).
         /// </summary>
-        [XmlElement("vlrBruto")]
+        [XmlIgnore]
         public double VlrBruto { get; set; }
+
+        [XmlElement("vlrBruto")]
+        public string VlrBrutoField
+        {
+            get => VlrBruto.ToString("F2", CultureInfo.InvariantCulture);
+            set => VlrBruto = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Preencher com o valor da contribuição previdenciária descontada pelo adquirente na comercialização de
         /// produção.Se não houver informação, preencher com 0 (zero).
         /// </summary>
- 
-        [XmlElement("vrCPDescPR")]
+        [XmlIgnore]
         public double VrCPDescPR { get; set; }
+
+        [XmlElement("vrCPDescPR")]
+        public string VrCPDescPRField
+        {
+            get => VrCPDescPR.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrCPDescPR = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Valor da contribuição destinada ao financiamento dos benefícios concedidos 
@@ -375,8 +346,15 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// do trabalho, incidente sobre a comercialização de
         /// produção rural de produtor rural.Se não houver informação, preencher com 0 (zero).
         /// </summary>
-        [XmlElement("vrRatDescPR")]
+        [XmlIgnore]
         public double VrRatDescPR { get; set; }
+
+        [XmlElement("vrRatDescPR")]
+        public string VrRatDescPRField
+        {
+            get => VrRatDescPR.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrRatDescPR = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Valor da contribuição destinada ao SENAR, incidente sobre
@@ -384,36 +362,38 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// pessoa física/segurado especial.Se não houver
         /// informação, preencher com 0 (zero).
         /// </summary>
-        [XmlElement("vrSenarDesc")]
+        [XmlIgnore]
         public double VrSenarDesc { get; set; }
+
+        [XmlElement("vrSenarDesc")]
+        public string VrSenarDescField
+        {
+            get => VrSenarDesc.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrSenarDesc = Converter.ToDouble(value);
+        }
 
         #region ShouldSerialize 
 
-        public bool ShouldSerializeSerieField() => !string.IsNullOrEmpty(Serie);
+        public bool ShouldSerializeSerie() => !string.IsNullOrEmpty(Serie);
 
         #endregion ShouldSerialize
     }
-    #endregion Nfs
 
-    #endregion IdeAdquir
-
-    #region InfoProcJudESocial1260
-
-#if INTEROP
-    [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoProcJudESocial1260")]
-    [ComVisible(true)]
-#endif
     /// <summary>
     /// Informações de processos judiciais com decisão/sentença
     /// favorável ao contribuinte e relativos à contribuição
     /// incidente sobre a comercialização.
     /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoProcJud1260")]
+    [ComVisible(true)]
+#endif
     [Serializable]
-    public class InfoProcJudESocial1260
+    public class InfoProcJud1260
     {
         /// <summary>
-        ///  Preencher com o código correspondente ao tipo de processo.
+        /// Preencher com o código correspondente ao tipo de processo.
         /// Valores válidos:
         /// 1 - Administrativo
         /// 2 - Judicial
@@ -424,7 +404,7 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// <summary>
         /// Informar um número de processo cadastrado através do evento S-1070, cujo indMatProc seja igual a [1].
         /// Validação: Deve ser um número de processo
-        ///administrativo ou judicial válido e existente na Tabela de Processos(S-1070), com indMatProc = [1].
+        /// administrativo ou judicial válido e existente na Tabela de Processos(S-1070), com indMatProc = [1].
         /// </summary>
         [XmlElement("nrProc")]
         public string NrProc { get; set; }
@@ -441,29 +421,50 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// Validação: Preenchimento obrigatório se vrRatSusp e vrSenarSusp não tiverem sido preenchidos.
         /// Deve ser um valor maior que 0 (zero).
         /// </summary>
-        [XmlElement("vrCPSusp")]
+        [XmlIgnore]
         public double VrCPSusp { get; set; }
+
+        [XmlElement("vrCPSusp")]
+        public string VrCPSuspField
+        {
+            get => VrCPSusp.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrCPSusp = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Valor da contribuição para GILRAT com exigibilidade suspensa.
         /// Validação: Preenchimento obrigatório se vrCPSusp e vrSenarSusp não tiverem sido preenchidos.
         /// Deve ser um valor maior que 0 (zero).
         /// </summary>
-        [XmlElement("vrRatSusp")]
+        [XmlIgnore]
         public double VrRatSusp { get; set; }
 
+        [XmlElement("vrRatSusp")]
+        public string VrRatSuspField
+        {
+            get => VrRatSusp.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrRatSusp = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Valor da contribuição para o SENAR com exigibilidade suspensa.
         /// Validação: Preenchimento obrigatório se VrCPSusp e vrRatSusp não tiverem sido preenchidos. 
         /// Deve ser um valor maior que 0 (zero).
-        [XmlElement("vrSenarSusp")]
+        /// </summary>
+        [XmlIgnore]
         public double VrSenarSusp { get; set; }
+
+        [XmlElement("vrSenarSusp")]
+        public string VrSenarSuspField
+        {
+            get => VrSenarSusp.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrSenarSusp = Converter.ToDouble(value);
+        }
 
         #region ShouldSerialize
 
         public bool ShouldSerializeVrCPSuspField() => VrCPSusp > 0;
-        
+
         public bool ShouldSerializeVrRatSuspField() => VrRatSusp > 0;
 
         public bool ShouldSerializeVrSenarSuspField() => VrSenarSusp > 0;
@@ -471,13 +472,4 @@ namespace Unimake.Business.DFe.Xml.ESocial
 
         #endregion ShouldSerialize
     }
-    #endregion InfoProcJudESocial1260
-
-    #endregion TpComerc
-
-    #endregion  IdeEstabESocial1260
-
-    #endregion InfoComProdESocial1260
-
-    #endregion EvtComProdESocial1260
 }

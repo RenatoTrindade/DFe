@@ -7,9 +7,15 @@ using System;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
 using System.Collections.Generic;
+using System.Globalization;
+using Unimake.Business.DFe.Utility;
+
 
 namespace Unimake.Business.DFe.Xml.ESocial
 {
+    /// <summary>
+    /// S-1005 - Tabela de Estabelecimentos, Obras ou Unidades de Órgãos Públicos
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.eSocial.ESocial1005")]
@@ -17,12 +23,21 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     [Serializable()]
     [XmlRoot("eSocial", Namespace = "http://www.esocial.gov.br/schema/evt/evtTabEstab/v_S_01_02_00", IsNullable = false)]
-    public class ESocial1005 : XMLBase
+    public class ESocial1005 : XMLBaseESocial
     {
+        /// <summary>
+        /// Evento Tabela de Estabelecimentos
+        /// </summary>
         [XmlElement("evtTabEstab")]
         public EvtTabEstab EvtTabEstab { get; set; }
+
+        [XmlElement(ElementName = "Signature", Namespace = "http://www.w3.org/2000/09/xmldsig#")]
+        public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento Tabela de Estabelecimentos
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.EvtTabEstab")]
@@ -30,16 +45,44 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class EvtTabEstab
     {
-        [XmlElement("ideEvento")]
-        public IdeEvento IdeEvento { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        [XmlAttribute(AttributeName = "Id", DataType = "token")]
+        public string ID { get; set; }
 
+        /// <summary>
+        /// Informações de identificação do evento
+        /// </summary>
+        [XmlElement("ideEvento")]
+        public IdeEvento1005 IdeEvento { get; set; }
+
+        /// <summary>
+        /// Informações de identificação do empregador
+        /// </summary>
         [XmlElement("ideEmpregador")]
         public IdeEmpregador IdeEmpregador { get; set; }
 
+        /// <summary>
+        /// Informações do estabelecimento
+        /// </summary>
         [XmlElement("infoEstab")]
-        public InfoEstab infoEstab { get; set; }
+        public InfoEstab InfoEstab { get; set; }
     }
 
+    /// <summary>
+    /// Informações de identificação do evento
+    /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEvento1005")]
+    [ComVisible(true)]
+#endif
+    public class IdeEvento1005 : IdeEvento { }
+
+    /// <summary>
+    /// Informações do estabelecimento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoEstab")]
@@ -47,30 +90,51 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class InfoEstab
     {
+        /// <summary>
+        /// Inclusão de novas informações
+        /// </summary>
         [XmlElement("inclusao")]
-        public InclusaoESocial1005 Inclusao { get; set; }
+        public Inclusao1005 Inclusao { get; set; }
 
+        /// <summary>
+        /// Alteração das informações
+        /// </summary>
         [XmlElement("alteracao")]
-        public Alteracao Alteracao { get; set; }
+        public Alteracao1005 Alteracao { get; set; }
 
+        /// <summary>
+        /// Exclusão das informações
+        /// </summary>
         [XmlElement("exclusao")]
-        public Exclusao Exclusao { get; set; }
+        public Exclusao1005 Exclusao { get; set; }
     }
 
+    /// <summary>
+    /// Inclusão de novas informações
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.InclusaoESocial1005")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.Inclusao1005")]
     [ComVisible(true)]
 #endif
-    public class InclusaoESocial1005
+    public class Inclusao1005
     {
+        /// <summary>
+        /// Identificação do estabelecimento e validade das informações
+        /// </summary>
         [XmlElement("ideEstab")]
         public IdeEstab IdeEstab { get; set; }
 
+        /// <summary>
+        /// Detalhamento das informações do estabelecimento
+        /// </summary>
         [XmlElement("dadosEstab")]
         public DadosEstab DadosEstab { get; set; }
     }
 
+    /// <summary>
+    /// Identificação do estabelecimento e validade das informações
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEstab")]
@@ -78,12 +142,22 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class IdeEstab
     {
+        /// <summary>
+        /// Preencher com o código correspondente ao tipo de inscrição, conforme Tabela 05
+        /// </summary>
         [XmlElement("tpInsc")]
         public TipoInscricaoEstabelecimento TpInsc { get; set; }
 
+        /// <summary>
+        /// Informar o número de inscrição do estabelecimento (inclusive Sociedade em Conta de Participação - SCP), 
+        /// obra de construção civil ou órgão público de acordo com o tipo de inscrição indicado no campo ideEstab/tpInsc.
+        /// </summary>
         [XmlElement("nrInsc")]
         public string NrInsc { get; set; }
 
+        /// <summary>
+        /// Preencher com o mês e ano de início da validade das informações prestadas no evento, no formato AAAA-MM
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime IniValid { get; set; }
@@ -102,6 +176,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
         }
 
+        /// <summary>
+        /// Preencher com o mês e ano de término da validade das informações, se houver
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime FimValid { get; set; }
@@ -123,10 +200,13 @@ namespace Unimake.Business.DFe.Xml.ESocial
 
         public bool ShouldSerializeFimValidField() => FimValid > DateTime.MinValue;
 
-        #endregion
+        #endregion ShouldSerialize
 
     }
 
+    /// <summary>
+    /// Detalhamento das informações do estabelecimento, obra de construção civil ou unidade de órgão público
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.DadosEstab")]
@@ -134,9 +214,15 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class DadosEstab
     {
+        /// <summary>
+        /// Preencher com o código CNAE conforme legislação vigente, referente à atividade econômica preponderante do estabelecimento
+        /// </summary>
         [XmlElement("cnaePrep")]
         public string CnaePrep { get; set; }
 
+        /// <summary>
+        /// Preencher com o CNPJ responsável pela inscrição no cadastro de obras da RFB
+        /// </summary>
         [XmlElement("cnpjResp")]
         public string CnpjResp { get; set; }
 
@@ -146,28 +232,34 @@ namespace Unimake.Business.DFe.Xml.ESocial
         [XmlElement("aliqGilrat")]
         public AliqGilrat AliqGilrat { get; set; }
 
+        /// <summary>
+        /// Informações relativas ao CAEPF
+        /// </summary>
         [XmlElement("infoCaepf")]
         public InfoCaepf InfoCaepf { get; set; }
 
         /// <summary>
-        /// Grupo preenchido obrigatória e exclusivamente por empresa construtora, relacionando os estabelecimentos inscritos no Cadastro Nacional de Obras - CNO, para indicar a substituição ou não da contribuição patronal incidente sobre a remuneração dos trabalhadores de obra de construção civil.
+        /// Indicativo de substituição da contribuição patronal - Obra de construção civil
         /// </summary>
         [XmlElement("infoObra")]
         public InfoObra InfoObra { get; set; }
 
         /// <summary>
-        /// Informações trabalhistas relativas ao estabelecimento.
+        ///Informações trabalhistas
         /// </summary>
         [XmlElement("infoTrab")]
         public InfoTrab InfoTrab { get; set; }
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeCnpjRespField() => !string.IsNullOrEmpty(CnpjResp);
+        public bool ShouldSerializeCnpjResp() => !string.IsNullOrEmpty(CnpjResp);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
+    /// <summary>
+    /// Informações de apuração da alíquota GILRAT do estabelecimento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.AliqGilrat")]
@@ -182,30 +274,56 @@ namespace Unimake.Business.DFe.Xml.ESocial
         [XmlElement("aliqRat")]
         public string AliqRat { get; set; }
 
+        /// <summary>
+        /// Fator Acidentário de Prevenção - FAP.
+        /// Validação: Preenchimento obrigatório e exclusivo por
+        /// Pessoa Jurídica e:
+        /// a) ideEstab/tpInsc = [4] e o campo cnpjResp não estiver
+        /// informado; ou
+        /// b) ideEstab/tpInsc = [1, 4] e o fator informado for diferente
+        /// do definido pelo órgão governamental competente para o
+        /// estabelecimento ou para o CNPJ responsável pela inscrição
+        /// no CNO(neste caso, deverá haver informações de processo
+        /// em procAdmJudFap); ou c) ideEstab/tpInsc = [1, 4] e o estabelecimento ou o CNPJ
+        /// responsável pela inscrição no CNO não for encontrado na tabela FAP.
+        /// Se informado, deve ser um número maior ou igual a 0,5000
+        /// e menor ou igual a 2,0000 e, no caso da alínea "b", deve ser
+        /// diferente do valor definido pelo órgão governamental competente.
+        /// </summary>
+        [XmlIgnore]
+        public double Fap { get; set; }
+
         [XmlElement("fap")]
-        public string Fap { get; set; }
+        public string FapField
+        {
+            get => Fap.ToString("F4", CultureInfo.InvariantCulture);
+            set => Fap = Converter.ToDouble(value);
+        }
 
         /// <summary>
-        /// Grupo que identifica, em caso de existência, o processo administrativo ou judicial em que houve decisão/sentença favorável ao contribuinte modificando a alíquota RAT da empresa.
+        /// Processo administrativo/judicial relativo à alíquota RAT
         /// </summary>
         [XmlElement("procAdmJudRat")]
         public ProcAdmJudRat ProcAdmJudRat { get; set; }
 
         /// <summary>
-        /// Grupo que identifica, em caso de existência, o processo administrativo/judicial em que houve decisão ou sentença favorável ao contribuinte suspendendo ou alterando a alíquota FAP aplicável ao contribuinte.
+        /// Processo administrativo/judicial relativo ao FAP
         /// </summary>
         [XmlElement("procAdmJudFap")]
         public ProcAdmJudFap ProcAdmJudFap { get; set; }
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeAliqRatField() => !string.IsNullOrEmpty(AliqRat);
+        public bool ShouldSerializeAliqRat() => !string.IsNullOrEmpty(AliqRat);
 
-        public bool ShouldSerializeFapField() => !string.IsNullOrEmpty(Fap);
+        public bool ShouldSerializeFapField() => !Fap.IsNullOrEmpty();
 
         #endregion
     }
 
+    /// <summary>
+    /// Grupo que identifica, em caso de existência, o processo administrativo ou judicial em que houve decisão/sentença favorável ao contribuinte modificando a alíquota RAT da empresa.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ProcAdmJudRat")]
@@ -213,16 +331,28 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class ProcAdmJudRat
     {
+        /// <summary>
+        /// Preencher com o código correspondente ao tipo de processo
+        /// </summary>
         [XmlElement("tpProc")]
         public TipoProcesso TpProc { get; set; }
 
+        /// <summary>
+        /// Informar um número de processo cadastrado através do evento S-1070, cujo indMatProc seja igual a [1]
+        /// </summary>
         [XmlElement("nrProc")]
         public string NrProc { get; set; }
 
+        /// <summary>
+        /// Código do indicativo da suspensão, atribuído pelo empregador em S-1070
+        /// </summary>
         [XmlElement("codSusp")]
         public string CodSusp { get; set; }
     }
 
+    /// <summary>
+    /// Grupo que identifica, em caso de existência, o processo administrativo/judicial em que houve decisão ou sentença favorável ao contribuinte suspendendo ou alterando a alíquota FAP aplicável ao contribuinte.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ProcAdmJudFap")]
@@ -230,16 +360,28 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class ProcAdmJudFap
     {
+        /// <summary>
+        /// Preencher com o código correspondente ao tipo de processo
+        /// </summary>
         [XmlElement("tpProc")]
         public TipoProcessoESocial TpProc { get; set; }
 
+        /// <summary>
+        /// Informar um número de processo cadastrado através do evento S-1070, cujo indMatProc seja igual a [1]
+        /// </summary>
         [XmlElement("nrProc")]
         public string NrProc { get; set; }
 
+        /// <summary>
+        /// Código do indicativo da suspensão, atribuído pelo empregador em S-1070
+        /// </summary>
         [XmlElement("codSusp")]
         public string CodSusp { get; set; }
     }
 
+    /// <summary>
+    /// Informações relativas ao Cadastro de Atividade Econômica da Pessoa Física - CAEPF
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoCaepf")]
@@ -247,10 +389,19 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class InfoCaepf
     {
+        /// <summary>
+        /// Tipo de CAEPF
+        /// </summary>
         [XmlElement("tpCaepf")]
         public TipoCaepf TpCaepf { get; set; }
     }
 
+    /// <summary>
+    /// Grupo preenchido obrigatória e exclusivamente por empresa construtora, 
+    /// relacionando os estabelecimentos inscritos no Cadastro Nacional de Obras - CNO, 
+    /// para indicar a substituição ou não da contribuição patronal incidente sobre a remuneração 
+    /// dos trabalhadores de obra de construção civil
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoObra")]
@@ -258,10 +409,16 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class InfoObra
     {
+        /// <summary>
+        /// Indicativo de substituição da contribuição patronal de obra de construção civil
+        /// </summary>
         [XmlElement("indSubstPatrObra")]
         public IndicativoSubstituicaoPatronal IndSubstPatrObra { get; set; }
     }
 
+    /// <summary>
+    /// Informações trabalhistas relativas ao estabelecimento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoTrab")]
@@ -270,16 +427,22 @@ namespace Unimake.Business.DFe.Xml.ESocial
     public class InfoTrab
     {
         /// <summary>
-        /// Informações relacionadas à contratação de aprendiz.
-        /// Preenchimento obrigatório somente no caso de dispensa, ainda que parcial, de contratação de aprendiz em virtude de processo judicial ou quando houver contratação de aprendiz por meio de entidade educativa ou de prática desportiva.
+        /// Informações relacionadas à contratação de aprendiz
         /// </summary>
         [XmlElement("infoApr")]
         public InfoApr InfoApr { get; set; }
 
+        /// <summary>
+        /// Informações sobre a contratação de PCD
+        /// </summary>
         [XmlElement("infoPCD")]
         public InfoPCD InfoPCD { get; set; }
     }
 
+    /// <summary>
+    /// Informações relacionadas à contratação de aprendiz.
+    /// Preenchimento obrigatório somente no caso de dispensa, ainda que parcial, de contratação de aprendiz em virtude de processo judicial ou quando houver contratação de aprendiz por meio de entidade educativa ou de prática desportiva.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoApr")]
@@ -287,9 +450,15 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class InfoApr
     {
+        /// <summary>
+        /// Preencher com o número do processo judicial
+        /// </summary>
         [XmlElement("nrProcJud")]
         public string NrProcJud { get; set; }
 
+        /// <summary>
+        /// Identificação da(s) entidade(s) educativa(s) ou de prática desportiva
+        /// </summary>
         [XmlElement("infoEntEduc")]
         public List<InfoEntEduc> InfoEntEduc { get; set; }
 
@@ -332,11 +501,14 @@ namespace Unimake.Business.DFe.Xml.ESocial
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeNrProcJudField() => !string.IsNullOrEmpty(NrProcJud);
+        public bool ShouldSerializeNrProcJud() => !string.IsNullOrEmpty(NrProcJud);
 
         #endregion
     }
 
+    /// <summary>
+    /// Identificação da(s) entidade(s) educativa(s) ou de prática desportiva
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoEntEduc")]
@@ -344,10 +516,16 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class InfoEntEduc
     {
+        /// <summary>
+        /// Informar o número de inscrição da entidade educativa ou de prática desportiva
+        /// </summary>
         [XmlElement("nrInsc")]
         public string NrInsc { get; set; }
     }
 
+    /// <summary>
+    /// Informações sobre a contratação de pessoa com deficiência (PCD)
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoPCD")]
@@ -355,37 +533,55 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class InfoPCD
     {
+        /// <summary>
+        /// Preencher com o número do processo 
+        /// </summary>
         [XmlElement("nrProcJud")]
         public string NrProcJud { get; set; }
     }
 
+    /// <summary>
+    /// Alteração das informações
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.Alteracao")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.Alteracao1005")]
     [ComVisible(true)]
 #endif
-    public class Alteracao
+    public class Alteracao1005
     {
+        /// <summary>
+        /// Identificação do estabelecimento e validade das informações
+        /// </summary>
         [XmlElement("ideEstab")]
         public IdeEstab IdeEstab { get; set; }
 
         /// <summary>
-        /// Detalhamento das informações do estabelecimento, obra de construção civil ou unidade de órgão público.
+        /// Detalhamento das informações do estabelecimento
         /// </summary>
         [XmlElement("dadosEstab")]
         public DadosEstab DadosEstab { get; set; }
 
+        /// <summary>
+        /// Novo período de validade das informações
+        /// </summary>
         [XmlElement("novaValidade")]
-        public NovaValidade NovaValidade { get; set; }
+        public NovaValidade1005 NovaValidade { get; set; }
     }
 
+    /// <summary>
+    /// Informação preenchida exclusivamente em caso de alteração do período de validade das informações, apresentando o novo período de validade
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.NovaValidade")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.NovaValidade1005")]
     [ComVisible(true)]
 #endif
-    public class NovaValidade
+    public class NovaValidade1005
     {
+        /// <summary>
+        /// Preencher com o mês e ano de início da validade das informações prestadas no evento, no formato AAAA-MM
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime IniValid { get; set; }
@@ -404,6 +600,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
         }
 
+        /// <summary>
+        /// Preencher com o mês e ano de término da validade das informações, se houver
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime FimValid { get; set; }
@@ -429,13 +628,19 @@ namespace Unimake.Business.DFe.Xml.ESocial
         #endregion
     }
 
+    /// <summary>
+    /// Exclusão das informações
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.Exclusao")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.Exclusao1005")]
     [ComVisible(true)]
 #endif
-    public class Exclusao
+    public class Exclusao1005
     {
+        /// <summary>
+        /// Identificação do estabelecimento e validade das informações
+        /// </summary>
         [XmlElement("ideEstab")]
         public IdeEstab IdeEstab { get; set; }
     }

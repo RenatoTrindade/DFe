@@ -8,6 +8,9 @@ using Unimake.Business.DFe.Servicos;
 
 namespace Unimake.Business.DFe.Xml.ESocial
 {
+    /// <summary>
+    /// S-2220 - Monitoramento da Saúde do Trabalhador
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ESocial2220")]
@@ -15,12 +18,21 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     [Serializable()]
     [XmlRoot("eSocial", Namespace = "http://www.esocial.gov.br/schema/evt/evtMonit/v_S_01_02_00", IsNullable = false)]
-    public class ESocial2220 : XMLBase
+    public class ESocial2220 : XMLBaseESocial
     {
+        /// <summary>
+        /// Evento Monitoramento da Saúde do Trabalhador
+        /// </summary>
         [XmlElement("evtMonit")]
         public EvtMonit EvtMonit { get; set; }
+
+        [XmlElement(ElementName = "Signature", Namespace = "http://www.w3.org/2000/09/xmldsig#")]
+        public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento Monitoramento da Saúde do Trabalhador
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.EvtMonit")]
@@ -28,52 +40,60 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class EvtMonit
     {
-        [XmlElement("ideEvento")]
-        public IdeEventoESocial2205 IdeEvento { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        [XmlAttribute(AttributeName = "Id", DataType = "token")]
+        public string ID { get; set; }
 
+        /// <summary>
+        /// Informações de identificação do evento
+        /// </summary>
+        [XmlElement("ideEvento")]
+        public IdeEvento2220 IdeEvento { get; set; }
+
+        /// <summary>
+        /// Informações de identificação do empregador
+        /// </summary>
         [XmlElement("ideEmpregador")]
         public IdeEmpregador IdeEmpregador { get; set; }
 
+        /// <summary>
+        /// Informações de identificação do trabalhador e do vínculo
+        /// </summary>
         [XmlElement("ideVinculo")]
-        public IdeVinculo ÌdeVinculo { get; set; }
+        public IdeVinculo2220 IdeVinculo { get; set; }
 
+        /// <summary>
+        /// Informações do exame médico ocupacional
+        /// </summary>
         [XmlElement("exMedOcup")]
         public ExMedOcup ExMedOcup { get; set; }
     }
 
+    /// <summary>
+    /// Informações de identificação do trabalhador e do vínculo
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeVinculoESocial2220")]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeVinculo2220")]
     [ComVisible(true)]
 #endif
-    public class IdeVinculoESocial2220
-    {
-        [XmlElement("cpfTrab")]
-        public string CpfTrab { get; set; }
+    public class IdeVinculo2220 : IdeVinculo2206 { }
 
-        [XmlElement("matricula")]
-        public string Matricula { get; set; }
-
-        [XmlElement("codCateg")]
+    /// <summary>
+    /// Informações de identificação do evento
+    /// </summary>
 #if INTEROP
-        public CodCateg CodCateg { get; set; } = (CodCateg)(-1);
-#else
-        public CodCateg? CodCateg { get; set; }
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEvento2220")]
+    [ComVisible(true)]
 #endif
+    public class IdeEvento2220 : IdeEvento2205 { }
 
-        #region ShouldSerialize
-
-        public bool ShouldSerializeMatriculaField() => !string.IsNullOrEmpty(Matricula);
-
-#if INTEROP
-        public bool ShouldSerializeCodCateg() => CodCateg != (CodCateg)(-1);
-#else
-        public bool ShouldSerializeCodCateg() => CodCateg != null;
-#endif
-
-        #endregion
-    }
-
+    /// <summary>
+    /// Informações do exame médico ocupacional
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ExMedOcup")]
@@ -81,16 +101,28 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class ExMedOcup
     {
+        /// <summary>
+        /// Tipo do exame médico ocupacional
+        /// </summary>
         [XmlElement("tpExameOcup")]
         public TpExameOcup TpExameOcup { get; set; }
 
+        /// <summary>
+        /// Detalhamento das informações do Atestado de Saúde Ocupacional - ASO
+        /// </summary>
         [XmlElement("aso")]
         public Aso Aso { get; set; }
 
+        /// <summary>
+        /// Informações sobre o médico responsável/coordenador do PCMSO
+        /// </summary>
         [XmlElement("respMonit")]
         public RespMonit RespMonit { get; set; }
     }
 
+    /// <summary>
+    /// Detalhamento das informações do Atestado de Saúde Ocupacional - ASO
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.Aso")]
@@ -98,6 +130,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class Aso
     {
+        /// <summary>
+        /// Data de emissão do ASO.
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime DtAso { get; set; }
@@ -116,6 +151,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
         }
 
+        /// <summary>
+        /// Resultado do ASO
+        /// </summary>
         [XmlElement("resAso")]
 #if INTEROP
         public ResAso ResAso { get; set; } = (ResAso)(-1);
@@ -123,9 +161,19 @@ namespace Unimake.Business.DFe.Xml.ESocial
         public ResAso? ResAso { get; set; }
 #endif
 
-
+        /// <summary>
+        /// Grupo que detalha as avaliações clínicas e os exames complementares porventura realizados pelo trabalhador 
+        /// em virtude do determinado nos Anexos da NR-07, além de outros solicitados pelo médico e os referentes ao ASO
+        /// </summary>
         [XmlElement("exame")]
         public List<Exame> Exame { get; set; }
+
+        /// <summary>
+        /// Informações sobre o médico emitente do ASO
+        /// </summary>
+        [XmlElement("medico")]
+        public Medico Medico { get; set; }
+
 
 #if INTEROP
 
@@ -164,9 +212,6 @@ namespace Unimake.Business.DFe.Xml.ESocial
         public int GetExameCount => (Exame != null ? Exame.Count : 0);
 #endif
 
-        [XmlElement("medico")]
-        public Medico Medico { get; set; }
-
         #region ShouldSerialize
 
 #if INTEROP
@@ -178,6 +223,10 @@ namespace Unimake.Business.DFe.Xml.ESocial
         #endregion
     }
 
+    /// <summary>
+    /// Grupo que detalha as avaliações clínicas e os exames complementares porventura realizados pelo 
+    /// trabalhador em virtude do determinado nos Anexos da NR-07, além de outros solicitados pelo médico e os referentes ao ASO.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.Exame")]
@@ -185,6 +234,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class Exame
     {
+        /// <summary>
+        /// Data do exame realizado
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime DtExm { get; set; }
@@ -203,12 +255,21 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
         }
 
+        /// <summary>
+        /// Código do procedimento diagnóstico
+        /// </summary>
         [XmlElement("procRealizado")]
         public string ProcRealizado { get; set; }
 
+        /// <summary>
+        /// Observação sobre o procedimento diagnóstico realizado
+        /// </summary>
         [XmlElement("obsProc")]
         public string ObsProc { get; set; }
 
+        /// <summary>
+        /// Ordem do exame
+        /// </summary>
         [XmlElement("ordExame")]
 #if INTEROP
         public OrdExame OrdExame { get; set; } = (OrdExame)(-1);
@@ -216,6 +277,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
         public OrdExame? OrdExame { get; set; }
 #endif
 
+        /// <summary>
+        /// Indicação dos resultados
+        /// </summary>
         [XmlElement("indResult")]
 #if INTEROP
         public IndResult IndResult { get; set; } = (IndResult)(-1);
@@ -225,7 +289,7 @@ namespace Unimake.Business.DFe.Xml.ESocial
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeObsProcField() => !string.IsNullOrEmpty(ObsProc);
+        public bool ShouldSerializeObsProc() => !string.IsNullOrEmpty(ObsProc);
 
 #if INTEROP
         public bool ShouldSerializeOrdExame() => OrdExame != (OrdExame)(-1);
@@ -242,6 +306,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
         #endregion
     }
 
+    /// <summary>
+    /// Informações sobre o médico emitente do ASO.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.Medico")]
@@ -249,12 +316,21 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class Medico
     {
+        /// <summary>
+        /// Preencher com o nome do médico emitente do ASO
+        /// </summary>
         [XmlElement("nmMed")]
         public string NmMed { get; set; }
 
+        /// <summary>
+        /// Número de inscrição do médico emitente do ASO no Conselho Regional de Medicina - CRM
+        /// </summary>
         [XmlElement("nrCRM")]
         public string NrCRM { get; set; }
 
+        /// <summary>
+        /// Preencher com a sigla da Unidade da Federação - UF de expedição do CRM
+        /// </summary>
         [XmlElement("ufCRM")]
 #if INTEROP
         public UFBrasil UfCRM { get; set; } = (UFBrasil)(-1);
@@ -264,7 +340,7 @@ namespace Unimake.Business.DFe.Xml.ESocial
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeNrCRMField() => !string.IsNullOrEmpty(NrCRM);
+        public bool ShouldSerializeNrCRM() => !string.IsNullOrEmpty(NrCRM);
 
 #if INTEROP
         public bool ShouldSerializeUfCRM() => UfCRM != (UFBrasil)(-1);
@@ -272,9 +348,12 @@ namespace Unimake.Business.DFe.Xml.ESocial
         public bool ShouldSerializeUfCRM() => UfCRM != null;
 #endif
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
+    /// <summary>
+    /// Informações sobre o médico responsável/coordenador do PCMSO
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.RespMonit")]
@@ -282,22 +361,34 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #endif
     public class RespMonit
     {
+        /// <summary>
+        /// Preencher com o CPF do médico responsável/coordenador do PCMSO
+        /// </summary>
         [XmlElement("cpfResp")]
         public string CpfResp { get; set; }
 
+        /// <summary>
+        /// Preencher com o nome do médico responsável/coordenador do PCMSO
+        /// </summary>
         [XmlElement("nmResp")]
         public string NmResp { get; set; }
 
+        /// <summary>
+        /// Número de inscrição do médico responsável/coordenador do PCMSO no CRM
+        /// </summary>
         [XmlElement("nrCRM")]
         public string NrCRM { get; set; }
 
+        /// <summary>
+        /// Preencher com a sigla da UF de expedição do CRM
+        /// </summary>
         [XmlElement("ufCRM")]
         public UFBrasil UfCRM { get; set; }
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeCpfRespField() => !string.IsNullOrEmpty(CpfResp);
+        public bool ShouldSerializeCpfResp() => !string.IsNullOrEmpty(CpfResp);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 }

@@ -7,25 +7,31 @@ using System;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
 using System.Collections.Generic;
-using static Unimake.Business.DFe.Xml.EFDReinf.TipoAjuste;
-using Unimake.Business.DFe.Xml.GNRE;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-3010 - Receita de espetáculos desportivos
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf3010")]
     [ComVisible(true)]
 #endif
-
     [Serializable()]
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtEspDesportivo/v2_01_02", IsNullable = false)]
     public class Reinf3010 : XMLBase
     {
+        /// <summary>
+        /// Evento espetáculo desportivo
+        /// </summary>
         [XmlElement("evtEspDesportivo")]
         public EvtEspDesportivo EvtEspDesportivo { get; set; }
     }
 
+    /// <summary>
+    /// Evento espetáculo desportivo
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtEspDesportivo")]
@@ -34,18 +40,18 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class EvtEspDesportivo : ReinfEventoBase
     {
         [XmlElement("ideEvento")]
-        public IdeEventoReinf3010 IdeEvento { get; set; }
+        public IdeEvento3010 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
-        public IdeContriReinf3010 IdeContri { get; set; }
+        public IdeContri3010 IdeContri { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf3010")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento3010")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf3010
+    public class IdeEvento3010
     {
         [XmlElement("indRetif")]
         public IndicativoRetificacao IndRetif { get; set; }
@@ -79,26 +85,41 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         [XmlElement("verProc")]
         public string VerProc { get; set; }
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeNrRecibo() => !string.IsNullOrEmpty(NrRecibo);
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeContriReinf3010")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeContri3010")]
     [ComVisible(true)]
 #endif
-    public class IdeContriReinf3010 : IdeContri
+    public class IdeContri3010 : IdeContri
     {
         [XmlElement("ideEstab")]
-        public IdeEstabReinf3010 ideEstab { get; set; }
+        public IdeEstab3010 IdeEstab { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstabReinf3010")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstab3010")]
     [ComVisible(true)]
 #endif
-    public class IdeEstabReinf3010 : IdeEstab
+    public class IdeEstab3010
     {
+        [XmlElement("tpInscEstab")]
+        public TipoInscricaoEstabelecimento TpInscEstab { get; set; }
+
+        [XmlElement("nrInscEstab")]
+        public string NrInscEstab { get; set; }
+
+        /// <summary>
+        /// Boletim do espetáculo desportivo
+        /// </summary>
         [XmlElement("boletim")]
         public List<Boletim> Boletim { get; set; }
 
@@ -143,6 +164,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public ReceitaTotal ReceitaTotal { get; set; }
     }
 
+    /// <summary>
+    /// Boletim do espetáculo desportivo
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Boletim")]
@@ -268,6 +292,14 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         public int GetOutrasReceitasCount => (OutrasReceitas != null ? OutrasReceitas.Count : 0);
 #endif
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeCnpjVisitante() => !string.IsNullOrEmpty(CnpjVisitante);
+        public bool ShouldSerializeNomeVisitante() => !string.IsNullOrEmpty(NomeVisitante);
+        public bool ShouldSerializeCodMunic() => !string.IsNullOrEmpty(CodMunic);
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -396,7 +428,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         }
 
         [XmlElement("infoProc")]
-        public List<InfoProcReinf3010> InfoProc { get; set; }
+        public List<InfoProc3010> InfoProc { get; set; }
 
 #if INTEROP
 
@@ -404,11 +436,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddInfoProc(InfoProcReinf3010 item)
+        public void AddInfoProc(InfoProc3010 item)
         {
             if (InfoProc == null)
             {
-                InfoProc = new List<InfoProcReinf3010>();
+                InfoProc = new List<InfoProc3010>();
             }
 
             InfoProc.Add(item);
@@ -419,7 +451,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da InfoProc</returns>
-        public InfoProcReinf3010 GetInfoProc(int index)
+        public InfoProc3010 GetInfoProc(int index)
         {
             if ((InfoProc?.Count ?? 0) == 0)
             {
@@ -434,14 +466,20 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         public int GetInfoProcCount => (InfoProc != null ? InfoProc.Count : 0);
 #endif
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeVlrCPSuspTotalField() => VlrCPSuspTotal > 0;
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcReinf3010")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProc3010")]
     [ComVisible(true)]
 #endif
-    public class InfoProcReinf3010
+    public class InfoProc3010
     {
         [XmlElement("tpProc")]
         public TipoProcesso TpProc { get; set; }
@@ -464,8 +502,8 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
+        public bool ShouldSerializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 }

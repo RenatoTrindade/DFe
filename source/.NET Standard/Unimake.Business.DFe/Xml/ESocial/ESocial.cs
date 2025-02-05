@@ -8,23 +8,22 @@ using System;
 using System.Globalization;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
-using Unimake.Business.DFe.Xml.GNRE;
-using Unimake.Business.DFe.Xml.SNCM;
+using Unimake.Business.DFe.Utility;
 
 namespace Unimake.Business.DFe.Xml.ESocial
 {
     #region IdeEvento
 
+    /// <summary>
+    /// Informações de identificação do evento
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEvento")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Informações de identificação do evento
-    /// </summary>
     [Serializable()]
-    public class IdeEvento
+    public abstract class IdeEvento
     {
         /// <summary>
         ///Valores válidos:
@@ -61,14 +60,14 @@ namespace Unimake.Business.DFe.Xml.ESocial
 
     #region IdeEmpregador
 
+    /// <summary>
+    /// Informações de identificação do empregador
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEmpregador")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Informações de identificação do empregador
-    /// </summary>
     [Serializable()]
     public class IdeEmpregador
     {
@@ -96,6 +95,7 @@ namespace Unimake.Business.DFe.Xml.ESocial
     #endregion
 
     #region CultureInfoESocial
+
     /// <summary>
     /// Configurações Cultura para o ESocial
     /// </summary>
@@ -110,24 +110,24 @@ namespace Unimake.Business.DFe.Xml.ESocial
         {
             get
             {
-                InfoField.NumberFormat.NumberDecimalSeparator = ",";
+                InfoField.NumberFormat.NumberDecimalSeparator = ".";
 
                 return InfoField;
             }
         }
     }
-    #endregion
+    #endregion CultureInfoESocial
 
     #region ItensRemun
 
+    /// <summary>
+    /// Rubricas que compõem a remuneração do trabalhador
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ItensRemun")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Rubricas que compõem a remuneração do trabalhador
-    /// </summary>
     [Serializable()]
     public abstract class ItensRemun
     {
@@ -150,23 +150,44 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// quantidade de dias trabalhados relacionada com uma rubrica de salário, etc.
         /// Validação: Deve ser maior que 0 (zero).
         /// </summary>
-        [XmlElement("qtdRubr")]
+        [XmlIgnore]
         public double QtdRubr { get; set; }
+
+        [XmlElement("qtdRubr")]
+        public string QtdRubrField
+        {
+            get => QtdRubr.ToString("F2", CultureInfo.InvariantCulture);
+            set => QtdRubr = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Informar o fator, percentual, etc. da rubrica, quando necessário.
         /// Ex.: Adicional de horas extras 50%, relacionado a uma rubrica de horas extras: Fator = 50.
         /// Validação: Deve ser maior que 0 (zero).
         /// </summary>
-        [XmlElement("fatorRubr")]
+        [XmlIgnore]
         public double FatorRubr { get; set; }
+
+        [XmlElement("fatorRubr")]
+        public string FatorRubrField
+        {
+            get => FatorRubr.ToString("F2", CultureInfo.InvariantCulture);
+            set => FatorRubr = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Valor total da rubrica. Validação: Deve ser maior que 0 (zero).
         /// </summary>
         //[XmlIgnore]
-        [XmlElement("vrRubr")]
+        [XmlIgnore]
         public double VrRubr { get; set; }
+
+        [XmlElement("vrRubr")]
+        public string VrRubrField
+        {
+            get => VrRubr.ToString("F2", CultureInfo.InvariantCulture);
+            set => VrRubr = Converter.ToDouble(value);
+        }
 
         /// <summary>
         /// Indicativo de tipo de apuração de IR.
@@ -179,14 +200,26 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// [2021] (se indApuracao = [2]).
         /// </summary>
         [XmlElement("indApurIR")]
+#if INTEROP
+        public IndApurIR IndApurIR { get; set; } = (IndApurIR)(-1);
+#else
         public IndApurIR? IndApurIR { get; set; }
+#endif
 
         #region ShouldSerialize
-        public bool ShouldSerializeQtdRubrField() => QtdRubr != 0;
-        public bool ShouldSerializeFatorRubrField() => FatorRubr != 0;
-        public bool ShouldSerializeIndApurIRField() =>  !IndApurIR.IsNullOrEmpty();
+
+        public bool ShouldSerializeQtdRubrField() => QtdRubr > 0;
+        public bool ShouldSerializeFatorRubrField() => FatorRubr > 0;
+
+#if INTEROP
+        public bool ShouldSerializeIndApurIR() => IndApurIR != (IndApurIR)(-1);
+#else
+        public bool ShouldSerializeIndApurIR() => IndApurIR != null;
+#endif
+
         #endregion ShouldSerialize
     }
 
     #endregion ItensRemun
+
 }

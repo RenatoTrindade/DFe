@@ -128,7 +128,7 @@ namespace Unimake.Business.DFe.Xml.CTe
         }
 
         /// <summary>
-        /// Deserializar o XML CTe no objeto CTe
+        /// Desserializar o XML CTe no objeto CTe
         /// </summary>
         /// <param name="xml">string do XML CTe</param>
         /// <returns>Objeto da CTe</returns>
@@ -3019,7 +3019,6 @@ namespace Unimake.Business.DFe.Xml.CTe
             set => QtdRat = Utility.Converter.ToDouble(value);
         }
 
-
 #if INTEROP
 
         /// <summary>
@@ -4216,9 +4215,14 @@ namespace Unimake.Business.DFe.Xml.CTe
         #region ShouldSerialize
 
         public bool ShouldSerializeNViag() => !string.IsNullOrWhiteSpace(NViag);
-        public bool ShouldSerializeTpNav() => TpNav != null && TpNav != TipoNavegacao.NaoDefinido;
 
-        #endregion
+#if INTEROP
+        public bool ShouldSerializeTpNav() => TpNav != TipoNavegacao.NaoDefinido;
+#else
+        public bool ShouldSerializeTpNav() => TpNav != null;
+#endif
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP

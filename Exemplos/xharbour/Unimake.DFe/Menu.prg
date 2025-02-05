@@ -72,6 +72,28 @@ Function Main()
    
    Aadd(aOpcoes, "Verificar se a DLL esta instalada no PC")
    
+   Aadd(aOpcoes, "eSocial - Consultar lote assincrono")   
+   Aadd(aOpcoes, "eSocial - Evento 2210 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Evento 2210 - Enviar lote - XML desserializado")
+   Aadd(aOpcoes, "eSocial - Evento 2221 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Evento 1010 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Evento 2220 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Evento 1200 - Enviar lote")   
+   Aadd(aOpcoes, "eSocial - Evento 2240 - Enviar lote")   
+   Aadd(aOpcoes, "eSocial - Evento 1210 - Enviar lote")   
+   Aadd(aOpcoes, "eSocial - Evento 2220 - Enviar lote - XML desserializado")
+   Aadd(aOpcoes, "eSocial - Evento 2200 - Enviar lote")   
+   Aadd(aOpcoes, "eSocial - Evento 2230 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Evento 2299 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Download Eventos Por ID")
+   Aadd(aOpcoes, "eSocial - Download Eventos Por Nr Recibo")
+   Aadd(aOpcoes, "eSocial - Consultar Eventos - Tabela")
+   Aadd(aOpcoes, "eSocial - Consultar Eventos - Trabalhador")
+   Aadd(aOpcoes, "eSocial - Consultar Eventos - Empregador")
+   Aadd(aOpcoes, "eSocial - Evento 1200 - Enviar lote - XML desserializado")
+   Aadd(aOpcoes, "eSocial - Evento 1000 - Enviar lote")
+   Aadd(aOpcoes, "eSocial - Evento 1000 - Enviar lote - XML desserializado")
+   
    Do While .T.
       Cls
 
@@ -251,6 +273,69 @@ Function Main()
 			  
          case nOpcao = 53
 		      VerificarDLLInstalada()
+			  
+	     case nOpcao = 54
+              eSocialConsultaLoteAssincrono()		 
+		
+         case nOpcao = 55
+		      EnviarEsocial2210()
+		
+	     case nOpcao = 56
+		      EnviarEsocial2210Desserializando()
+			  
+         case nOpcao = 57
+		      EnviarEsocial2221()			  
+			  
+         case nOpcao = 58
+		      EnviarEsocial1010()			  
+			  
+         case nOpcao = 59
+		      EnviarEsocial2220()			  
+			  
+         case nOpcao = 60
+		      EnviarEsocial1200()			  
+			  
+         case nOpcao = 61
+		      EnviarEsocial2240()			  
+			  
+         case nOpcao = 62
+		      EnviarEsocial1210()			  
+			  
+         case nOpcao = 63
+		      EnviarEsocial2220Desserializando()			  
+			  
+         case nOpcao = 64
+		      EnviarEsocial2200()		 
+			  
+         case nOpcao = 65
+		      EnviarEsocial2230()		 
+			  
+         case nOpcao = 66
+		      EnviarEsocial2299()		 
+			  
+         case nOpcao = 67
+		      DownloadEventoESocialPorID()		 
+			  
+         case nOpcao = 68
+		      DownloadEventoESocialPorNRRec()
+			  
+         case nOpcao = 69			
+              ConsultarEvtsTabelaESocial()
+			  
+		 case nOpcao = 70
+              ConsultarEvtsTrabalhadorESocial()
+			  
+		 case nOpcao = 71
+              ConsultarEvtsEmpregadorESocial()		 
+			  
+		 case nOpcao = 72
+              EnviarEsocial1200Desserializando()
+			  
+		 case nOpcao = 73
+              EnviarEsocial1000()
+			  
+		 case nOpcao = 74
+              EnviarEsocial1000Desserializando()
       endcase
    EndDo
 Return       

@@ -10,17 +10,21 @@ using System.Collections.Generic;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-2050 - Comercialização de produção
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2050")]
     [ComVisible(true)]
 #endif
-
     [Serializable()]
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtInfoProdRural/v2_01_02", IsNullable = false)]
     public class Reinf2050 : XMLBase
     {
-
+        /// <summary>
+        /// Evento comercialização da produção
+        /// </summary>
         [XmlElement("evtComProd")]
         public EvtComProd EvtComProd { get; set; }
 
@@ -38,7 +42,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     {
 
         [XmlElement("ideEvento")]
-        public IdeEventoReinf2050 IdeEvento { get; set; }
+        public IdeEvento2050 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
@@ -50,37 +54,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf2050")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento2050")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf2050
-    {
-
-        [XmlElement("indRetif")]
-        public IndicativoRetificacao IndRetif { get; set; }
-
-        [XmlElement("nrRecibo")]
-        public string NrRecibo { get; set; }
-
-        [XmlElement("perApur")]
-        public string PerApur { get; set; }
-
-        [XmlElement("tpAmb")]
-        public TipoAmbiente TpAmb { get; set; }
-
-        [XmlElement("procEmi")]
-        public ProcessoEmissaoReinf ProcEmi { get; set; }
-
-        [XmlElement("verProc")]
-        public string VerProc { get; set; }
-
-        #region ShouldSerialize
-
-        public bool ShouldSereializeNrRecibo() => !string.IsNullOrEmpty(NrRecibo);
-
-        #endregion
-
-    }
+    public class IdeEvento2050 : IdeEvento2010 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
@@ -90,15 +67,15 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class InfoComProd
     {
         [XmlElement("ideEstab")]
-        public IdeEstabReinf2050 IdeEstab { get; set; }
+        public IdeEstab2050 IdeEstab { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstabReinf2050")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEstab2050")]
     [ComVisible(true)]
 #endif
-    public class IdeEstabReinf2050
+    public class IdeEstab2050
     {
 
         [XmlElement("tpInscEstab")]
@@ -219,13 +196,13 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCPSuspTotal() => VlrCPSuspTotal > 0;
+        public bool ShouldSerializeVlrCPSuspTotalField() => VlrCPSuspTotal > 0;
         
-        public bool ShouldSerializeVlrRatSuspTotal() => VlrRatSuspTotal > 0;
+        public bool ShouldSerializeVlrRatSuspTotalField() => VlrRatSuspTotal > 0;
        
-        public bool ShouldSerializeVlrSenarSuspTotal() => VlrSenarSuspTotal > 0;
+        public bool ShouldSerializeVlrSenarSuspTotalField() => VlrSenarSuspTotal > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -249,7 +226,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         }
 
         [XmlElement("infoProc")]
-        public List<InfoProcReinf2050> InfoProc { get; set; }
+        public List<InfoProc2050> InfoProc { get; set; }
 
 #if INTEROP
 
@@ -257,11 +234,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddInfoProc(InfoProcReinf2050 item)
+        public void AddInfoProc(InfoProc2050 item)
         {
             if (InfoProc == null)
             {
-                InfoProc = new List<InfoProcReinf2050>();
+                InfoProc = new List<InfoProc2050>();
             }
 
             InfoProc.Add(item);
@@ -272,7 +249,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da InfoProc</returns>
-        public InfoProcReinf2050 GetInfoProc(int index)
+        public InfoProc2050 GetInfoProc(int index)
         {
             if ((InfoProc?.Count ?? 0) == 0)
             {
@@ -291,10 +268,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProcReinf2050")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoProc2050")]
     [ComVisible(true)]
 #endif
-    public class InfoProcReinf2050
+    public class InfoProc2050
     {
 
         [XmlElement("tpProc")]
@@ -324,7 +301,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         {
             get => VlrRatSusp.ToString("F2", CultureInfoReinf.Info);
             set => VlrRatSusp = double.Parse(value.ToString(), CultureInfoReinf.Info);
-        }
+        } 
 
         [XmlIgnore]
         public double VlrSenarSusp { get; set; }
@@ -338,14 +315,14 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
+        public bool ShouldSerializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
 
-        public bool ShouldSerializeVlrCPSusp() => VlrCPSusp > 0;
+        public bool ShouldSerializeVlrCPSuspField() => VlrCPSusp > 0;
         
-        public bool ShouldSerializeVlrRatSusp() => VlrRatSusp > 0;
+        public bool ShouldSerializeVlrRatSuspField() => VlrRatSusp > 0;
         
-        public bool ShouldSerializeVlrSenarSusp() => VlrSenarSusp > 0;
+        public bool ShouldSerializeVlrSenarSuspField() => VlrSenarSusp > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 }

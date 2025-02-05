@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -8,6 +9,9 @@ using System.Xml;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
 using Unimake.Business.DFe.Utility;
+using Unimake.Business.DFe.Xml.DARE;
+using Unimake.Business.DFe.Xml.GNRE;
+using Unimake.Business.DFe.Xml.SNCM;
 
 namespace Unimake.Business.DFe
 {
@@ -30,18 +34,24 @@ namespace Unimake.Business.DFe
                 InternalServerError.LoadXml(StringToXml("O servidor retornou um erro (500) || Mensagem retornada:  " + responseString));
                 return InternalServerError;
             }
+            else if (Response.StatusCode == System.Net.HttpStatusCode.NotFound && Config.PadraoNFSe == PadraoNFSe.NACIONAL)
+            {
+                var naoEncontradoErro = new XmlDocument();
+                naoEncontradoErro.LoadXml(StringToXml("O servidor da Receita Federal retornou um erro (404) pois não encontrou a determinada nota no ambiente. " + responseString));
+                return naoEncontradoErro;
+            }
 
             var resultadoRetorno = new XmlDocument();
             var tipoRetorno = (string.IsNullOrWhiteSpace(Config.ResponseMediaType) ? Response.Content.Headers.ContentType.MediaType : Config.ResponseMediaType);
 
             if (!responseString.StartsWith("<") && Response.IsSuccessStatusCode)
-            {   
-                if(responseString.StartsWith(" "))
+            {
+                if (responseString.StartsWith(" "))
                 {
                     responseString = responseString.Substring(1);
                 }
             }
-            
+
             //Response.Content.Headers.ContentType.MediaType -> ContentType retornado na comunicação || (Config.ContentType)
             switch (tipoRetorno)             //(Config.ContentType)
             {
@@ -59,9 +69,26 @@ namespace Unimake.Business.DFe
                     break;
 
                 case "application/json": //Retorno JSON -> Vamos ter que converter para XML
+                case "application/problem+json": //DARE SP retorna isso quando o JSON de envio tem problemas nas tags
                     try
                     {
                         resultadoRetorno.LoadXml(BuscarXML(ref Config, responseString));
+
+                        if (Config.Servico == Servico.DAREEnvio)
+                        {
+                            if (responseString.Contains("itensParaGeracao"))
+                            {
+                                DARELoteRetorno dareLote = JsonConvert.DeserializeObject<DARELoteRetorno>(responseString);
+
+                                resultadoRetorno = dareLote.GerarXML();
+                            }
+                            else if (responseString.Contains("documentoImpressao"))
+                            {
+                                DAREUnicoRetorno dareUnico = JsonConvert.DeserializeObject<DAREUnicoRetorno>(responseString);
+
+                                resultadoRetorno = CreateXmlDocumentDARERetorno(dareUnico);
+                            }
+                        }
                     }
                     catch
                     {
@@ -69,6 +96,20 @@ namespace Unimake.Business.DFe
                         {
                             resultadoRetorno.LoadXml(StringToXml(responseString));
                         }
+
+                        else if (Config.Servico == Servico.DAREReceita)
+                        {
+                            // Desserializando JSON para lista de objetos
+                            List<ReceitaDARE> dare = JsonConvert.DeserializeObject<List<ReceitaDARE>>(responseString);
+
+                            if (dare == null)
+                            {
+                                throw new InvalidOperationException("Não foi possível desserializar a lista de receitas.");
+                            }
+
+                            resultadoRetorno = CreateXmlDocumentReceitas(dare);
+                        }
+
                         else
                         {
                             resultadoRetorno.LoadXml(responseString);
@@ -91,7 +132,7 @@ namespace Unimake.Business.DFe
                 case "application/pdf":
                     responseString = responseString.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
                     responseString = Convert.ToBase64String(Encoding.UTF8.GetBytes(responseString));
-                    stream  = Response.IsSuccessStatusCode ?  Response.Content.ReadAsStreamAsync().Result : null;
+                    stream = Response.IsSuccessStatusCode ? Response.Content.ReadAsStreamAsync().Result : null;
                     resultadoRetorno = CreateXmlDocument(responseString);
                     break;
 
@@ -193,6 +234,26 @@ namespace Unimake.Business.DFe
             XmlNode textoElement = xmlDoc.CreateElement("Base64Pdf");
             textoElement.InnerText = text;
             root.AppendChild(textoElement);
+
+            return xmlDoc;
+        }
+
+        static XmlDocument CreateXmlDocumentReceitas(List<ReceitaDARE> listaReceitas)
+        {
+            var receitas = new Xml.DARE.Receitas();
+            receitas.Receita = listaReceitas;
+
+            var xmlDoc = XMLUtility.Serializar<Xml.DARE.Receitas>(receitas);
+
+            return xmlDoc;
+        }
+
+        static XmlDocument CreateXmlDocumentDARERetorno(DAREUnicoRetorno dareUnico) 
+        {
+            var dareRetorno = new DARERetorno();
+            dareRetorno.DARE = dareUnico;
+
+            var xmlDoc = XMLUtility.Serializar<DARERetorno>(dareRetorno);
 
             return xmlDoc;
         }

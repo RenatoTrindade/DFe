@@ -293,7 +293,34 @@ namespace Unimake.Business.DFe
 
                 if (TratarScapeRetorno)
                 {
-                    RetornoServicoString = retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].InnerText;
+                    if (soap.PadraoNFSe == PadraoNFSe.GIF && retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].OuterXml.Contains("SOAP-ENV:Fault"))
+                    {
+                        RetornoServicoString = retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].OuterXml;
+                    }
+                    else if (soap.PadraoNFSe == PadraoNFSe.GISSONLINE && retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].OuterXml.Contains("faultcode"))
+                    {
+                        RetornoServicoString = retornoXml.ChildNodes[0].OuterXml;
+                    }
+                    else if (soap.PadraoNFSe == PadraoNFSe.TIPLAN && retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].OuterXml.Contains("faultcode"))
+                    {
+                        RetornoServicoString = retornoXml.OuterXml;
+                    }
+                    else if (tagRetorno == "soap:Fault")
+                    {
+                        RetornoServicoString = retornoXml.OuterXml;
+                    }
+
+                    // Padrão TECNOSISTEMAS às vezes retorna o InnerText sem formatação e gera o erro Dados nível raiz inválidos. Linha 1, posição 1
+                    // Para corrigir, pegamos o OuterXml e fazemos um replace nos scapes para ficar correto
+                    else if (soap.PadraoNFSe == PadraoNFSe.TECNOSISTEMAS)
+                    {
+                        RetornoServicoString = retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].OuterXml.Replace("&lt;", "<").Replace("&gt;", ">");
+                    }
+
+                    else
+                    {
+                        RetornoServicoString = retornoXml.GetElementsByTagName(tagRetorno)[0].ChildNodes[0].InnerText;
+                    }
                 }
                 else
                 {

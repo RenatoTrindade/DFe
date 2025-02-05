@@ -19,8 +19,7 @@
 				<autXML>
 					<CNPJ>00000000000000</CNPJ>
 				</autXML>
-				<tpAutorizacao>1</tpAutorizacao>
-				<xCondUso>O emitente ou destinatário da NF-e, declara que permite o transportador declarado no campo CNPJ/CPF deste evento a autorizar os transportadores subcontratados ou redespachados a terem acesso ao download da NF-e</xCondUso>
+				<tpAutorizacao>0</tpAutorizacao>
 			</detEvento>
 		</infEvento>
 	</evento>

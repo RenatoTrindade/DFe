@@ -10,6 +10,9 @@ using System.Collections.Generic;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-9015 - Consolidação das retenções na fonte
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf9015")]
@@ -19,6 +22,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtRetCons/v2_01_02", IsNullable = false)]
     public class Reinf9015 : XMLBase
     {
+        /// <summary>
+        /// Evento retenções consolidadas
+        /// </summary>
         [XmlElement("evtRetCons")]
         public EvtRetCons EvtRetCons { get; set; }
 
@@ -26,6 +32,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento retenções consolidadas
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtRetCons")]
@@ -33,37 +42,87 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
     public class EvtRetCons : ReinfEventoBase
     {
+        /// <summary>
+        /// Informações de identificação do evento
+        /// </summary>
         [XmlElement("ideEvento")]
-        public IdeEventoReinf9001 IdeEvento { get; set; }
+        public IdeEvento9015 IdeEvento { get; set; }
 
+        /// <summary>
+        /// Informações de identificação do contribuinte
+        /// </summary>
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
 
+        /// <summary>
+        /// Informações do recibo de retorno
+        /// </summary>
         [XmlElement("ideRecRetorno")]
-        public IdeRecRetorno IdeRecRetorno { get; set; }
+        public IdeRecRetorno9015 IdeRecRetorno { get; set; }
 
+        /// <summary>
+        /// Informações de processamento do evento
+        /// </summary>
         [XmlElement("infoRecEv")]
-        public InfoRecEvReinf9015 InfoRecEv { get; set; }
+        public InfoRecEv9015 InfoRecEv { get; set; }
 
+        /// <summary>
+        /// Informações relativas a totalizadores pela natureza do rendimento e código de receita
+        /// </summary>
         [XmlElement("infoCR_CNR")]
         public InfoCR_CNR InfoCR_CNR { get; set; }
 
+        /// <summary>
+        /// Informações consolidadas dos tributos da empresa
+        /// </summary>
         [XmlElement("infoTotalCR")]
         public InfoTotalCR InfoTotalCR { get; set; }
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoRecEvReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento9015")]
     [ComVisible(true)]
 #endif
-    public class InfoRecEvReinf9015
+    public class IdeEvento9015 : IdeEvento9001 { }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeRecRetorno9015")]
+    [ComVisible(true)]
+#endif
+    public class IdeRecRetorno9015 : IdeRecRetorno9001 { }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.InfoRecEv9015")]
+    [ComVisible(true)]
+#endif
+    public class InfoRecEv9015
     {
         [XmlElement("nrRecArqBase")]
         public string NrRecArqBase { get; set; }
 
         [XmlElement("nrProtLote")]
         public string NrProtLote { get; set; }
+
+        [XmlIgnore]
+#if INTEROP
+        public DateTime DhRecepcao { get; set; }
+#else
+        public DateTimeOffset DhRecepcao { get; set; }
+#endif
+
+        [XmlElement("dhRecepcao")]
+        public string DhRecepcaoField
+        {
+            get => DhRecepcao.ToString("yyyy-MM-ddTHH:mm:sszzz");
+#if INTEROP
+            set => DhRecepcao = DateTime.Parse(value);
+#else
+            set => DhRecepcao = DateTimeOffset.Parse(value);
+#endif
+        }
 
         [XmlIgnore]
 #if INTEROP
@@ -89,13 +148,16 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         [XmlElement("idEv")]
         public string IdEv { get; set; }
 
+        [XmlElement("fechRet")]
+        public IndicativoFinalidadeEvento FechRet { get; set; }
+
         [XmlElement("hash")]
         public string Hash { get; set; }
 
         #region ShouldSerialize
-        public bool ShouldSereializeNrProtLote() => !string.IsNullOrEmpty(NrProtLote);
+        public bool ShouldSerializeNrProtLote() => !string.IsNullOrEmpty(NrProtLote);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -106,17 +168,13 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class InfoCR_CNR
     {
         [XmlElement("indExistInfo")]
-#if INTEROP
-        public IndicativoExistenciaTributos IndExistInfo { get; set; } = (IndicativoExistenciaTributos)(-1);
-#else
-        public IndicativoExistenciaTributos ? IndExistInfo { get; set; }
-#endif
+        public IndicativoExistenciaTributos IndExistInfo { get; set; }
 
         [XmlElement("identEscritDCTF")]
         public string IdentEscritDCTF { get; set; }
 
         [XmlElement("totApurMen")]
-        public List<TotApurMenReinf9015> TotApurMen { get; set; }
+        public List<TotApurMen9015> TotApurMen { get; set; }
 
 #if INTEROP
 
@@ -124,11 +182,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddTotApurMen(TotApurMenReinf9015 item)
+        public void AddTotApurMen(TotApurMen9015 item)
         {
             if (TotApurMen == null)
             {
-                TotApurMen = new List<TotApurMenReinf9015>();
+                TotApurMen = new List<TotApurMen9015>();
             }
 
             TotApurMen.Add(item);
@@ -139,7 +197,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da TotApurMen</returns>
-        public TotApurMenReinf9015 GetTotApurMen(int index)
+        public TotApurMen9015 GetTotApurMen(int index)
         {
             if ((TotApurMen?.Count ?? 0) == 0)
             {
@@ -156,7 +214,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
 
         [XmlElement("totApurQui")]
-        public List<TotApurQuiReinf9015> TotApurQui { get; set; }
+        public List<TotApurQui9015> TotApurQui { get; set; }
 
 #if INTEROP
 
@@ -164,11 +222,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddTotApurQui(TotApurQuiReinf9015 item)
+        public void AddTotApurQui(TotApurQui9015 item)
         {
             if (TotApurQui == null)
             {
-                TotApurQui = new List<TotApurQuiReinf9015>();
+                TotApurQui = new List<TotApurQui9015>();
             }
 
             TotApurQui.Add(item);
@@ -179,7 +237,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da TotApurQui</returns>
-        public TotApurQuiReinf9015 GetTotApurQui(int index)
+        public TotApurQui9015 GetTotApurQui(int index)
         {
             if ((TotApurQui?.Count ?? 0) == 0)
             {
@@ -196,7 +254,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
 
         [XmlElement("totApurDec")]
-        public List<TotApurDecReinf9015> TotApurDec { get; set; }
+        public List<TotApurDec9015> TotApurDec { get; set; }
 
 #if INTEROP
 
@@ -204,11 +262,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddTotApurDec(TotApurDecReinf9015 item)
+        public void AddTotApurDec(TotApurDec9015 item)
         {
             if (TotApurDec == null)
             {
-                TotApurDec = new List<TotApurDecReinf9015>();
+                TotApurDec = new List<TotApurDec9015>();
             }
 
             TotApurDec.Add(item);
@@ -219,7 +277,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da TotApurDec</returns>
-        public TotApurDecReinf9015 GetTotApurDec(int index)
+        public TotApurDec9015 GetTotApurDec(int index)
         {
             if ((TotApurDec?.Count ?? 0) == 0)
             {
@@ -236,7 +294,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
 
         [XmlElement("totApurSem")]
-        public List<TotApurSemReinf9015> TotApurSem { get; set; }
+        public List<TotApurSem9015> TotApurSem { get; set; }
 
 #if INTEROP
 
@@ -244,11 +302,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddTotApurSem(TotApurSemReinf9015 item)
+        public void AddTotApurSem(TotApurSem9015 item)
         {
             if (TotApurSem == null)
             {
-                TotApurSem = new List<TotApurSemReinf9015>();
+                TotApurSem = new List<TotApurSem9015>();
             }
 
             TotApurSem.Add(item);
@@ -259,7 +317,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da TotApurSem</returns>
-        public TotApurSemReinf9015 GetTotApurSem(int index)
+        public TotApurSem9015 GetTotApurSem(int index)
         {
             if ((TotApurSem?.Count ?? 0) == 0)
             {
@@ -276,7 +334,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 #endif
 
         [XmlElement("totApurDia")]
-        public List<TotApurDiaReinf9015> TotApurDia { get; set; }
+        public List<TotApurDia9015> TotApurDia { get; set; }
 
 #if INTEROP
 
@@ -284,11 +342,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddTotApurDia(TotApurDiaReinf9015 item)
+        public void AddTotApurDia(TotApurDia9015 item)
         {
             if (TotApurDia == null)
             {
-                TotApurDia = new List<TotApurDiaReinf9015>();
+                TotApurDia = new List<TotApurDia9015>();
             }
 
             TotApurDia.Add(item);
@@ -299,7 +357,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da TotApurDia</returns>
-        public TotApurDiaReinf9015 GetTotApurDia(int index)
+        public TotApurDia9015 GetTotApurDia(int index)
         {
             if ((TotApurDia?.Count ?? 0) == 0)
             {
@@ -324,10 +382,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurMenReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurMen9015")]
     [ComVisible(true)]
 #endif
-    public class TotApurMenReinf9015
+    public class TotApurMen9015
     {
         [XmlElement("CRMen")]
         public string CRMen { get; set; }
@@ -397,23 +455,23 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRMenCalc() => VlrCRMenCalc > 0;
+        public bool ShouldSerializeVlrCRMenCalcField() => VlrCRMenCalc > 0;
 
-        public bool ShouldSerializeVlrCRMenSuspInf() => VlrCRMenSuspInf > 0;
+        public bool ShouldSerializeVlrCRMenSuspInfField() => VlrCRMenSuspInf > 0;
 
-        public bool ShouldSerializeVlrCRMenSuspCalc() => VlrCRMenSuspCalc > 0;
+        public bool ShouldSerializeVlrCRMenSuspCalcField() => VlrCRMenSuspCalc > 0;
 
-        public bool ShouldSerializeVlrCRMenSuspDCTF() => VlrCRMenSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRMenSuspDCTFField() => VlrCRMenSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurQuiReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurQui9015")]
     [ComVisible(true)]
 #endif
-    public class TotApurQuiReinf9015
+    public class TotApurQui9015
     {
         [XmlElement("perApurQui")]
         public string PerApurQui { get; set; }
@@ -486,23 +544,23 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRQuiCalc() => VlrCRQuiCalc > 0;
+        public bool ShouldSerializeVlrCRQuiCalcField() => VlrCRQuiCalc > 0;
 
-        public bool ShouldSerializeVlrCRQuiSuspInf() => VlrCRQuiSuspInf > 0;
+        public bool ShouldSerializeVlrCRQuiSuspInfField() => VlrCRQuiSuspInf > 0;
 
-        public bool ShouldSerializeVlrCRQuisSuspCalc() => VlrCRQuisSuspCalc > 0;
+        public bool ShouldSerializeVlrCRQuisSuspCalcField() => VlrCRQuisSuspCalc > 0;
 
-        public bool ShouldSerializeVlrCRQuiSuspDCTF() => VlrCRQuiSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRQuiSuspDCTFField() => VlrCRQuiSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDecReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDec9015")]
     [ComVisible(true)]
 #endif
-    public class TotApurDecReinf9015
+    public class TotApurDec9015
     {
         [XmlElement("perApurDec")]
         public string PerApurDec { get; set; }
@@ -575,24 +633,24 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRDecCalc() => VlrCRDecCalc > 0;
+        public bool ShouldSerializeVlrCRDecCalcField() => VlrCRDecCalc > 0;
 
-        public bool ShouldSerializeVlrCRDecSuspInf() => VlrCRDecSuspInf > 0;
+        public bool ShouldSerializeVlrCRDecSuspInfField() => VlrCRDecSuspInf > 0;
 
-        public bool ShouldSerializeVlrCRDecSuspCalc() => VlrCRDecSuspCalc > 0;
+        public bool ShouldSerializeVlrCRDecSuspCalcField() => VlrCRDecSuspCalc > 0;
 
-        public bool ShouldSerializeVlrCRDecSuspDCTF() => VlrCRDecSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRDecSuspDCTFField() => VlrCRDecSuspDCTF > 0;
 
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurSemReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurSem9015")]
     [ComVisible(true)]
 #endif
-    public class TotApurSemReinf9015
+    public class TotApurSem9015
     {
         [XmlElement("perApurSem")]
         public string PerApurSem { get; set; }
@@ -665,23 +723,23 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRSemCalc() => VlrCRSemCalc > 0;
+        public bool ShouldSerializeVlrCRSemCalcField() => VlrCRSemCalc > 0;
 
-        public bool ShouldSerializeVlrCRSemSuspInf() => VlrCRSemSuspInf > 0;
+        public bool ShouldSerializeVlrCRSemSuspInfField() => VlrCRSemSuspInf > 0;
 
-        public bool ShouldSerializeVlrCRSemSuspCalc() => VlrCRSemSuspCalc > 0;
+        public bool ShouldSerializeVlrCRSemSuspCalcField() => VlrCRSemSuspCalc > 0;
 
-        public bool ShouldSerializeVlrCRSemSuspDCTF() => VlrCRSemSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRSemSuspDCTFField() => VlrCRSemSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDiaReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDia9015")]
     [ComVisible(true)]
 #endif
-    public class TotApurDiaReinf9015
+    public class TotApurDia9015
     {
         [XmlElement("perApurDia")]
         public string PerApurDia { get; set; }
@@ -754,15 +812,15 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRDiaCalc() => VlrCRDiaCalc > 0;
+        public bool ShouldSerializeVlrCRDiaCalcField() => VlrCRDiaCalc > 0;
 
-        public bool ShouldSerializeVlrCRDiaSuspInf() => VlrCRDiaSuspInf > 0;
+        public bool ShouldSerializeVlrCRDiaSuspInfField() => VlrCRDiaSuspInf > 0;
 
-        public bool ShouldSerializeVlrCRDiaSuspCalc() => VlrCRDiaSuspCalc > 0;
+        public bool ShouldSerializeVlrCRDiaSuspCalcField() => VlrCRDiaSuspCalc > 0;
 
-        public bool ShouldSerializeVlrCRDiaSuspDCTF() => VlrCRDiaSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRDiaSuspDCTFField() => VlrCRDiaSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -1006,14 +1064,14 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRMenSuspDCTF() => VlrCRMenSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRMenSuspDCTFField() => VlrCRMenSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurQuiInfoTotalCRReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurQuiInfoTotalCR")]
     [ComVisible(true)]
 #endif
     public class TotApurQuiInfoTotalCR
@@ -1046,14 +1104,14 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRQuiSuspDCTF() => VlrCRQuiSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRQuiSuspDCTFField() => VlrCRQuiSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDecInfoTotalCRReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDecInfoTotalCR")]
     [ComVisible(true)]
 #endif
     public class TotApurDecInfoTotalCR
@@ -1086,14 +1144,14 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRDecSuspDCTF() => VlrCRDecSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRDecSuspDCTFField() => VlrCRDecSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurSemInfoTotalCRReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurSemInfoTotalCR")]
     [ComVisible(true)]
 #endif
     public class TotApurSemInfoTotalCR
@@ -1126,14 +1184,14 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRSemSuspDCTF() => VlrCRSemSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRSemSuspDCTFField() => VlrCRSemSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDiaInfoTotalCRReinf9015")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.TotApurDiaInfoTotalCR")]
     [ComVisible(true)]
 #endif
     public class TotApurDiaInfoTotalCR
@@ -1148,7 +1206,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public double VlrCRDiaDCTF { get; set; }
 
         [XmlElement("vlrCRDiaDCTF")]
-        public string VlrCRDiaCalcField
+        public string VlrCRDiaDCTFField
         {
             get => VlrCRDiaDCTF.ToString("F2", CultureInfoReinf.Info);
             set => VlrCRDiaDCTF = double.Parse(value.ToString(), CultureInfoReinf.Info);
@@ -1166,8 +1224,8 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeVlrCRDiaSuspDCTF() => VlrCRDiaSuspDCTF > 0;
+        public bool ShouldSerializeVlrCRDiaSuspDCTFField() => VlrCRDiaSuspDCTF > 0;
 
-        #endregion
+        #endregion ShouldSerialize
     }
 }

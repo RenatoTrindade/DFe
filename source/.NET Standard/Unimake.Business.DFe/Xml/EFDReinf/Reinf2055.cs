@@ -10,16 +10,21 @@ using System.Collections.Generic;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-2055 - Aquisição de produção rural
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2055")]
     [ComVisible(true)]
 #endif
-
     [Serializable()]
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evt2055AquisicaoProdRural/v2_01_02", IsNullable = false)]
     public class Reinf2055 : XMLBase
     {
+        /// <summary>
+        /// Evento aquisição de produção 
+        /// </summary>
         [XmlElement("evtAqProd")]
         public EvtAqProd EvtAqProd { get; set; }
 
@@ -36,7 +41,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     {
 
         [XmlElement("ideEvento")]
-        public IdeEventoReinf2055 IdeEvento { get; set; }
+        public IdeEvento2055 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
@@ -48,10 +53,10 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf2055")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento2055")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf2055 : IdeEventoReinf2050 { }
+    public class IdeEvento2055 : IdeEvento2050 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
@@ -140,9 +145,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeIndOpcCP() => !string.IsNullOrEmpty(IndOpcCP);
+        public bool ShouldSerializeIndOpcCP() => !string.IsNullOrEmpty(IndOpcCP);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -153,7 +158,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class DetAquis
     {
         [XmlElement("indAquis")]
-        public IndicativoDaAquisicao IndAquis { get; set; }
+        public IndAquis IndAquis { get; set; }
 
         [XmlIgnore]
         public double VlrBruto { get; set; }
@@ -281,15 +286,15 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
+        public bool ShouldSerializeCodSusp() => !string.IsNullOrEmpty(CodSusp);
 
-        public bool ShouldSerializeVlrTotalNRetPrinc() => VlrCPNRet > 0;
+        public bool ShouldSerializeVlrCPNRetField() => VlrCPNRet > 0;
         
-        public bool ShouldSerializeVlrRatNRet() => VlrRatNRet > 0;
+        public bool ShouldSerializeVlrRatNRetField() => VlrRatNRet > 0;
         
-        public bool ShouldSerializeVlrSenarNRet() => VlrSenarNRet > 0;
+        public bool ShouldSerializeVlrSenarNRetField() => VlrSenarNRet > 0;
 
-        #endregion
+        #endregion ShouldSerialize
 
     }
 

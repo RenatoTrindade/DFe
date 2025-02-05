@@ -9,156 +9,81 @@ using System.Runtime.InteropServices;
 
 namespace Unimake.Business.DFe.Xml.ESocial
 {
+    /// <summary>
+    /// S-1299 - Fechamento dos Eventos Periódicos
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.ESocial1299")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// S-1299 - Fechamento dos Eventos Periódicos
-    /// </summary>
     [Serializable()]
     [XmlRoot("eSocial", Namespace = "http://www.esocial.gov.br/schema/evt/evtFechaEvPer/v_S_01_02_00", IsNullable = false)]
-    public class ESocial1299 : XMLBase
+    public class ESocial1299 : XMLBaseESocial
     {
         /// <summary>
         /// Evento Fechamento dos Eventos Periódicos
         /// </summary>
         [XmlElement("evtFechaEvPer")]
         public EvtFechaEvPer EvtFechaEvPer { get; set; }
+
+        [XmlElement(ElementName = "Signature", Namespace = "http://www.w3.org/2000/09/xmldsig#")]
+        public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento Fechamento dos Eventos Periódicos
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.EvtFechaEvPer")]
     [ComVisible(true)]
 #endif
-    /// <summary>
-    /// Evento Fechamento dos Eventos Periódicos
-    /// </summary>
     public class EvtFechaEvPer
     {
         /// <summary>
         /// ID
         /// </summary>
         [XmlAttribute(AttributeName = "Id")]
-        public string Id { get; set; }
+        public string ID { get; set; }
 
         /// <summary>
-        /// Informações de identificação do evento.
+        /// Informações de identificação do evento
         /// </summary>
         [XmlElement("ideEvento")]
-        public IdeEventoESocial1299 IdeEvento { get; set; }
+        public IdeEvento1299 IdeEvento { get; set; }
 
         /// <summary>
-        /// Informações de identificação do empregador.
+        /// Informações de identificação do empregador
         /// </summary>
         [XmlElement("ideEmpregador")]
         public IdeEmpregador IdeEmpregador { get; set; }
 
         /// <summary>
-        /// Período de apuração a que se refere o fechamento.
+        /// Informações do fechamento
         /// </summary>
         [XmlElement("infoFech")]
         public InfoFech InfoFech { get; set; }
     }
 
-#if INTEROP
-    [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEventoESocial1299")]
-    [ComVisible(true)]
-#endif
     /// <summary>
     /// Informações de identificação do evento.
     /// </summary>
-    public class IdeEventoESocial1299
-    {
-        /// <summary>
-        /// Indicativo de período de apuração.
-        /// </summary>
-        [XmlElement("indApuracao")]
-        public IndApuracao IndApuracao { get; set; }
-
-        [XmlIgnore]
 #if INTEROP
-        public DateTime PerApur {get; set; }
-#else
-        /// <summary>
-        /// Informar o mês/ano (formato AAAA-MM) de referência
-        /// das informações, se indApuracao for igual a[1], ou apenas
-        /// o ano(formato AAAA), se indApuracao for igual a[2].
-        /// Validação: Deve ser um mês/ano ou ano válido, igual ou
-        /// posterior ao início da obrigatoriedade dos eventos
-        /// periódicos para o empregador.
-        /// (yyyy-MM)
-        /// </summary>
-        public DateTimeOffset PerApur { get; set; }
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.ESocial.IdeEvento1299")]
+    [ComVisible(true)]
 #endif
+    public class IdeEvento1299 : IdeEvento1298 { }
 
-        /// <summary>
-        /// Informar o mês/ano (formato AAAA-MM) de referência
-        /// das informações, se indApuracao for igual a[1], ou apenas
-        /// o ano(formato AAAA), se indApuracao for igual a[2].
-        /// Validação: Deve ser um mês/ano ou ano válido, igual ou
-        /// posterior ao início da obrigatoriedade dos eventos
-        /// periódicos para o empregador.
-        /// (yyyy-MM)
-        /// </summary>
-        [XmlElement("perApur")]
-        public string PerApurField
-        {
-            get => PerApur.ToString("yyyy-MM");
-#if INTEROP
-            set => PerApur = DateTime.Parse(value);
-#else
-            set => PerApur = DateTimeOffset.Parse(value);
-#endif
-        }
-
-
-        /// <summary>
-        /// Indicativo do tipo de guia. Valores válidos:
-        /// 1 - Documento de Arrecadação do eSocial - DAE
-        /// </summary>
-        [XmlElement("indGuia")]
-        public IndGuia? IndGuia { get; set; }
-
-        /// <summary>
-        /// Identificação do ambiente
-        /// </summary>
-        [XmlElement("tpAmb")]
-        public TipoAmbiente TpAmb { get; set; }
-
-        /// <summary>
-        /// Processo de emissão do evento.
-        /// </summary>
-        [XmlElement("procEmi")]
-        public ProcEmiESocial ProcEmi { get; set; }
-
-        /// <summary>
-        /// Versão do processo de emissão do evento. Informar a versão do aplicativo emissor do evento.
-        /// </summary>
-        [XmlElement("verProc")]
-        public string VerProc { get; set; }
-
-        #region ShouldSerialize
-#if INTEROP
-        public bool ShouldSerializeIndGuiaField() => !IndGuia.IsNullOrEmpty();
-#else
-        public bool ShouldSerializeIndGuiaField() => !IndGuia.IsNullOrEmpty();
-#endif
-#endregion ShouldSerialize
-    }
-
-
+    /// <summary>
+    /// Informações do fechamento.
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.ESocial.InfoFech")]
     [ComVisible(true)]
-#endif
-    /// <summary>
-    /// Informações do fechamento.
-    /// </summary>
+#endif    
     public class InfoFech
     {
         /// <summary>
@@ -212,6 +137,7 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// </summary>
         [XmlElement("evtContratAvNP")]
         public SimNaoLetra EvtContratAvNP { get; set; }
+
         /// <summary>
         /// Possui informações de desoneração de folha de
         /// pagamento ou, sendo empresa enquadrada no Simples,
@@ -238,29 +164,53 @@ namespace Unimake.Business.DFe.Xml.ESocial
         /// caso o campo tenha sido informado em fechamento anterior do mesmo período de apuração.
         /// </summary>
         [XmlElement("indExcApur1250")]
-        public string IndExcApur1250 { get; set; }
+#if INTEROP
+        public SimNaoLetra IndExcApur1250 { get; set; } = (SimNaoLetra)(-1);
+#else
+        public SimNaoLetra? IndExcApur1250 { get; set; }
+#endif
 
         /// <summary>
         /// Solicitação de transmissão imediata da DCTFWeb
-        /// Valores válidos: S - Sim Validação: Não informar se perApur < [2021-10]. 
+        /// Valores válidos: S - Sim Validação: Não informar se perApur menor que [2021-10]. 
         /// Preenchimento obrigatório se perApur >= [2021-10] e (classTrib em S-1000 = [04] ou indGuia estiver informado).
         /// </summary>
         [XmlElement("transDCTFWeb")]
-        public string TransDCTFWeb { get; set; }
-
+#if INTEROP
+        public SimNaoLetra TransDCTFWeb { get; set; } = (SimNaoLetra)(-1);
+#else
+        public SimNaoLetra? TransDCTFWeb { get; set; }
+#endif
         /// <summary>
         /// Indicativo de não validação das regras de fechamento, para que os grandes contribuintes possam reduzir o tempo
         /// de processamento do evento. O preenchimento deste campo implica a não execução da REGRA_VALIDA_FECHAMENTO_FOPAG.
         /// </summary>
         [XmlElement("naoValid")]
-        public string NaoValid { get; set; }
+#if INTEROP
+        public SimNaoLetra NaoValid { get; set; } = (SimNaoLetra)(-1);
+#else
+        public SimNaoLetra? NaoValid { get; set; }
+#endif
 
         #region ShouldSerialize
 
-        public bool ShouldSerializeIndExecApur1250Field() => !string.IsNullOrEmpty(IndExcApur1250);
-        public bool ShouldSerializeTransDCTFWebField() => !string.IsNullOrEmpty(TransDCTFWeb);
-        public bool ShouldSerializeNaoValidField() => !string.IsNullOrEmpty(NaoValid);
+#if INTEROP
+        public bool ShouldSerializeIndExcApur1250() => IndExcApur1250 != (SimNaoLetra)(-1);
+#else
+        public bool ShouldSerializeIndExcApur1250() => IndExcApur1250 != null;
+#endif
 
+#if INTEROP
+        public bool ShouldSerializeTransDCTFWeb() => TransDCTFWeb != (SimNaoLetra)(-1);
+#else
+        public bool ShouldSerializeTransDCTFWeb() => TransDCTFWeb != null;
+#endif
+
+#if INTEROP
+        public bool ShouldSerializeNaoValid() => NaoValid != (SimNaoLetra)(-1);
+#else
+        public bool ShouldSerializeNaoValid() => NaoValid != null;
+#endif
 
         #endregion ShouldSerialize
     }

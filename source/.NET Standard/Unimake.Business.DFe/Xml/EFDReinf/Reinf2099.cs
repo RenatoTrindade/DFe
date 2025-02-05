@@ -9,6 +9,9 @@ using Unimake.Business.DFe.Servicos;
 
 namespace Unimake.Business.DFe.Xml.EFDReinf
 {
+    /// <summary>
+    /// R-2099 - Fechamento dos eventos da série R-2000
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.Reinf2099")]
@@ -18,6 +21,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     [XmlRoot("Reinf", Namespace = "http://www.reinf.esocial.gov.br/schemas/evtFechamento/v2_01_02", IsNullable = false)]
     public class Reinf2099 : XMLBase
     {
+        /// <summary>
+        /// Evento de fechamento 
+        /// </summary>
         [XmlElement("evtFechaEvPer")]
         public EvtFechaEvPer EvtFechaEvPer { get; set; }
 
@@ -25,6 +31,9 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         public Signature Signature { get; set; }
     }
 
+    /// <summary>
+    /// Evento de fechamento 
+    /// </summary>
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId("Unimake.Business.DFe.Xml.EFDReinf.EvtFechaEvPer")]
@@ -33,13 +42,13 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
     public class EvtFechaEvPer : ReinfEventoBase
     {
         [XmlElement("ideEvento")]
-        public IdeEventoReinf2099 IdeEvento { get; set; }
+        public IdeEvento2099 IdeEvento { get; set; }
 
         [XmlElement("ideContri")]
         public IdeContri IdeContri { get; set; }
 
         [XmlElement("ideRespInf")]
-        public IdeRespInf IdeRespInf { get; set; }
+        public IdeRespInf2099 IdeRespInf { get; set; }
 
         [XmlElement("infoFech")]
         public InfoFech InfoFech { get; set; }
@@ -47,17 +56,17 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEventoReinf2099")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeEvento2099")]
     [ComVisible(true)]
 #endif
-    public class IdeEventoReinf2099 : IdeEventoReinf2098 { }
+    public class IdeEvento2099 : IdeEvento2098 { }
 
 #if INTEROP
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeRespInf")]
+    [ProgId("Unimake.Business.DFe.Xml.EFDReinf.IdeRespInf2099")]
     [ComVisible(true)]
 #endif
-    public class IdeRespInf
+    public class IdeRespInf2099
     {
         [XmlElement("nmResp")]
         public string NmResp { get; set; }
@@ -73,11 +82,11 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         #region ShouldSerialize
 
-        public bool ShouldSereializeTelefone() => !string.IsNullOrEmpty(Telefone);
+        public bool ShouldSerializeTelefone() => !string.IsNullOrEmpty(Telefone);
 
-        public bool ShouldSereializeEmail() => !string.IsNullOrEmpty(Email);
+        public bool ShouldSerializeEmail() => !string.IsNullOrEmpty(Email);
 
-        #endregion
+        #endregion ShouldSerialize
     }
 
 #if INTEROP

@@ -3,9 +3,10 @@ using System.Runtime.InteropServices;
 #endif
 using System;
 using Unimake.Business.DFe.Servicos.Interop;
-using Unimake.Business.DFe.Utility;
 using Unimake.Business.DFe.Xml.EFDReinf;
 using Unimake.Exceptions;
+using Unimake.Business.DFe.Utility;
+using System.Xml;
 
 namespace Unimake.Business.DFe.Servicos.EFDReinf
 {
@@ -19,6 +20,29 @@ namespace Unimake.Business.DFe.Servicos.EFDReinf
 #endif
     public class RecepcionarLoteAssincrono : ServicoBase, IInteropService<ReinfEnvioLoteEventos>
     {
+
+        private ReinfEnvioLoteEventos _ReinfEnvioLoteEventos;
+
+        /// <summary>
+        /// Objeto do XML do lote eventos REINF
+        /// </summary>
+        public ReinfEnvioLoteEventos ReinfEnvioLoteEventos
+        { 
+            get => _ReinfEnvioLoteEventos ?? (_ReinfEnvioLoteEventos = new ReinfEnvioLoteEventos().LerXML<ReinfEnvioLoteEventos>(ConteudoXML));
+            protected set => _ReinfEnvioLoteEventos = value;
+        }
+
+        private void ValidarXMLEvento(XmlDocument xml, string schemaArquivo, string targetNS)
+        {
+            var validar = new ValidarSchema();
+            validar.Validar(xml, (Configuracoes.TipoDFe).ToString() + "." + schemaArquivo, targetNS);
+
+            if (!validar.Success) 
+            { 
+                throw new ValidarXMLException(validar.ErrorMessage);
+            }
+        }
+
         #region Protected Methods
 
         /// <summary>
@@ -36,6 +60,37 @@ namespace Unimake.Business.DFe.Servicos.EFDReinf
                 Configuracoes.SchemaVersao = xml.Versao;
 
                 base.DefinirConfiguracao();
+            }
+        }
+
+        /// <summary>
+        /// Validar o XML
+        /// </summary>
+        protected override void XmlValidar()
+        {
+            var xml = ReinfEnvioLoteEventos;
+            var schemaArquivoEvento = string.Empty;
+
+            ValidarXMLEvento(ConteudoXML, Configuracoes.SchemaArquivo, Configuracoes.TargetNS);
+
+            if (Configuracoes.TiposEventosEspecificos.Count > 0)
+            {
+                string eventoEspecifico;
+                var listEventos = ConteudoXML.GetElementsByTagName("evento");
+
+                foreach (var nodeEvento in listEventos)
+                {
+                    var elementEvento = (XmlElement)nodeEvento;
+                    var reinfEvento = elementEvento.GetElementsByTagName("Reinf")[0];
+
+                    var xmlEventoEspecifico = new XmlDocument();
+                    xmlEventoEspecifico.LoadXml(reinfEvento.OuterXml);
+
+                    eventoEspecifico = reinfEvento.FirstChild.Name;
+                    schemaArquivoEvento = Configuracoes.TiposEventosEspecificos[eventoEspecifico.ToString()].SchemaArquivoEvento;
+
+                    ValidarXMLEvento(xmlEventoEspecifico, schemaArquivoEvento, Configuracoes.TiposEventosEspecificos[eventoEspecifico.ToString()].TargetNS);
+                }
             }
         }
 
@@ -62,6 +117,33 @@ namespace Unimake.Business.DFe.Servicos.EFDReinf
 
             Inicializar(reinfRecepcionarLoteAssinc?.GerarXML() ?? throw new ArgumentNullException(nameof(reinfRecepcionarLoteAssinc)), configuracao);
         }
+
+        /// <summary>
+        /// Conteúdo retornado pelo web-service depois do envio do XML
+        /// </summary>
+        public ReinfRetornoLoteAssincrono Result
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(RetornoWSString))
+                {
+                    return XMLUtility.Deserializar<ReinfRetornoLoteAssincrono>(RetornoWSXML);
+                }
+
+                return new ReinfRetornoLoteAssincrono
+                {
+                    RetornoLoteEventosAssincrono = new RetornoLoteEventosAssincrono
+                    {
+                        Status = new Xml.EFDReinf.Status
+                        {
+                            CdResposta = 0,
+                            DescResposta = "Ocorreu uma falha ao tentar criar o objeto a partir do XML retornado da SEFAZ",
+                        }
+                    }
+                };
+            }
+        }
+
 
         #endregion Public Constructors
 
