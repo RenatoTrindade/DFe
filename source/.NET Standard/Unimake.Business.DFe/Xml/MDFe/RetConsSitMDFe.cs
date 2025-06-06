@@ -8,17 +8,16 @@ using System.Runtime.InteropServices;
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
 using Unimake.Business.DFe.Utility;
-using Unimake.Business.DFe.Xml.NFe;
 
 namespace Unimake.Business.DFe.Xml.MDFe
 {
+    /// <summary>
+    /// Retorno consulta Situação MDFe
+    /// </summary>
 #if INTEROP
 
     [ClassInterface(ClassInterfaceType.AutoDual)]
@@ -28,24 +27,45 @@ namespace Unimake.Business.DFe.Xml.MDFe
     [XmlRoot("retConsSitMDFe", Namespace = "http://www.portalfiscal.inf.br/mdfe", IsNullable = false)]
     public class RetConsSitMDFe : XMLBase
     {
+        /// <summary>
+        /// Versão do leiaute.
+        /// </summary>
         [XmlAttribute(AttributeName = "versao", DataType = "token")]
         public string Versao { get; set; }
 
+        /// <summary>
+        /// Tipo de ambiente.
+        /// </summary>
         [XmlElement("tpAmb")]
         public TipoAmbiente TpAmb { get; set; }
 
+        /// <summary>
+        /// Versão do aplicativo que processou o retorno da consulta da situação do MDFe.
+        /// </summary>
         [XmlElement("verAplic")]
         public string VerAplic { get; set; }
 
+        /// <summary>
+        /// Código do status da resposta.
+        /// </summary>
         [XmlElement("cStat")]
         public int CStat { get; set; }
 
+        /// <summary>
+        /// Descrição literal do status da resposta.
+        /// </summary>
         [XmlElement("xMotivo")]
         public string XMotivo { get; set; }
 
+        /// <summary>
+        /// Código da UF.
+        /// </summary>
         [XmlIgnore]
         public UFBrasil CUF { get; set; }
 
+        /// <summary>
+        /// Código da UF (formato string para serialização XML).
+        /// </summary>
         [XmlElement("cUF")]
         public int CUFField
         {
@@ -53,33 +73,28 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => CUF = (UFBrasil)Enum.Parse(typeof(UFBrasil), value.ToString());
         }
 
+        /// <summary>
+        /// Protocolo de autorização do MDFe.
+        /// </summary>
         [XmlElement("protMDFe")]
         public ProtMDFe ProtMDFe { get; set; }
 
+        /// <summary>
+        /// Processamento do evento do MDFe.
+        /// </summary>
         [XmlElement("procEventoMDFe")]
-        public List<ProcEventoMDFe> ProcEventoMDFe { get; set; }
+        public List<ProcEventoMDFe> ProcEventoMDFe { get; set; } = new List<ProcEventoMDFe>();
 
         /// <summary>
-        /// Grupo de informações do compartilhamento do MDFe com InfraSA para geração do DTe
+        /// Grupo de informações do compartilhamento do MDFe com InfraSA para geração do DTe.
         /// </summary>
         [XmlElement("procInfraSA")]
         public ProcInfraSA ProcInfraSA { get; set; }
 
-
-
-        //public override void ReadXml(XmlDocument document)
-        //{
-        //    ProcEventoNFe.Clear();
-
-        //    var nodeListProcEventoNFe = document.GetElementsByTagName("procEventoNFe");
-
-        //    foreach (var item in nodeListProcEventoNFe)
-        //    {
-        //        ProcEventoNFe.Add(XMLUtility.Deserializar<ProcEventoNFe>(((XmlElement)item).OuterXml));
-        //    }
-        //}
-
-
+        /// <summary>
+        /// Lê o XML e deserializa para o objeto RetConsSitMDFe.
+        /// </summary>
+        /// <param name="document">XmlDocument contendo o XML a ser lido.</param>
         public override void ReadXml(XmlDocument document)
         {
             ProcEventoMDFe.Clear();
@@ -90,79 +105,27 @@ namespace Unimake.Business.DFe.Xml.MDFe
             {
                 ProcEventoMDFe.Add(XMLUtility.Deserializar<ProcEventoMDFe>(((XmlElement)item).OuterXml));
             }
-           
-            //base.ReadXml(document);
-            //var reader = XmlReader.Create(new StringReader(document.InnerXml));
-            //var nodes = XDocument.Parse(document.InnerXml)
-            //                     .DescendantNodes()
-            //                     .Where(w => w is XElement)
-            //                     .Cast<XElement>();
-            //var retEventos = nodes.Where(w => w.Name.LocalName.Equals(nameof(RetEventoMDFe), StringComparison.InvariantCultureIgnoreCase))
-            //                      .FirstOrDefault();
-
-            //if (retEventos != null)
-            //{
-            //    ProcEventoMDFe[0].Versao = nodes.Where(w => w.Name.LocalName == "procEventoMDFe" &&
-            //                                                w.GetAttributeValue("versao") != null)
-            //                                    .First()
-            //                                    .GetAttributeValue("versao");
-            //    ProcEventoMDFe[0].RetEventoMDFe = new RetEventoMDFe
-            //    {
-            //        Versao = retEventos.GetAttributeValue("versao"),
-            //        InfEvento = new RetEventoMDFeInfEvento
-            //        {
-            //            Id = retEventos.GetElement("infEvento").GetAttributeValue("Id"),
-            //            TpAmb = retEventos.GetValue<TipoAmbiente>("tpAmb"),
-            //            VerAplic = retEventos.GetValue("verAplic"),
-            //            COrgao = retEventos.GetValue<UFBrasil>("cOrgao"),
-            //            CStat = retEventos.GetValue<int>("cStat"),
-            //            XMotivo = retEventos.GetValue("xMotivo"),
-            //            ChMDFe = retEventos.GetValue("chMDFe"),
-            //            TpEvento = retEventos.GetValue<TipoEventoMDFe>("tpEvento"),
-            //            XEvento = retEventos.GetValue("xEvento"),
-            //            NSeqEvento = retEventos.GetValue<int>("nSeqEvento"),
-            //            DhRegEvento = retEventos.GetValue<DateTime>("dhRegEvento"),
-            //            NProt = retEventos.GetValue("nProt")
-            //        }
-            //    };
-            //}
-
-            //while (reader.Read())
-            //{
-            //    if (reader.NodeType != XmlNodeType.Element)
-            //    {
-            //        continue;
-            //    }
-
-            //    if (reader.Name != "Signature")
-            //    {
-            //        continue;
-            //    }
-
-            //    ProcEventoMDFe[0].EventoMDFe.Signature = reader.ToSignature();
-            //    break;
-            //}
         }
 
 #if INTEROP
 
         /// <summary>
-        /// Retorna o elemento da lista ProcEventoMDFe (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// Retorna o elemento da lista ProcEventoMDFe (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista).
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da ProcEventoMDFe</returns>
         public ProcEventoMDFe GetProcEventoMDFe(int index)
         {
-            if((ProcEventoMDFe?.Count ?? 0) == 0)
+            if ((ProcEventoMDFe?.Count ?? 0) == 0)
             {
                 return default;
             };
 
             return ProcEventoMDFe[index];
-        }        
+        }
 
         /// <summary>
-        /// Retorna a quantidade de elementos existentes na lista ProcEventoMDFe
+        /// Retorna a quantidade de elementos existentes na lista ProcEventoMDFe.
         /// </summary>
         public int GetProcEventoMDFeCount => ProcEventoMDFe != null ? ProcEventoMDFe.Count : 0;
 

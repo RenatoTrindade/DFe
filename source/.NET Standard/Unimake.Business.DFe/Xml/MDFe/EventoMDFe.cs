@@ -14,6 +14,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
 using Unimake.Business.DFe.Utility;
+using Unimake.Business.DFe.Xml.NFCom;
 
 namespace Unimake.Business.DFe.Xml.MDFe
 {
@@ -28,12 +29,21 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento: Cancelamento
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Cancelamento";
 
+        /// <summary>
+        /// Número do Protocolo
+        /// </summary>
         [XmlElement("nProt", Order = 1)]
         public string NProt { get; set; }
 
+        /// <summary>
+        /// Justificativa
+        /// </summary>
         [XmlElement("xJust", Order = 2)]
         public string XJust { get; set; }
 
@@ -46,11 +56,11 @@ namespace Unimake.Business.DFe.Xml.MDFe
             base.WriteXml(writer);
 
             writer.WriteRaw($@"
-            <evCancMDFe>
-            <descEvento>{DescEvento}</descEvento>
-            <nProt>{NProt}</nProt>
-            <xJust>{XJust}</xJust>
-            </evCancMDFe>");
+                <evCancMDFe>
+                <descEvento>{DescEvento}</descEvento>
+                <nProt>{NProt}</nProt>
+                <xJust>{XJust}</xJust>
+                </evCancMDFe>");
         }
 
         #endregion Public Methods
@@ -79,6 +89,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento (obtida de EventoIncCondutor)
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -86,6 +99,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoIncCondutor.DescEvento = value;
         }
 
+        /// <summary>
+        /// Evento de Inclusão de Condutor do MDF-e
+        /// </summary>
         [XmlElement(ElementName = "evIncCondutorMDFe", Order = 0)]
         public EventoIncCondutor EventoIncCondutor
         {
@@ -93,6 +109,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoIncCondutor = value;
         }
 
+        /// <summary>
+        /// Lista de Condutores do MDF-e (obtida de EventoIncCondutor)
+        /// </summary>
         [XmlIgnore]
         public List<CondutorMDFe> CondutorMDFe
         {
@@ -114,9 +133,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             foreach (var condutorMDFe in CondutorMDFe)
             {
                 writeRaw += $@"<condutor>
-                               <xNome>{condutorMDFe.XNome}</xNome>
-                               <CPF>{condutorMDFe.CPF}</CPF>
-                               </condutor>";
+                                <xNome>{condutorMDFe.XNome}</xNome>
+                                <CPF>{condutorMDFe.CPF}</CPF>
+                                </condutor>";
             }
 
             writeRaw += $@"</evIncCondutorMDFe>";
@@ -138,9 +157,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento: Inclusão Condutor
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Inclusao Condutor";
 
+        /// <summary>
+        /// Lista de Condutores
+        /// </summary>
         [XmlElement("condutor", Order = 1)]
         public List<CondutorMDFe> Condutor { get; set; } = new List<CondutorMDFe>();
 
@@ -191,9 +216,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
     [XmlType(Namespace = "http://www.portalfiscal.inf.br/mdfe")]
     public class CondutorMDFe
     {
+        /// <summary>
+        /// Nome do Condutor
+        /// </summary>
         [XmlElement("xNome", Order = 0)]
         public string XNome { get; set; }
 
+        /// <summary>
+        /// CPF do Condutor
+        /// </summary>
         [XmlElement("CPF", Order = 1)]
         public string CPF { get; set; }
     }
@@ -236,6 +267,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento (obtida de EventoIncDFeMDFe)
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -243,6 +277,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoIncDFeMDFe.DescEvento = value;
         }
 
+        /// <summary>
+        /// Número do Protocolo (obtido de EventoIncDFeMDFe)
+        /// </summary>
         [XmlIgnore]
         public string NProt
         {
@@ -250,6 +287,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoIncDFeMDFe.NProt = value;
         }
 
+        /// <summary>
+        /// Código do Município de Carregamento (obtido de EventoIncDFeMDFe)
+        /// </summary>
         [XmlIgnore]
         public string CMunCarrega
         {
@@ -257,6 +297,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoIncDFeMDFe.CMunCarrega = value;
         }
 
+        /// <summary>
+        /// Nome do Município de Carregamento (obtido de EventoIncDFeMDFe)
+        /// </summary>
         [XmlIgnore]
         public string XMunCarrega
         {
@@ -264,6 +307,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoIncDFeMDFe.XMunCarrega = value;
         }
 
+        /// <summary>
+        /// Evento de Inclusão de DF-e no MDF-e
+        /// </summary>
         [XmlElement(ElementName = "evIncDFeMDFe", Order = 0)]
         public EventoIncDFeMDFe EventoIncDFeMDFe
         {
@@ -271,6 +317,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoIncDFeMDFe = value;
         }
 
+        /// <summary>
+        /// Lista de Informações do Documento (obtida de EventoIncDFeMDFe)
+        /// </summary>
         [XmlIgnore]
         public List<InfDoc> InfDoc
         {
@@ -295,10 +344,10 @@ namespace Unimake.Business.DFe.Xml.MDFe
             foreach (var infDoc in InfDoc)
             {
                 writeRaw += $@"<infDoc>
-                               <cMunDescarga>{infDoc.CMunDescarga}</cMunDescarga>
-                               <xMunDescarga>{infDoc.XMunDescarga}</xMunDescarga>
-                               <chNFe>{infDoc.ChNFe}</chNFe>
-                               </infDoc>";
+                                <cMunDescarga>{infDoc.CMunDescarga}</cMunDescarga>
+                                <xMunDescarga>{infDoc.XMunDescarga}</xMunDescarga>
+                                <chNFe>{infDoc.ChNFe}</chNFe>
+                                </infDoc>";
             }
 
             writeRaw += $@"</evIncDFeMDFe>";
@@ -320,18 +369,33 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento: Inclusão DF-e
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Inclusao DF-e";
 
+        /// <summary>
+        /// Número do Protocolo
+        /// </summary>
         [XmlElement("nProt", Order = 1)]
         public string NProt { get; set; }
 
+        /// <summary>
+        /// Código do Município de Carregamento
+        /// </summary>
         [XmlElement("cMunCarrega", Order = 2)]
         public string CMunCarrega { get; set; }
 
+        /// <summary>
+        /// Nome do Município de Carregamento
+        /// </summary>
         [XmlElement("xMunCarrega", Order = 3)]
         public string XMunCarrega { get; set; }
 
+        /// <summary>
+        /// Informações do Documento
+        /// </summary>
         [XmlElement("infDoc", Order = 4)]
         public List<InfDoc> InfDoc { get; set; } = new List<InfDoc>();
 
@@ -373,8 +437,6 @@ namespace Unimake.Business.DFe.Xml.MDFe
         /// Retorna a quantidade de elementos existentes na lista InfDoc
         /// </summary>
         public int GetInfDocCount => (InfDoc != null ? InfDoc.Count : 0);
-
-
 #endif
 
         #endregion Public Methods
@@ -389,12 +451,21 @@ namespace Unimake.Business.DFe.Xml.MDFe
     [XmlRoot(ElementName = "infDoc")]
     public class InfDoc : EventoDetalhe
     {
+        /// <summary>
+        /// Código do Município de Descarregamento
+        /// </summary>
         [XmlElement("cMunDescarga", Order = 0)]
         public string CMunDescarga { get; set; }
 
+        /// <summary>
+        /// Nome do Município de Descarregamento
+        /// </summary>
         [XmlElement("xMunDescarga", Order = 1)]
         public string XMunDescarga { get; set; }
 
+        /// <summary>
+        /// Chave de Acesso da NF-e
+        /// </summary>
         [XmlElement("chNFe", Order = 2)]
         public string ChNFe { get; set; }
     }
@@ -410,15 +481,27 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento: Encerramento
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Encerramento";
 
+        /// <summary>
+        /// Número do Protocolo
+        /// </summary>
         [XmlElement("nProt", Order = 1)]
         public string NProt { get; set; }
 
+        /// <summary>
+        /// Data do Encerramento
+        /// </summary>
         [XmlIgnore]
         public DateTime DtEnc { get; set; }
 
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade "DtEnc" para atribuir ou resgatar o valor)
+        /// </summary>
         [XmlElement("DtEnc", Order = 2)]
         public string DtEncField
         {
@@ -426,9 +509,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => DtEnc = DateTime.Parse(value);
         }
 
+        /// <summary>
+        /// Código da UF
+        /// </summary>
         [XmlIgnore]
         public UFBrasil CUF { get; set; }
 
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade "CUF" para atribuir ou resgatar o valor)
+        /// </summary>
         [XmlElement("cUF", Order = 3)]
         public int CUFField
         {
@@ -436,9 +525,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => CUF = (UFBrasil)Enum.Parse(typeof(UFBrasil), value.ToString());
         }
 
+        /// <summary>
+        /// Código do Município
+        /// </summary>
         [XmlElement("cMun", Order = 4)]
         public long CMun { get; set; }
 
+        /// <summary>
+        /// Indicador de Encerramento por Terceiro
+        /// </summary>
         [XmlElement("indEncPorTerceiro", Order = 5)]
         public int IndEncPorTerceiro { get; set; } = 0;
 
@@ -748,12 +843,21 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         #region Public Properties
 
+        /// <summary>
+        /// Informações do Evento
+        /// </summary>
         [XmlElement("infEvento", Order = 0)]
         public InfEvento InfEvento { get; set; }
 
+        /// <summary>
+        /// Assinatura XML
+        /// </summary>
         [XmlElement("Signature", Namespace = "http://www.w3.org/2000/09/xmldsig#", Order = 1)]
         public Signature Signature { get; set; }
 
+        /// <summary>
+        /// Versão do leiaute
+        /// </summary>
         [XmlAttribute(AttributeName = "versao", DataType = "token")]
         public string Versao { get; set; }
 
@@ -947,9 +1051,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public virtual string DescEvento { get; set; }
 
+        /// <summary>
+        /// Versão do Evento
+        /// </summary>
         [XmlAttribute(AttributeName = "versaoEvento", DataType = "token")]
         public virtual string VersaoEvento { get; set; }
 
@@ -983,18 +1093,33 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         #region Public Properties
 
+        /// <summary>
+        /// Chave de Acesso do MDF-e
+        /// </summary>
         [XmlElement("chMDFe", Order = 4)]
         public string ChMDFe { get; set; }
 
+        /// <summary>
+        /// CNPJ do Emitente
+        /// </summary>
         [XmlElement("CNPJ", Order = 2)]
         public string CNPJ { get; set; }
 
+        /// <summary>
+        /// CPF do Emitente
+        /// </summary>
         [XmlElement("CPF", Order = 3)]
         public string CPF { get; set; }
 
+        /// <summary>
+        /// Código do Órgão
+        /// </summary>
         [XmlIgnore]
         public UFBrasil COrgao { get; set; }
 
+        /// <summary>
+        /// Campo para serialização do Código do Órgão
+        /// </summary>
         [XmlElement("cOrgao", Order = 0)]
         public int COrgaoField
         {
@@ -1002,6 +1127,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => COrgao = (UFBrasil)Enum.Parse(typeof(UFBrasil), value.ToString());
         }
 
+        /// <summary>
+        /// Detalhe do Evento
+        /// </summary>
         [XmlElement("detEvento", Order = 9)]
         public EventoDetalhe DetEvento
         {
@@ -1050,6 +1178,10 @@ namespace Unimake.Business.DFe.Xml.MDFe
                         _detEvento = value is DetEventoAlteracaoPagtoServMDFe ? value : new DetEventoAlteracaoPagtoServMDFe();
                         break;
 
+                    case TipoEventoMDFe.EncerramentoFisco:
+                        _detEvento = value is DetEventoEncerramentoFisco ? value : new DetEventoEncerramentoFisco();
+                        break;
+
                     default:
                         throw new NotImplementedException($"O tipo de evento '{TpEvento}' não está implementado.");
                 }
@@ -1059,6 +1191,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             }
         }
 
+        /// <summary>
+        /// Data e Hora do Evento
+        /// </summary>
         [XmlIgnore]
 #if INTEROP
         public DateTime DhEvento { get; set; }
@@ -1066,6 +1201,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
         public DateTimeOffset DhEvento { get; set; }
 #endif
 
+        /// <summary>
+        /// Campo para serialização da Data e Hora do Evento
+        /// </summary>
         [XmlElement("dhEvento", Order = 6)]
         public string DhEventoField
         {
@@ -1077,6 +1215,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
 #endif
         }
 
+        /// <summary>
+        /// Identificador do Evento
+        /// </summary>
         [XmlAttribute(DataType = "ID")]
         public string Id
         {
@@ -1084,12 +1225,21 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _ = value;
         }
 
+        /// <summary>
+        /// Número Sequencial do Evento
+        /// </summary>
         [XmlElement("nSeqEvento", Order = 8)]
         public int NSeqEvento { get; set; }
 
+        /// <summary>
+        /// Tipo de Ambiente
+        /// </summary>
         [XmlElement("tpAmb", Order = 1)]
         public TipoAmbiente TpAmb { get; set; }
 
+        /// <summary>
+        /// Tipo do Evento
+        /// </summary>
         [XmlElement("tpEvento", Order = 7)]
         public TipoEventoMDFe TpEvento { get; set; }
 
@@ -1127,6 +1277,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         internal override void SetValue(PropertyInfo pi) => base.SetValue(pi);
 
+        /// <summary>
+        /// evPagtoOperMDFe - Evento Pagamento da Operação do MDF-e
+        /// </summary>
         [XmlElement(ElementName = "evPagtoOperMDFe", Order = 0)]
         public EventoPagtoOperMDFe EventoPagtoOperMDFe
         {
@@ -1134,6 +1287,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoPagtoOperMDFe = value;
         }
 
+        /// <summary>
+        /// Descrição do Evento
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -1141,6 +1297,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoPagtoOperMDFe.DescEvento = value;
         }
 
+        /// <summary>
+        /// Número do Protocolo
+        /// </summary>
         [XmlIgnore]
         public string NProt
         {
@@ -1148,6 +1307,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoPagtoOperMDFe.NProt = value;
         }
 
+        /// <summary>
+        /// Informações das Viagens
+        /// </summary>
         [XmlIgnore]
         public InfViagens InfViagens
         {
@@ -1155,6 +1317,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoPagtoOperMDFe.InfViagens = value;
         }
 
+        /// <summary>
+        /// Informações de Pagamento
+        /// </summary>
         [XmlIgnore]
         public List<PagtoOperMDFeInfPag> InfPag
         {
@@ -1162,22 +1327,26 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoPagtoOperMDFe.InfPag = value;
         }
 
+        /// <summary>
+        /// Serializa o objeto DetEventoPagtoOperMDFe em XML.
+        /// </summary>
+        /// <param name="writer">O XmlWriter usado para serialização.</param>
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
 
             var writeRaw = $@"<evPagtoOperMDFe>
-                <descEvento>{DescEvento}</descEvento>
-                <nProt>{NProt}</nProt>
-                <infViagens>
-                <qtdViagens>{InfViagens.QtdViagens}</qtdViagens>
-                <nroViagem>{InfViagens.NroViagem}</nroViagem>
-                </infViagens>";
+                    <descEvento>{DescEvento}</descEvento>
+                    <nProt>{NProt}</nProt>
+                    <infViagens>
+                    <qtdViagens>{InfViagens.QtdViagens}</qtdViagens>
+                    <nroViagem>{InfViagens.NroViagem}</nroViagem>
+                    </infViagens>";
 
             foreach (var infPag in InfPag)
             {
                 writeRaw += $@"<infPag>
-                               <xNome>{infPag.XNome}</xNome>";
+                                 <xNome>{infPag.XNome}</xNome>";
 
                 if (!string.IsNullOrWhiteSpace(infPag.CNPJ))
                 {
@@ -1195,8 +1364,8 @@ namespace Unimake.Business.DFe.Xml.MDFe
                 foreach (var comp in infPag.Comp)
                 {
                     writeRaw += $@"<Comp>
-                                   <tpComp>{((int)comp.TpComp).ToString("00")}</tpComp>
-                                   <vComp>{comp.VCompField}</vComp>";
+                                     <tpComp>{((int)comp.TpComp).ToString("00")}</tpComp>
+                                     <vComp>{comp.VCompField}</vComp>";
 
                     if (comp.TpComp == TipoComponenteMDFe.Outros && !string.IsNullOrWhiteSpace(comp.XComp))
                     {
@@ -1207,7 +1376,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
                 }
 
                 writeRaw += $@"<vContrato>{infPag.VContratoField}</vContrato>
-                               <indPag>{infPag.IndPagField}</indPag>";
+                                 <indPag>{infPag.IndPagField}</indPag>";
 
                 if (infPag.IndPag == IndicadorPagamento.PagamentoPrazo)
                 {
@@ -1219,10 +1388,10 @@ namespace Unimake.Business.DFe.Xml.MDFe
                     foreach (var infPrazo in infPag.InfPrazo)
                     {
                         writeRaw += $@"<infPrazo>
-                                   <nParcela>{infPrazo.NParcela}</nParcela>
-                                   <dVenc>{infPrazo.DVencField}</dVenc>
-                                   <vParcela>{infPrazo.VParcelaField}</vParcela>
-                                   </infPrazo>";
+                                     <nParcela>{infPrazo.NParcela}</nParcela>
+                                     <dVenc>{infPrazo.DVencField}</dVenc>
+                                     <vParcela>{infPrazo.VParcelaField}</vParcela>
+                                     </infPrazo>";
                     }
                 }
 
@@ -1333,9 +1502,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
     [XmlRoot(ElementName = "infViagens")]
     public class InfViagens
     {
+        /// <summary>
+        /// Quantidade de viagens.
+        /// </summary>
         [XmlElement("qtdViagens", Order = 0)]
         public string QtdViagens { get; set; }
 
+        /// <summary>
+        /// Número da viagem.
+        /// </summary>
         [XmlElement("nroViagem", Order = 1)]
         public string NroViagem { get; set; }
     }
@@ -1351,12 +1526,21 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         private int IndAntecipaAdiantField;
 
+        /// <summary>
+        /// Lista de componentes de pagamento.
+        /// </summary>
         [XmlElement("Comp")]
         public List<Comp> Comp { get; set; }
 
+        /// <summary>
+        /// Valor do contrato.
+        /// </summary>
         [XmlIgnore]
         public double VContrato { get; set; }
 
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade "VContrato" para atribuir ou resgatar o valor)
+        /// </summary>
         [XmlElement("vContrato")]
         public string VContratoField
         {
@@ -1364,9 +1548,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => VContrato = Utility.Converter.ToDouble(value);
         }
 
+        /// <summary>
+        /// Indicador de pagamento.
+        /// </summary>
         [XmlIgnore]
         public IndicadorPagamento IndPag { get; set; }
 
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade "IndPag" para atribuir ou resgatar o valor)
+        /// </summary>
         [XmlElement("indPag")]
         public int IndPagField
         {
@@ -1374,9 +1564,15 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => IndPag = (IndicadorPagamento)Enum.Parse(typeof(IndicadorPagamento), value.ToString());
         }
 
+        /// <summary>
+        /// Valor do adiantamento.
+        /// </summary>
         [XmlIgnore]
         public double VAdiant { get; set; }
 
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade "VAdiant" para atribuir ou resgatar o valor)
+        /// </summary>
         [XmlElement("vAdiant")]
         public string VAdiantField
         {
@@ -1402,10 +1598,13 @@ namespace Unimake.Business.DFe.Xml.MDFe
             }
         }
 
+        /// <summary>
+        /// Informações de prazo de pagamento.
+        /// </summary>
         [XmlElement("infPrazo")]
         public List<InfPrazo> InfPrazo { get; set; }
 
-        /// <summary> 
+        /// <summary>
         /// Tipo de Permissão em relação a antecipação das parcelas
         /// </summary>
         [XmlElement("tpAntecip")]
@@ -1415,25 +1614,37 @@ namespace Unimake.Business.DFe.Xml.MDFe
         public TipoPermissaoAtencipacaoParcela? TpAntecip { get; set; }
 #endif
 
+        /// <summary>
+        /// Informações bancárias.
+        /// </summary>
         [XmlElement("infBanc")]
         public InfBanc InfBanc { get; set; }
 
         #region ShouldSerialize
 
+        /// <summary>
+        /// Indica se a propriedade IndAntecipaAdiant deve ser serializada.
+        /// </summary>
         public bool ShouldSerializeIndAntecipaAdiant() => IndAntecipaAdiant == 1;
 
 #if INTEROP
+        /// <summary>
+        /// Indica se a propriedade TpAntecip deve ser serializada.
+        /// </summary>
         public bool ShouldSerializeTpAntecip() => TpAntecip != (TipoPermissaoAtencipacaoParcela)(-1);
 #else
+        /// <summary>
+        /// Indica se a propriedade TpAntecip deve ser serializada.
+        /// </summary>
         public bool ShouldSerializeTpAntecip() => TpAntecip != null;
 #endif
 
-        #endregion 
+        #endregion
 
 #if INTEROP
 
         /// <summary>
-        /// Adicionar novo elemento a lista
+        /// Adicionar novo elemento a lista de componentes de pagamento.
         /// </summary>
         /// <param name="comp">Elemento</param>
         public void AddComp(Comp comp)
@@ -1447,7 +1658,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
         }
 
         /// <summary>
-        /// Retorna o elemento da lista Comp (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// Retorna o elemento da lista de componentes de pagamento (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista).
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da Comp</returns>
@@ -1462,12 +1673,12 @@ namespace Unimake.Business.DFe.Xml.MDFe
         }
 
         /// <summary>
-        /// Retorna a quantidade de elementos existentes na lista Comp
+        /// Retorna a quantidade de elementos existentes na lista de componentes de pagamento.
         /// </summary>
         public int GetCompCount => (Comp != null ? Comp.Count : 0);
 
         /// <summary>
-        /// Adicionar novo elemento a lista
+        /// Adicionar novo elemento a lista de informações de prazo de pagamento.
         /// </summary>
         /// <param name="infPrazo">Elemento</param>
         public void AddInfPrazo(InfPrazo infPrazo)
@@ -1481,7 +1692,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
         }
 
         /// <summary>
-        /// Retorna o elemento da lista InfPrazo (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// Retorna o elemento da lista de informações de prazo de pagamento (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista).
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da InfPrazo</returns>
@@ -1496,7 +1707,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
         }
 
         /// <summary>
-        /// Retorna a quantidade de elementos existentes na lista InfPrazo
+        /// Retorna a quantidade de elementos existentes na lista de informações de prazo de pagamento.
         /// </summary>
         public int GetInfPrazoCount => (InfPrazo != null ? InfPrazo.Count : 0);
 
@@ -1516,6 +1727,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
 
         internal override void SetValue(PropertyInfo pi) => base.SetValue(pi);
 
+        /// <summary>
+        /// Evento de Registro de Passagem do MDF-e.
+        /// </summary>
         [XmlElement(ElementName = "evMDFeRegPassagem", Order = 0)]
         public EventoMDFeRegPassagem EventoMDFeRegPassagem
         {
@@ -1523,6 +1737,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoMDFeRegPassagem = value;
         }
 
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -1530,6 +1747,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.DescEvento = value;
         }
 
+        /// <summary>
+        /// Código da UF de trânsito.
+        /// </summary>
         [XmlIgnore]
         public string CUFTransito
         {
@@ -1537,13 +1757,19 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.CUFTransito = value;
         }
 
+        /// <summary>
+        /// Código da unidade fiscal.
+        /// </summary>
         [XmlIgnore]
         public string CUnidFiscal
         {
             get => EventoMDFeRegPassagem.CUnidFiscal;
             set => EventoMDFeRegPassagem.CUnidFiscal = value;
-
         }
+
+        /// <summary>
+        /// Descrição da unidade fiscal.
+        /// </summary>
         [XmlIgnore]
         public string XUnidFiscal
         {
@@ -1551,6 +1777,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.XUnidFiscal = value;
         }
 
+        /// <summary>
+        /// Data e hora da passagem.
+        /// </summary>
         [XmlIgnore]
         public string DhPass
         {
@@ -1558,6 +1787,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.DhPass = value;
         }
 
+        /// <summary>
+        /// CPF do funcionário.
+        /// </summary>
         [XmlIgnore]
         public string CPFFunc
         {
@@ -1565,6 +1797,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.CPFFunc = value;
         }
 
+        /// <summary>
+        /// Nome do funcionário.
+        /// </summary>
         [XmlIgnore]
         public string XFunc
         {
@@ -1572,6 +1807,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.XFunc = value;
         }
 
+        /// <summary>
+        /// Tipo de transmissão.
+        /// </summary>
         [XmlIgnore]
         public string TpTransm
         {
@@ -1579,6 +1817,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.TpTransm = value;
         }
 
+        /// <summary>
+        /// Tipo de sentido.
+        /// </summary>
         [XmlIgnore]
         public string TpSentido
         {
@@ -1586,6 +1827,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.TpSentido = value;
         }
 
+        /// <summary>
+        /// Placa do veículo.
+        /// </summary>
         [XmlIgnore]
         public string Placa
         {
@@ -1593,22 +1837,26 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagem.Placa = value;
         }
 
+        /// <summary>
+        /// Serializa o objeto DetEventoMDFeRegPassagem em XML.
+        /// </summary>
+        /// <param name="writer">O XmlWriter usado para serialização.</param>
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
 
             var writeRaw = $@"<evMDFeRegPassagem>
-                <descEvento>{DescEvento}</descEvento>
-                <cUFTransito>{CUFTransito}</cUFTransito>
-                <cUnidFiscal>{CUnidFiscal}</cUnidFiscal>
-                <xUnidFiscal>{XUnidFiscal}</xUnidFiscal>
-                <dhPass>{DhPass}</dhPass>
-                <CPFFunc>{CPFFunc}</CPFFunc>
-                <xFunc>{XFunc}</xFunc>
-                <tpTransm>{TpTransm}</tpTransm>
-                <tpSentido>{TpSentido}</tpSentido>
-                <placa>{Placa}</placa>
-                </evMDFeRegPassagem>";
+                    <descEvento>{DescEvento}</descEvento>
+                    <cUFTransito>{CUFTransito}</cUFTransito>
+                    <cUnidFiscal>{CUnidFiscal}</cUnidFiscal>
+                    <xUnidFiscal>{XUnidFiscal}</xUnidFiscal>
+                    <dhPass>{DhPass}</dhPass>
+                    <CPFFunc>{CPFFunc}</CPFFunc>
+                    <xFunc>{XFunc}</xFunc>
+                    <tpTransm>{TpTransm}</tpTransm>
+                    <tpSentido>{TpSentido}</tpSentido>
+                    <placa>{Placa}</placa>
+                    </evMDFeRegPassagem>";
 
             writer.WriteRaw(writeRaw);
         }
@@ -1623,33 +1871,63 @@ namespace Unimake.Business.DFe.Xml.MDFe
     [XmlRoot(ElementName = "detEventoMDFeRegPassagem")]
     public class EventoMDFeRegPassagem : EventoDetalhe
     {
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Registro de Passagem";
 
+        /// <summary>
+        /// Código da UF de trânsito.
+        /// </summary>
         [XmlElement("cUFTransito", Order = 1)]
         public string CUFTransito { get; set; }
 
+        /// <summary>
+        /// Código da unidade fiscal.
+        /// </summary>
         [XmlElement("cUnidFiscal", Order = 1)]
         public string CUnidFiscal { get; set; }
 
+        /// <summary>
+        /// Descrição da unidade fiscal.
+        /// </summary>
         [XmlElement("xUnidFiscal", Order = 1)]
         public string XUnidFiscal { get; set; }
 
+        /// <summary>
+        /// Data e hora da passagem.
+        /// </summary>
         [XmlElement("dhPass", Order = 1)]
         public string DhPass { get; set; }
 
+        /// <summary>
+        /// CPF do funcionário.
+        /// </summary>
         [XmlElement("CPFFunc", Order = 1)]
         public string CPFFunc { get; set; }
 
+        /// <summary>
+        /// Nome do funcionário.
+        /// </summary>
         [XmlElement("xFunc", Order = 1)]
         public string XFunc { get; set; }
 
+        /// <summary>
+        /// Tipo de transmissão.
+        /// </summary>
         [XmlElement("tpTransm", Order = 1)]
         public string TpTransm { get; set; }
 
+        /// <summary>
+        /// Tipo de sentido.
+        /// </summary>
         [XmlElement("tpSentido", Order = 1)]
         public string TpSentido { get; set; }
 
+        /// <summary>
+        /// Placa do veículo.
+        /// </summary>
         [XmlElement("placa", Order = 1)]
         public string Placa { get; set; }
     }
@@ -1665,8 +1943,14 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         private EventoMDFeRegPassagemAuto _eventoMDFeRegPassagemAuto;
 
+        /// <summary>
+        /// Define o valor da propriedade usando informações de reflexão.
+        /// </summary>
         internal override void SetValue(PropertyInfo pi) => base.SetValue(pi);
 
+        /// <summary>
+        /// Evento de Registro de Passagem Automático do MDF-e.
+        /// </summary>
         [XmlElement(ElementName = "evMDFeRegPassagemAuto", Order = 0)]
         public EventoMDFeRegPassagemAuto EventoMDFeRegPassagemAuto
         {
@@ -1674,6 +1958,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoMDFeRegPassagemAuto = value;
         }
 
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -1681,6 +1968,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.DescEvento = value;
         }
 
+        /// <summary>
+        /// Tipo de transmissão.
+        /// </summary>
         [XmlIgnore]
         public string TpTransm
         {
@@ -1688,6 +1978,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.TpTransm = value;
         }
 
+        /// <summary>
+        /// Código da UF de trânsito.
+        /// </summary>
         [XmlIgnore]
         public string CUFTransito
         {
@@ -1695,14 +1988,19 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.CUFTransito = value;
         }
 
+        /// <summary>
+        /// Código de identificação do equipamento.
+        /// </summary>
         [XmlIgnore]
         public string CIdEquip
         {
             get => EventoMDFeRegPassagemAuto.CIdEquip;
             set => EventoMDFeRegPassagemAuto.CIdEquip = value;
-
         }
 
+        /// <summary>
+        /// Descrição do equipamento.
+        /// </summary>
         [XmlIgnore]
         public string XIdEquip
         {
@@ -1710,6 +2008,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.XIdEquip = value;
         }
 
+        /// <summary>
+        /// Tipo do equipamento.
+        /// </summary>
         [XmlIgnore]
         public string TpEquip
         {
@@ -1717,6 +2018,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.TpEquip = value;
         }
 
+        /// <summary>
+        /// Placa do veículo.
+        /// </summary>
         [XmlIgnore]
         public string Placa
         {
@@ -1724,6 +2028,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.Placa = value;
         }
 
+        /// <summary>
+        /// Tipo de sentido.
+        /// </summary>
         [XmlIgnore]
         public string TpSentido
         {
@@ -1731,6 +2038,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.TpSentido = value;
         }
 
+        /// <summary>
+        /// Data e hora da passagem.
+        /// </summary>
         [XmlIgnore]
         public string DhPass
         {
@@ -1738,6 +2048,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.DhPass = value;
         }
 
+        /// <summary>
+        /// Latitude da passagem.
+        /// </summary>
         [XmlIgnore]
         public string Latitude
         {
@@ -1745,6 +2058,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.Latitude = value;
         }
 
+        /// <summary>
+        /// Longitude da passagem.
+        /// </summary>
         [XmlIgnore]
         public string Longitude
         {
@@ -1752,7 +2068,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.Longitude = value;
         }
 
-
+        /// <summary>
+        /// Número Sequencial Único.
+        /// </summary>
         [XmlIgnore]
         public string NSU
         {
@@ -1760,26 +2078,30 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoMDFeRegPassagemAuto.NSU = value;
         }
 
+        /// <summary>
+        /// Serializa o objeto DetEventoMDFeRegPassagemAuto em XML.
+        /// </summary>
+        /// <param name="writer">O XmlWriter usado para serialização.</param>
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
 
             var writeRaw = $@"<evMDFeRegPassagemAuto>
-                <descEvento>{DescEvento}</descEvento>
-                <tpTransm>{TpTransm}</tpTransm>
-                <infPass>
-                <cUFTransito>{CUFTransito}</cUFTransito>
-                <cIdEquip>{CIdEquip}</cIdEquip>
-                <xIdEquip>{XIdEquip}</xIdEquip>
-                <tpEquip>{TpEquip}</tpEquip>
-                <placa>{Placa}</placa>
-                <tpSentido>{TpSentido}</tpSentido>
-                <dhPass>{DhPass}</dhPass>
-                <latitude>{Latitude}</latitude>
-                <longitude>{Longitude}</longitude>
-                <NSU>{NSU}</NSU>
-                </infPass>
-                </evMDFeRegPassagemAuto>";
+                    <descEvento>{DescEvento}</descEvento>
+                    <tpTransm>{TpTransm}</tpTransm>
+                    <infPass>
+                    <cUFTransito>{CUFTransito}</cUFTransito>
+                    <cIdEquip>{CIdEquip}</cIdEquip>
+                    <xIdEquip>{XIdEquip}</xIdEquip>
+                    <tpEquip>{TpEquip}</tpEquip>
+                    <placa>{Placa}</placa>
+                    <tpSentido>{TpSentido}</tpSentido>
+                    <dhPass>{DhPass}</dhPass>
+                    <latitude>{Latitude}</latitude>
+                    <longitude>{Longitude}</longitude>
+                    <NSU>{NSU}</NSU>
+                    </infPass>
+                    </evMDFeRegPassagemAuto>";
 
             writer.WriteRaw(writeRaw);
         }
@@ -1794,39 +2116,75 @@ namespace Unimake.Business.DFe.Xml.MDFe
     [XmlRoot(ElementName = "evMDFeRegPassagemAuto")]
     public class EventoMDFeRegPassagemAuto : EventoDetalhe
     {
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Registro de Passagem Automático";
 
+        /// <summary>
+        /// Tipo de transmissão.
+        /// </summary>
         [XmlElement("tpTransm", Order = 1)]
         public string TpTransm { get; set; }
 
+        /// <summary>
+        /// Código da UF de trânsito.
+        /// </summary>
         [XmlElement("cUFTransito", Order = 1)]
         public string CUFTransito { get; set; }
 
+        /// <summary>
+        /// Código de identificação do equipamento.
+        /// </summary>
         [XmlElement("cIdEquip", Order = 1)]
         public string CIdEquip { get; set; }
 
+        /// <summary>
+        /// Descrição do equipamento.
+        /// </summary>
         [XmlElement("xIdEquip", Order = 1)]
         public string XIdEquip { get; set; }
 
+        /// <summary>
+        /// Tipo do equipamento.
+        /// </summary>
         [XmlElement("tpEquip", Order = 1)]
         public string TpEquip { get; set; }
 
+        /// <summary>
+        /// Placa do veículo.
+        /// </summary>
         [XmlElement("placa", Order = 1)]
         public string Placa { get; set; }
 
+        /// <summary>
+        /// Tipo de sentido.
+        /// </summary>
         [XmlElement("tpSentido", Order = 1)]
         public string TpSentido { get; set; }
 
+        /// <summary>
+        /// Data e hora da passagem.
+        /// </summary>
         [XmlElement("dhPass", Order = 1)]
         public string DhPass { get; set; }
 
+        /// <summary>
+        /// Latitude da passagem.
+        /// </summary>
         [XmlElement("latitude", Order = 1)]
         public string Latitude { get; set; }
 
+        /// <summary>
+        /// Longitude da passagem.
+        /// </summary>
         [XmlElement("longitude", Order = 1)]
         public string Longitude { get; set; }
 
+        /// <summary>
+        /// Número Sequencial Único.
+        /// </summary>
         [XmlElement("NSU", Order = 1)]
         public string NSU { get; set; }
     }
@@ -1842,8 +2200,14 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         private EventoAlteracaoPagtoServMDFe _eventoAlteracaoPagtoServMDFe;
 
+        /// <summary>
+        /// Define o valor da propriedade usando informações de reflexão.
+        /// </summary>
         internal override void SetValue(PropertyInfo pi) => base.SetValue(pi);
 
+        /// <summary>
+        /// Evento de Alteração do Pagamento do Serviço do MDF-e.
+        /// </summary>
         [XmlElement(ElementName = "evAlteracaoPagtoServMDFe", Order = 0)]
         public EventoAlteracaoPagtoServMDFe EventoAlteracaoPagtoServMDFe
         {
@@ -1851,6 +2215,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoAlteracaoPagtoServMDFe = value;
         }
 
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -1858,6 +2225,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoAlteracaoPagtoServMDFe.DescEvento = value;
         }
 
+        /// <summary>
+        /// Número do Protocolo.
+        /// </summary>
         [XmlIgnore]
         public string NProt
         {
@@ -1865,6 +2235,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoAlteracaoPagtoServMDFe.NProt = value;
         }
 
+        /// <summary>
+        /// Informações de Pagamento.
+        /// </summary>
         [XmlIgnore]
         public List<AlteracaoPagtoServMDFeInfPag> InfPag
         {
@@ -1872,18 +2245,22 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoAlteracaoPagtoServMDFe.InfPag = value;
         }
 
+        /// <summary>
+        /// Serializa o objeto DetEventoAlteracaoPagtoServMDFe em XML.
+        /// </summary>
+        /// <param name="writer">O XmlWriter usado para serialização.</param>
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
 
             var writeRaw = $@"<evAlteracaoPagtoServMDFe>
-                <descEvento>{DescEvento}</descEvento>
-                <nProt>{NProt}</nProt>";
+                    <descEvento>{DescEvento}</descEvento>
+                    <nProt>{NProt}</nProt>";
 
             foreach (PagtoOperMDFeInfPag infPag in InfPag)
             {
                 writeRaw += $@"<infPag>
-                               <xNome>{infPag.XNome}</xNome>";
+                                 <xNome>{infPag.XNome}</xNome>";
 
                 if (!string.IsNullOrWhiteSpace(infPag.CNPJ))
                 {
@@ -1901,8 +2278,8 @@ namespace Unimake.Business.DFe.Xml.MDFe
                 foreach (var comp in infPag.Comp)
                 {
                     writeRaw += $@"<Comp>
-                                   <tpComp>{((int)comp.TpComp).ToString("00")}</tpComp>
-                                   <vComp>{comp.VCompField}</vComp>";
+                                     <tpComp>{((int)comp.TpComp).ToString("00")}</tpComp>
+                                     <vComp>{comp.VCompField}</vComp>";
 
                     if (comp.TpComp == TipoComponenteMDFe.Outros && !string.IsNullOrWhiteSpace(comp.XComp))
                     {
@@ -1913,7 +2290,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
                 }
 
                 writeRaw += $@"<vContrato>{infPag.VContratoField}</vContrato>
-                               <indPag>{infPag.IndPagField}</indPag>";
+                                 <indPag>{infPag.IndPagField}</indPag>";
 
                 if (infPag.IndPag == IndicadorPagamento.PagamentoPrazo)
                 {
@@ -1925,10 +2302,10 @@ namespace Unimake.Business.DFe.Xml.MDFe
                     foreach (var infPrazo in infPag.InfPrazo)
                     {
                         writeRaw += $@"<infPrazo>
-                                   <nParcela>{infPrazo.NParcela}</nParcela>
-                                   <dVenc>{infPrazo.DVencField}</dVenc>
-                                   <vParcela>{infPrazo.VParcelaField}</vParcela>
-                                   </infPrazo>";
+                                     <nParcela>{infPrazo.NParcela}</nParcela>
+                                     <dVenc>{infPrazo.DVencField}</dVenc>
+                                     <vParcela>{infPrazo.VParcelaField}</vParcela>
+                                     </infPrazo>";
                     }
                 }
 
@@ -1973,12 +2350,21 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Alteracao Pagamento Servico MDFe";
 
+        /// <summary>
+        /// Número do Protocolo.
+        /// </summary>
         [XmlElement("nProt", Order = 1)]
         public string NProt { get; set; }
 
+        /// <summary>
+        /// Informações de Pagamento.
+        /// </summary>
         [XmlElement("infPag", Order = 3)]
         public List<AlteracaoPagtoServMDFeInfPag> InfPag { get; set; } = new List<AlteracaoPagtoServMDFeInfPag>();
 
@@ -1989,7 +2375,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
 #if INTEROP
 
         /// <summary>
-        /// Adicionar novo elemento a lista
+        /// Adicionar novo elemento a lista de informações de pagamento.
         /// </summary>
         /// <param name="infPag">Elemento</param>
         public void AddInfPag(AlteracaoPagtoServMDFeInfPag infPag)
@@ -2003,7 +2389,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
         }
 
         /// <summary>
-        /// Retorna o elemento da lista InfPag (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// Retorna o elemento da lista de informações de pagamento (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista).
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
         /// <returns>Conteúdo do index passado por parâmetro da InfPag</returns>
@@ -2018,7 +2404,7 @@ namespace Unimake.Business.DFe.Xml.MDFe
         }
 
         /// <summary>
-        /// Retorna a quantidade de elementos existentes na lista InfPag
+        /// Retorna a quantidade de elementos existentes na lista de informações de pagamento.
         /// </summary>
         public int GetInfPagCount => (InfPag != null ? InfPag.Count : 0);
 
@@ -2047,8 +2433,14 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         private EventoConfirmaServMDFe _eventoConfirmaServMDFe;
 
+        /// <summary>
+        /// Define o valor da propriedade usando informações de reflexão.
+        /// </summary>
         internal override void SetValue(PropertyInfo pi) => base.SetValue(pi);
 
+        /// <summary>
+        /// Evento de Confirmação do Serviço do MDF-e.
+        /// </summary>
         [XmlElement(ElementName = "evConfirmaServMDFe", Order = 0)]
         public EventoConfirmaServMDFe EventoConfirmaServMDFe
         {
@@ -2056,6 +2448,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => _eventoConfirmaServMDFe = value;
         }
 
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlIgnore]
         public override string DescEvento
         {
@@ -2063,6 +2458,9 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoConfirmaServMDFe.DescEvento = value;
         }
 
+        /// <summary>
+        /// Número do Protocolo.
+        /// </summary>
         [XmlIgnore]
         public string NProt
         {
@@ -2070,13 +2468,17 @@ namespace Unimake.Business.DFe.Xml.MDFe
             set => EventoConfirmaServMDFe.NProt = value;
         }
 
+        /// <summary>
+        /// Serializa o objeto DetEventoConfirmaServMDFe em XML.
+        /// </summary>
+        /// <param name="writer">O XmlWriter usado para serialização.</param>
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
 
             var writeRaw = $@"<evConfirmaServMDFe>
-                <descEvento>{DescEvento}</descEvento>
-                <nProt>{NProt}</nProt>";
+                    <descEvento>{DescEvento}</descEvento>
+                    <nProt>{NProt}</nProt>";
 
             writeRaw += $@"</evConfirmaServMDFe>";
 
@@ -2095,12 +2497,121 @@ namespace Unimake.Business.DFe.Xml.MDFe
     {
         #region Public Properties
 
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
         [XmlElement("descEvento", Order = 0)]
         public override string DescEvento { get; set; } = "Confirmacao Servico Transporte";
 
+        /// <summary>
+        /// Número do Protocolo.
+        /// </summary>
         [XmlElement("nProt", Order = 1)]
         public string NProt { get; set; }
 
         #endregion Public Properties
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.MDFe.DetEventoEncerramentoFisco")]
+    [ComVisible(true)]
+#endif
+    [Serializable]
+    [XmlRoot(ElementName = "evMDFeEncFisco")]
+    public class DetEventoEncerramentoFisco : EventoDetalhe
+    {
+        private EventoEncerramentoFisco _eventoEncerramentoEvento;
+
+        /// <summary>
+        /// Define o valor da propriedade usando informações de reflexão.
+        /// </summary>
+        internal override void SetValue(PropertyInfo pi) => base.SetValue(pi);
+
+        /// <summary>
+        /// Evento de Encerramento Fiscal do MDF-e.
+        /// </summary>
+        [XmlElement(ElementName = "evMDFeEncFisco", Order = 0)]
+        public EventoEncerramentoFisco EventoEncerramentoFisco
+        {
+            get => _eventoEncerramentoEvento ?? (_eventoEncerramentoEvento = new EventoEncerramentoFisco());
+            set => _eventoEncerramentoEvento = value;
+        }
+
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
+        [XmlIgnore]
+        public override string DescEvento
+        {
+            get => EventoEncerramentoFisco.DescEvento;
+            set => EventoEncerramentoFisco.DescEvento = value;
+        }
+
+        /// <summary>
+        /// Tipo de Encerramento.
+        /// </summary>
+        [XmlIgnore]
+        public string TpEnc
+        {
+            get => EventoEncerramentoFisco.TpEnc;
+            set => EventoEncerramentoFisco.TpEnc = value;
+        }
+
+        /// <summary>
+        /// Justificativa do Encerramento.
+        /// </summary>
+        [XmlIgnore]
+        public string XJust
+        {
+            get => EventoEncerramentoFisco.XJust;
+            set => EventoEncerramentoFisco.XJust = value;
+        }
+
+        /// <summary>
+        /// Serializa o objeto DetEventoEncerramentoFisco em XML.
+        /// </summary>
+        /// <param name="writer">O XmlWriter usado para serialização.</param>
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+
+            var writeRaw = $@"<evMDFeEncFisco>
+                    <descEvento>{DescEvento}</descEvento>
+                    <tpEnc>{TpEnc}</tpEnc>
+                    <xJust>{XJust}</xJust>";
+
+            writeRaw += $@"</evMDFeEncFisco>";
+
+            writer.WriteRaw(writeRaw);
+        }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.MDFe.EventoEncerramentoFisco")]
+    [ComVisible(true)]
+#endif
+    [Serializable]
+    [XmlRoot(ElementName = "evMDFeEncFisco")]
+    public class EventoEncerramentoFisco : EventoDetalhe
+    {
+        /// <summary>
+        /// Descrição do Evento.
+        /// </summary>
+        [XmlElement("descEvento", Order = 0)]
+        public override string DescEvento { get; set; } = "Encerramento Fisco";
+
+        /// <summary>
+        /// Tipo de Encerramento.
+        /// </summary>
+        [XmlElement("tpEnc", Order = 1)]
+        public string TpEnc { get; set; }
+
+        /// <summary>
+        /// Justificativa do Encerramento.
+        /// </summary>
+        [XmlElement("xJust", Order = 2)]
+        public string XJust { get; set; }
     }
 }
