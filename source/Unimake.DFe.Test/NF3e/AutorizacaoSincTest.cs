@@ -34,6 +34,8 @@ namespace Unimake.DFe.Test.NF3e
         [InlineData(UFBrasil.GO, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.MA, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.MG, TipoAmbiente.Homologacao)]
+        [InlineData(UFBrasil.MT, TipoAmbiente.Homologacao)]
+        [InlineData(UFBrasil.MS, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.PA, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.PB, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.PR, TipoAmbiente.Homologacao)]
@@ -80,7 +82,7 @@ namespace Unimake.DFe.Test.NF3e
             var configuracao = new Configuracao
             {
                 TipoDFe = TipoDFe.NF3e,
-                TipoEmissao = TipoEmissao.ContingenciaOfflineNF3e,
+                TipoEmissao = TipoEmissao.ContingenciaOfflineNF3eNFCom,
                 CertificadoDigital = PropConfig.CertificadoDigital
             };
 
@@ -124,7 +126,7 @@ namespace Unimake.DFe.Test.NF3e
                         XFant = "Unimake Software",
                         EnderEmit = new EnderEmit
                         {
-                            XLgr = "Rua Paulo Antônio da Costa",
+                            XLgr = "Rua Paulo Antonio da Costa",
                             Nro = "575",
                             XBairro = "Jardim Simara",
                             CMun = "4118402",
@@ -144,7 +146,7 @@ namespace Unimake.DFe.Test.NF3e
                         {
                             XLgr = "Rua da Silva",
                             Nro = "1",
-                            XBairro = "Jardim Ipê",
+                            XBairro = "Jardim Ipe",
                             CMun = "1234567",
                             XMun = "Outro",
                             CEP = "87777001",
@@ -423,7 +425,7 @@ namespace Unimake.DFe.Test.NF3e
                         {
                             XLgr = "Rua da Silva",
                             Nro = "1",
-                            XBairro = "Jardim Ipê",
+                            XBairro = "Jardim Ipe",
                             CMun = "1234567",
                             XMun = "Outro",
                             CEP = "87777001",

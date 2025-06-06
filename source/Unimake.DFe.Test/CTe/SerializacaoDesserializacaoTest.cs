@@ -76,7 +76,7 @@ namespace Unimake.DFe.Test.CTe
         /// <summary>
         /// Testar a serialização e desserialização do XML CTeOS
         /// </summary>
-        [Theory]
+        [Theory]        
         [Trait("DFe", "CTeOS")]
         [InlineData(@"..\..\..\CTe\Resources\CTeOS_ModalRodoOS.xml")]
         [InlineData(@"..\..\..\CTe\Resources\4_00_CTeOS_ModalRodoOS.xml")]
@@ -133,9 +133,9 @@ namespace Unimake.DFe.Test.CTe
         [InlineData(@"..\..\..\CTe\Resources\retConsSitCTe_2.xml")]
         [InlineData(@"..\..\..\CTe\Resources\retConsSitCTe_3.xml")]
         [InlineData(@"..\..\..\CTe\Resources\retConsSitCTe_4.xml")]
+        [InlineData(@"..\..\..\CTe\Resources\retConsSitCTe_5.xml")]
         public void SerializacaoDesserializacaoRetConsSitCTe(string arqXML)
         {
-            
             Assert.True(File.Exists(arqXML), "Arquivo " + arqXML + " não foi localizado para a realização da serialização/desserialização.");
 
             var doc = new XmlDocument();

@@ -695,7 +695,7 @@ namespace Unimake.Business.DFe.Servicos
                 WebActionProducao = WebActionProducao.Replace("{TipoEventoEFDReinf}", TipoEventoEFDReinf);
                 WebTagRetorno = WebTagRetorno.Replace("{TipoEventoEFDReinf}", TipoEventoEFDReinf);
             }
-            else if(Servico == Servico.EFDReinfConsultaLoteAssincrono)
+            else if (Servico == Servico.EFDReinfConsultaLoteAssincrono)
             {
                 RequestURIProducao = RequestURIProducao.Replace("{numeroProtocolo}", NumeroProtocolo);
                 RequestURIHomologacao = RequestURIHomologacao.Replace("{numeroProtocolo}", NumeroProtocolo);
@@ -849,6 +849,30 @@ namespace Unimake.Business.DFe.Servicos
         /// HttpContent utilizado para a comunicação
         /// </summary>
         public HttpContent HttpContent { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private string _RequestURI { get; set; }
+
+        /// <summary>
+        /// Request URI utilizado na comunicação por API
+        /// </summary>
+        public string RequestURI
+        {
+            get
+            {
+                if (_RequestURI == null)
+                {
+                    _RequestURI = TipoAmbiente == TipoAmbiente.Homologacao ? RequestURIHomologacao : RequestURIProducao;
+                }
+                return _RequestURI;
+            }
+            set
+            {
+                _RequestURI = value;
+            }
+        }
 
         #endregion Public Fields
 
@@ -1319,7 +1343,7 @@ namespace Unimake.Business.DFe.Servicos
         /// <summary>
         /// Número do protocolo retornado no envio do lote do REINF
         /// </summary>
-        public string NumeroProtocolo {  get; set; }
+        public string NumeroProtocolo { get; set; }
 
         /// <summary>
         /// Versão do schema do XML do evento
@@ -1384,6 +1408,17 @@ namespace Unimake.Business.DFe.Servicos
         /// Formato deve ser conforme acima: ano com 4 dígitos + mês com 2 dígitos (zeros a esquerda) + dia com 2 dígitos (zeros a esquerda) + horas com 2 dígitos (zeros a esquerda) + minutos com 2 dígitos (zeros a esquerda)
         /// </summary>
         public string VersaoConfiguracao { get; set; }
+
+        /// <summary>
+        /// Cookie (caso exista)
+        /// IPM v2.8: Após efetuar a primeira requisição na aplicação (seja de emissão ou de cancelamento),
+        /// poderá ser obtida a informação referente à sessão.Em seguida, para as próximas requisições,
+        /// deve-se passar junto ao cabeçalho a informação de Cookie, juntamente com o identificador de
+        /// sessão.
+        /// Este parâmetro é de extrema importação, ele faz com que o tempo de emissão da NFS -e
+        /// reduza consideravelmente, pois não é necessário criar uma sessão para cada emissão.
+        /// </summary>
+        public string Cookie { get; set; }
 
         #endregion Public Properties
 
