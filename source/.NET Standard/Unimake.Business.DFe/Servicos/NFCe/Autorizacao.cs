@@ -237,7 +237,7 @@ namespace Unimake.Business.DFe.Servicos.NFCe
                     {
                         urlQrCode = urlQrCode_original;
                     }
-                    string paramLinkQRCode;
+                    var paramLinkQRCode = chave + "|" + Configuracoes.VersaoQRCodeNFCe.ToString() + "|" + ((int)tpAmb).ToString();
 
                     if (tpEmis == TipoEmissao.ContingenciaOffLine)
                     {
