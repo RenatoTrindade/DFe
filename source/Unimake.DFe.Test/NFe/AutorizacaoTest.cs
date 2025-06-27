@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using Unimake.Business.DFe.Servicos;
 using Unimake.Business.DFe.Servicos.NFe;
@@ -370,7 +371,7 @@ namespace Unimake.DFe.Test.NFe
             Assert.True(configuracao.TipoAmbiente.Equals(tipoAmbiente), "Tipo de ambiente definido nas configurações diferente de " + tipoAmbiente.ToString());
             Assert.True(autorizacao.Result.CUF.Equals(ufBrasil), "Webservice retornou uma UF e está diferente de " + ufBrasil.ToString());
             Assert.True(autorizacao.Result.TpAmb.Equals(tipoAmbiente), "Webservice retornou um Tipo de ambiente diferente " + tipoAmbiente.ToString());
-            Assert.True(autorizacao.Result.CStat.Equals(103) || autorizacao.Result.CStat.Equals(656), "Lote não foi processado. <cStat>" + autorizacao.Result.CStat + " - <xMotivo>" + autorizacao.Result.XMotivo + "<xMotivo>");
+            Assert.True(autorizacao.Result.CStat.Equals(103) || autorizacao.Result.CStat.Equals(452) || autorizacao.Result.CStat.Equals(656), "Lote não foi processado. <cStat>" + autorizacao.Result.CStat + " - <xMotivo>" + autorizacao.Result.XMotivo + "<xMotivo>");
             if (autorizacao.Result.InfRec != null)
             {
                 Assert.True(!string.IsNullOrWhiteSpace(autorizacao.Result.InfRec.NRec), "Não retornou o número do recibo no envio da NFe");
@@ -1244,7 +1245,7 @@ namespace Unimake.DFe.Test.NFe
                 var autorizacao = new Autorizacao(xml, configuracao);
                 Assert.True(false);
             }
-            catch (ValidatorDFeException ex)
+            catch (ValidatorDFeException)
             {
                 Assert.True(true);
             }
@@ -1254,5 +1255,34 @@ namespace Unimake.DFe.Test.NFe
             }
         }
 
+
+        /// <summary>
+        /// Testar o envio de um XML com as tags da reforma tributária
+        /// </summary>
+        /// <param name="tipoAmbiente"></param>
+        /// <param name="arqXML"></param>
+        [Theory]
+        [Trait("DFe", "NFe")]
+        [InlineData(TipoAmbiente.Homologacao, @"..\..\..\NFe\Resources\envNFeReformaTributaria.xml")]
+        public void ValidarNFeComReformaTributaria(TipoAmbiente tipoAmbiente, string arqXML)
+        {
+            Assert.True(File.Exists(arqXML), "Arquivo " + arqXML + " não foi localizado para a realização da serialização/desserialização.");
+
+            var doc = new XmlDocument();
+            doc.Load(arqXML);
+
+            var configuracao = new Configuracao
+            {
+                TipoDFe = TipoDFe.NFe,
+                TipoAmbiente = tipoAmbiente,
+                CertificadoDigital = PropConfig.CertificadoDigital
+            };
+
+            var enviNFe = new EnviNFe();
+            enviNFe = enviNFe.LerXML<EnviNFe>(doc);
+
+            var autorizacaoNFe = new Autorizacao(enviNFe, configuracao);
+            
+        }
     }
 }

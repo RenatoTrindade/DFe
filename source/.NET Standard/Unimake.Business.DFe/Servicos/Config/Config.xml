@@ -190,6 +190,12 @@
 		<ArqConfig>Equiplano.xml</ArqConfig>
 		<PadraoNFSe>EQUIPLANO</PadraoNFSe>
 	</Arquivo>
+	<Arquivo ID="9999906">
+		<Nome>FISCO</Nome>
+		<UF>BR</UF>
+		<ArqConfig>FISCO.xml</ArqConfig>
+		<PadraoNFSe>FISCO</PadraoNFSe>
+	</Arquivo>
 	<!-- **** Fim dos padrões com apenas um XML de configuração **** -->
 	<Arquivo ID="3303203">
 		<Nome>Nilópolis - RJ</Nome>
@@ -1391,12 +1397,6 @@
 		<ArqConfig>SalvadorBA.xml</ArqConfig>
 		<PadraoNFSe>SALVADOR_BA</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="2909802">
-		<Nome>Cruz das Almas - BA</Nome>
-		<UF>BA</UF>
-		<ArqConfig>FISCO.xml</ArqConfig>
-		<PadraoNFSe>FISCO</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="2917508">
 		<Nome>Jacobina - BA</Nome>
 		<UF>BA</UF>
@@ -1683,7 +1683,7 @@
 		<Nome>João Pessoa - PB</Nome>
 		<UF>PB</UF>
 		<ArqConfig>JoaoPessoaPB.xml</ArqConfig>
-		<PadraoNFSe>SISPMJP</PadraoNFSe>
+		<PadraoNFSe>DSF</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="2800308">
 		<Nome>Aracaju - SE</Nome>
@@ -1960,5 +1960,71 @@
 		<UF>RS</UF>
 		<ArqConfig>NovaSantaRitaRS.xml</ArqConfig>
 		<PadraoNFSe>IPM</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3522307">
+		<Nome>Itapetininga - SP</Nome>
+		<UF>SP</UF>
+		<ArqConfig>ItapetiningaSP.xml</ArqConfig>
+		<PadraoNFSe>JLSOFT</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="4320206">
+		<Nome>Seberi - RS</Nome>
+		<UF>RS</UF>
+		<ArqConfig>SeberiRS.xml</ArqConfig>
+		<PadraoNFSe>IPM</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="2914703">
+		<Nome>Itaberaba - BA</Nome>
+		<UF>BA</UF>
+		<ArqConfig>ItaberabaBA.xml</ArqConfig>
+		<PadraoNFSe>ADM_SISTEMAS</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="2400208">
+		<Nome>Assú - RN</Nome>
+		<UF>RN</UF>
+		<ArqConfig>AssuRN.xml</ArqConfig>
+		<PadraoNFSe>PUBLICA</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="2612505">
+		<Nome>Santa Cruz do Capibaribe - PE</Nome>
+		<UF>PE</UF>
+		<ArqConfig>SantaCruzDoCapibaribePE.xml</ArqConfig>
+		<PadraoNFSe>TINUS</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3301702">
+		<Nome>Duque de Caxias - RJ</Nome>
+		<UF>RJ</UF>
+		<ArqConfig>DuqueDeCaxiasRJ.xml</ArqConfig>
+		<PadraoNFSe>ISSNET</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3162500">
+		<Nome>São João del Rei - MG</Nome>
+		<UF>MG</UF>
+		<ArqConfig>SaoJoaoDelReiMG.xml</ArqConfig>
+		<PadraoNFSe>SH3</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3172004">
+		<Nome>Visconde do Rio Branco - MG</Nome>
+		<UF>MG</UF>
+		<ArqConfig>ViscondeDoRioBrancoMG.xml</ArqConfig>
+		<PadraoNFSe>SH3</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3105905">
+		<Nome>Barroso - MG</Nome>
+		<UF>MG</UF>
+		<ArqConfig>BarrosoMG.xml</ArqConfig>
+		<PadraoNFSe>SH3</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3302502">
+		<Nome>Magé - RJ</Nome>
+		<UF>RJ</UF>
+		<ArqConfig>MageRJ.xml</ArqConfig>
+		<PadraoNFSe>MODERNIZACAO_PUBLICA</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3305208">
+		<Nome>São Pedro da Aldeira - RJ</Nome>
+		<UF>RJ</UF>
+		<ArqConfig>SaoPedroDaAldeiaRJ.xml</ArqConfig>
+		<PadraoNFSe>MODERNIZACAO_PUBLICA</PadraoNFSe>
 	</Arquivo>
 </Configuracoes>

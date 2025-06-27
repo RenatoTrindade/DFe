@@ -329,6 +329,9 @@ namespace Unimake.Business.DFe.Xml.ESocial
 #else
         public bool ShouldSerializeIndPorte() => IndPorte != null;
 #endif
+        public bool ShouldSerializeCnpjEFR() => !string.IsNullOrEmpty(CnpjEFR);
+
+        public bool ShouldSerializeDtTrans11096() => !string.IsNullOrEmpty(DtTrans11096);
 
 #if INTEROP
         public bool ShouldSerializeIndTribFolhaPisPasep() => IndTribFolhaPisPasep != (SimNaoLetra)(-1);
@@ -342,7 +345,7 @@ namespace Unimake.Business.DFe.Xml.ESocial
         public bool ShouldSerializeIndPertIRRF() => IndPertIRRF != null && IndPertIRRF == SimNaoLetra.Sim;
 #endif
 
-        #endregion ShouldSerialize
+#endregion ShouldSerialize
     }
 
     /// <summary>
