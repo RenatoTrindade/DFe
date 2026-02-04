@@ -86,7 +86,7 @@ namespace Unimake.DFe.Test.NF3e
             var configuracao = new Configuracao
             {
                 TipoDFe = TipoDFe.NF3e,
-                TipoEmissao = TipoEmissao.ContingenciaOfflineNF3eNFCom,
+                TipoEmissao = TipoEmissao.ContingenciaFSIA,
                 CertificadoDigital = PropConfig.CertificadoDigital
             };
 
@@ -100,7 +100,7 @@ namespace Unimake.DFe.Test.NF3e
         /// <param name="ufBrasil">UF</param>
         /// <param name="tipoAmbiente">Ambiente</param>
         /// <returns></returns>
-        private Business.DFe.Xml.NF3e.NF3e MontarXMLNF3e(UFBrasil ufBrasil, TipoAmbiente tipoAmbiente)
+        private static Business.DFe.Xml.NF3e.NF3e MontarXMLNF3e(UFBrasil ufBrasil, TipoAmbiente tipoAmbiente)
         {
             var xml = new Business.DFe.Xml.NF3e.NF3e
             {
@@ -436,18 +436,6 @@ namespace Unimake.DFe.Test.NF3e
                                                         PAliqEfetRegCBS = 2.7000,
                                                         VTribRegCBS = 27.00
                                                     },
-                                                    GIBSCredPres = new GIBSCredPres
-                                                    {
-                                                        CCredPres = "1111",
-                                                        PCredPres = 5.0000,
-                                                        VCredPresCondSus = 50.00,
-                                                    },
-                                                    GCBSCredPres = new GCBSCredPres
-                                                    {
-                                                        CCredPres = "2222",
-                                                        PCredPres = 3.0000,
-                                                        VCredPres = 30.00,
-                                                    },
                                                     GTribCompraGov = new GTribCompraGov
                                                     {
                                                         PAliqIBSUF = 1.0000,
@@ -537,17 +525,13 @@ namespace Unimake.DFe.Test.NF3e
                                     VDevTrib = 1.99,
                                     VIBSMun = 155.89
                                 },
-                                VIBS = 1.17,
-                                VCredPres = 117.40,
-                                VCredPresCondSus = 1.59
+                                VIBS = 1.17
                             },
                             GCBS = new GCBSTot
                             {
                                 VDif = 22.22,
                                 VDevTrib = 23.33,
-                                VCBS = 44.44,
-                                VCredPres = 55.55,
-                                VCredPresCondSus = 66.66
+                                VCBS = 44.44
                             }
                         },
                         VTotDFe = 1000.55
@@ -734,6 +718,30 @@ namespace Unimake.DFe.Test.NF3e
 
             var autorizarNf3eSincrono = new AutorizacaoSinc(nf3eSincronoObjeto, configuracao);
             autorizarNf3eSincrono.Executar();
+        }
+
+        [Theory]
+        [Trait("DFe", "NF3e")]
+        [InlineData(TipoAmbiente.Homologacao, @"..\..\..\NF3e\Resources\NF3e_RTC.xml")]
+        public void ValidarNF3eReformaTributaria(TipoAmbiente tipoAmbiente, string arqXML)
+        {
+            Assert.True(File.Exists(arqXML), "Arquivo " + arqXML + " não foi localizado para a realização da serialização/desserialização.");
+            
+            var doc = new XmlDocument();
+            doc.Load(arqXML);
+
+            var configuracao = new Configuracao
+            {
+                TipoDFe = TipoDFe.NF3e,
+                TipoEmissao = TipoEmissao.Normal,
+                TipoAmbiente = tipoAmbiente,
+                CertificadoDigital = PropConfig.CertificadoDigital,
+            };
+
+            var nf3eSincrono = new Business.DFe.Xml.NF3e.NF3e();
+            var nf3eSincronoObjeto = nf3eSincrono.LerXML<Business.DFe.Xml.NF3e.NF3e>(doc);
+
+            var autorizarNf3eSincrono = new AutorizacaoSinc(nf3eSincronoObjeto, configuracao);
         }
     }
 }

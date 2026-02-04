@@ -601,7 +601,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
 
         public bool ShouldSerializeNrInscFciScp() => !string.IsNullOrEmpty(NrInscFciScp);
 
-        public bool ShouldSerializePercSCP() => PercSCP > 0;
+        public bool ShouldSerializePercSCPField() => PercSCP > 0;
 
 #if INTEROP
         public bool ShouldSerializeIndJud() => IndJud != (SimNaoLetra)(-1);
@@ -799,8 +799,7 @@ namespace Unimake.Business.DFe.Xml.EFDReinf
         #region ShouldSerialize
 
         public bool ShouldSerializeDescRendimento() => !string.IsNullOrEmpty(DescRendimento);
-
-        public bool ShouldSerializeDtObitoField() => DtLaudo > DateTime.MinValue;
+        public bool ShouldSerializeDtLaudoField() => DtLaudo > DateTime.MinValue;
 
         #endregion ShouldSerialize
     }

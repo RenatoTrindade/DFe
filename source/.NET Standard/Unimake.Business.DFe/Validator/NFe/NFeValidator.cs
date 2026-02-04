@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Unimake.Business.DFe.Servicos;
 using Unimake.Business.DFe.Utility;
@@ -232,6 +233,13 @@ namespace Unimake.Business.DFe.Validator.NFe
                     ThrowHelper.Instance.Throw(new ValidatorDFeException("O CST do grupo de tributação de ICMS20 está incorreto. Valor informado: " + Tag.Value + " - Valor aceito: 20." +
                         " [Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] [TAG: <CST> do grupo de tag <det><imposto><ICMS><ICMS20>]"));
                 }
+                if (value == "20" && !HasNotaFooterBaseLegal(Tag))
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        "Nota Fiscal possui produto utilizando CST 020 e não foi localizado nenhum texto de base legal para o benefício nas informações adicionais da NFe/NFCe. " +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CST dos grupos de tag det, imposto, ICMS e ICMS20]"));
+                }
             }).ValidateTag(element => element.NameEquals(nameof(ICMS30.CST)) && element.Parent.NameEquals(nameof(ICMS30)), Tag =>
             {
                 var value = Tag.Value;
@@ -256,6 +264,13 @@ namespace Unimake.Business.DFe.Validator.NFe
                     ThrowHelper.Instance.Throw(new ValidatorDFeException("O CST do grupo de tributação de ICMS40 está incorreto. Valor informado: " + Tag.Value + " - Valores aceitos: 40, 41 ou 50." +
                         " [Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] [TAG: <CST> do grupo de tag <det><imposto><ICMS><ICMS40>]"));
                 }
+                if (value == "40" && !HasNotaFooterBaseLegal(Tag))
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        "Nota Fiscal possui produto utilizando CST 040 e não foi localizado nenhum texto de base legal para o benefício nas informações adicionais da NFe/NFCe. " +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CST dos grupos de tag det, imposto, ICMS e ICMS40]"));
+                }
             }).ValidateTag(element => element.NameEquals(nameof(ICMS51.CST)) && element.Parent.NameEquals(nameof(ICMS51)), Tag =>
             {
                 var value = Tag.Value;
@@ -267,6 +282,13 @@ namespace Unimake.Business.DFe.Validator.NFe
                 {
                     ThrowHelper.Instance.Throw(new ValidatorDFeException("O CST do grupo de tributação de ICMS51 está incorreto. Valor informado: " + Tag.Value + " - Valor aceito: 51." +
                         " [Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] [TAG: <CST> do grupo de tag <det><imposto><ICMS><ICMS51>]"));
+                }
+                if (value == "51" && !HasNotaFooterBaseLegal(Tag))
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        "Nota Fiscal possui produto utilizando CST 051 e não foi localizado nenhum texto de base legal para o benefício nas informações adicionais da NFe/NFCe. " +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CST dos grupos de tag det, imposto, ICMS e ICMS51]"));
                 }
             }).ValidateTag(element => element.NameEquals(nameof(ICMS53.CST)) && element.Parent.NameEquals(nameof(ICMS53)), Tag =>
             {
@@ -703,123 +725,95 @@ namespace Unimake.Business.DFe.Validator.NFe
                 }
             }).ValidateTag(element => element.NameEquals(nameof(Ide.DhSaiEnt)) && element.Parent.NameEquals(nameof(Ide)), Tag =>
             {
+                var tpNF = Tag.Parent.GetValue("tpNF");
                 var mod = Tag.Parent.GetValue("mod");
 
-                if (mod == "65")
+                if (tpNF == "1") //Somente notas de saída terá esta validação, tem notas de entrada que é permitido a data de entrada ser menor que a emissão.
                 {
-                    ThrowHelper.Instance.Throw(new ValidatorDFeException(
-                        $"A data de entrada/saída, tag <dhSaiEnt>, não deve ser informada quando o modelo do documento fiscal, tag <mod>, for 65 (NFC-e). " +
-                        $"[TAG: <dhSaiEnt> do grupo de tag <NFe><infNFe><ide>]"));
-                }
-
-                var dhSaiEntStr = Tag.Value;
-                var dhEmiStr = Tag.Parent.GetValue("dhEmi");
-
-                if (!string.IsNullOrWhiteSpace(dhSaiEntStr) && !string.IsNullOrWhiteSpace(dhEmiStr))
-                {
-                    if (DateTime.TryParse(dhSaiEntStr, out var dhSaiEnt) && DateTime.TryParse(dhEmiStr, out var dhEmi))
-                    {
-                        var dhSaiEntTrunc = new DateTime(dhSaiEnt.Year, dhSaiEnt.Month, dhSaiEnt.Day, dhSaiEnt.Hour, 0, 0);
-                        var dhEmiTrunc = new DateTime(dhEmi.Year, dhEmi.Month, dhEmi.Day, dhEmi.Hour, 0, 0);
-
-                        if (dhSaiEntTrunc < dhEmiTrunc)
-                        {
-                            ThrowHelper.Instance.Throw(new ValidatorDFeException(
-                                $"A data/hora de saída/entrada <dhSaiEnt> não pode ser anterior à data/hora de emissão <dhEmi>. " +
-                                $"Valores informados: dhEmi = {dhEmi:O}, dhSaiEnt = {dhSaiEnt:O}. " +
-                                $"[TAGs: <dhEmi> e <dhSaiEnt> do grupo de tag <NFe><infNFe><ide>]"));
-                        }
-                    }
-                    else
+                    if (mod == "65")
                     {
                         ThrowHelper.Instance.Throw(new ValidatorDFeException(
-                            $"Erro ao interpretar as datas das tags <dhEmi> ou <dhSaiEnt>. Verifique se os valores estão em um formato de data/hora válido conforme o padrão ISO 8601. " +
-                            $"Valores encontrados: dhEmi = '{dhEmiStr}', dhSaiEnt = '{dhSaiEntStr}'"));
+                            $"A data de entrada/saída, tag <dhSaiEnt>, não deve ser informada quando o modelo do documento fiscal, tag <mod>, for 65 (NFC-e). " +
+                            $"[TAG: <dhSaiEnt> do grupo de tag <NFe><infNFe><ide>]"));
+                    }
+
+                    var dhSaiEntStr = Tag.Value;
+                    var dhEmiStr = Tag.Parent.GetValue("dhEmi");
+
+                    if (!string.IsNullOrWhiteSpace(dhSaiEntStr) && !string.IsNullOrWhiteSpace(dhEmiStr))
+                    {
+                        if (DateTime.TryParse(dhSaiEntStr, out var dhSaiEnt) && DateTime.TryParse(dhEmiStr, out var dhEmi))
+                        {
+                            var dhSaiEntTrunc = new DateTime(dhSaiEnt.Year, dhSaiEnt.Month, dhSaiEnt.Day, 0, 0, 0);
+                            var dhEmiTrunc = new DateTime(dhEmi.Year, dhEmi.Month, dhEmi.Day, 0, 0, 0);
+
+                            if (dhSaiEntTrunc < dhEmiTrunc)
+                            {
+                                ThrowHelper.Instance.Throw(new ValidatorDFeException(
+                                    $"A data/hora de saída/entrada <dhSaiEnt> não pode ser anterior à data/hora de emissão <dhEmi>. " +
+                                    $"Valores informados: dhEmi = {dhEmi:O}, dhSaiEnt = {dhSaiEnt:O}. " +
+                                    $"[TAGs: <dhEmi> e <dhSaiEnt> do grupo de tag <NFe><infNFe><ide>]"));
+                            }
+                        }
+                        else
+                        {
+                            ThrowHelper.Instance.Throw(new ValidatorDFeException(
+                                $"Erro ao interpretar as datas das tags <dhEmi> ou <dhSaiEnt>. Verifique se os valores estão em um formato de data/hora válido conforme o padrão ISO 8601. " +
+                                $"Valores encontrados: dhEmi = '{dhEmiStr}', dhSaiEnt = '{dhSaiEntStr}'"));
+                        }
                     }
                 }
             }).ValidateTag(element => element.NameEquals(nameof(Prod.CFOP)) && element.Parent.NameEquals(nameof(Prod)), Tag =>
             {
-                var finNFe = Tag.Parent.Parent.Parent.GetValue("finNFe");
-                var tpNF = Tag.Parent.Parent.Parent.GetValue("tpNF");
-
-                var emitUF = Tag.Document?.Descendants().FirstOrDefault(e => e.NameEquals(nameof(EnderEmit)))?.GetValue(nameof(EnderEmit.UF));
-                var destUF = Tag.Document?.Descendants().FirstOrDefault(e => e.NameEquals(nameof(EnderDest)))?.GetValue(nameof(EnderDest.UF));
-
                 var cfop = Tag.Value.Trim();
                 var cProd = Tag.Parent?.Parent?.GetValue("cProd");
                 var xProd = Tag.Parent?.Parent?.GetValue("xProd");
                 var nItem = Tag.Parent?.Parent?.GetAttributeValue("nItem");
 
-                if (finNFe == "4") // Devolução
+                var det = Tag.Parent?.Parent;
+                var cst = PegarCstDoDet(det);
+
+                //Regra 01 -> CFOP 6101 + CST 00
+                if (cfop == "6101" && cst == "00")
                 {
-                    var tipoOperacao = "";
-                    var cfopsValidos = new HashSet<string>();
-
-                    // Devolução de venda (entrada)
-                    if (tpNF == "0")
-                    {
-                        if (string.IsNullOrWhiteSpace(destUF) || destUF.ToUpper() == "EX")
-                        {
-                            tipoOperacao = "Devolução de venda do exterior";
-                            cfopsValidos = new HashSet<string>
-                            {
-                                "3201", "3202", "3211", "3212", "3503", "3553"
-                            };
-                        }
-                        else if (!string.IsNullOrWhiteSpace(emitUF) && emitUF == destUF)
-                        {
-                            tipoOperacao = "Devolução de venda estadual";
-                            cfopsValidos = new HashSet<string>
-                            {
-                                "1201", "1202", "1203", "1204", "1208", "1209", "1212", "1213", "1214", "1215", "1216", "1410", "1411", "1503", "1504", "1505", "1506", "1553", "1660", "1661", "1662", "1918", "1919"
-                            };
-                        }
-                        else
-                        {
-                            tipoOperacao = "Devolução de venda interestadual";
-                            cfopsValidos = new HashSet<string>
-                            {
-                                "2201", "2202", "2203", "2204", "2208", "2209", "2212", "2213", "2214", "2215", "2216", "2410", "2411", "2503", "2504", "2505", "2506", "2553", "2660", "2661", "2662", "2918", "2919"
-                            };
-                        }
-                    }
-                    // Devolução de compra (saída)
-                    else if (tpNF == "1")
-                    {
-                        if (!string.IsNullOrWhiteSpace(emitUF) && emitUF == destUF)
-                        {
-                            tipoOperacao = "Devolução de compra estadual";
-                            cfopsValidos = new HashSet<string> 
-                            {
-                                "5201", "5202", "5208", "5209", "5210", "5213", "5214", "5215", "5216", "5410", "5411", "5412", "5413", "5503", "5553", "5555", "5556", "5660", "5661", "5662", "5918", "5919", "5921"
-                            };
-                        }
-                        else if (!string.IsNullOrWhiteSpace(destUF) && destUF.ToUpper() == "EX")
-                        {
-                            tipoOperacao = "Devolução de compra do exterior";
-                            cfopsValidos = new HashSet<string> 
-                            {
-                                "7201", "7202", "7210", "7211", "7212", "7553", "7556", "7930"
-                            };
-                        }
-                        else
-                        {
-                            tipoOperacao = "Devolução de compra interestadual";
-                            cfopsValidos = new HashSet<string> 
-                            {
-                                "6201", "6202", "6208", "6209", "6210", "6213", "6214", "6215", "6216", "6410", "6411", "6412", "6413", "6503", "6553", "6555", "6556", "6660", "6661", "6662", "6918", "6919", "6921"
-                            };
-                        }
-                    }
-
-                    if (!cfopsValidos.Contains(cfop))
-                    {
-                        ThrowHelper.Instance.Throw(new ValidatorDFeException(
-                            $"CFOP '{cfop}' inválido para {tipoOperacao}. " +
-                            $"Para esse tipo de devolução, utilize um dos seguintes CFOPs: {string.Join(", ", cfopsValidos.OrderBy(x => x))}. " +
-                            $"[Item: {nItem}] [cProd: {cProd}] [xProd: {xProd}] [TAG: <CFOP> do grupo de tag <NFe><infNFe><det><prod>]"));
-                    }
+                    Warnings.Add(new ValidatorDFeException(
+                        "Se a operação for isenta (por exemplo, para zona franca ou consumidor final sem substituição tributária), usar CST 00 com CFOP 6.101 implica débito de ICMS, podendo gerar imposto a pagar mesmo sem necessidade." +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CFOP dos grupos de tag det e prod]"));
                 }
+
+                if (cfop == "6102" && cst == "10" && ConsumirdorFinalMesmoEstado(Tag))
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        " Para venda interestadual a consumidor final, o correto seria usar CFOP 6.108 ou 6.109, com destaque do ICMS de diferencial de alíquota (DIFAL). Se usar CFOP 6.102 e CST 10, pode gerar cobrança indevida de ST e/ou erro de cálculo do DIFAL" +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CFOP dos grupos de tag det e prod]"));
+                }
+
+                if (cfop == "5102" && cst == "40")
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        "Se não há isenção prevista em lei, pode se usar CST 40 com CFOP 5.102 pode levar à ''sonegação involuntária'', e posteriormente a autuação fiscal." +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CFOP dos grupos de tag det e prod]"));
+                }
+
+                if (cfop == "5949" && cst == "00")
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        "CFOP 5.949 e CST 00 genéricos. Podem esconder operação real e gerar tributação indevida por padrão, além de chamar atenção do fisco." +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CFOP dos grupos de tag det e prod]"));
+                }
+
+                if (cfop == "6350" && (cst == "00" || cst == "10"))
+                {
+                    Warnings.Add(new ValidatorDFeException(
+                        "A Zona Franca, CFOP 6.350 pode garantir isenção do ICMS. Usar CST 00 ou 10, que destaca o imposto pode gerar débito indevido ou não aproveitamento de benefício fiscal." +
+                        "[Item: " + nItem + "] [cProd: " + cProd + "] [xProd: " + xProd + "] " +
+                        "[TAG: CFOP dos grupos de tag det e prod]"));
+                }
+
             });
 
         #endregion Public Constructors
@@ -854,5 +848,115 @@ namespace Unimake.Business.DFe.Validator.NFe
 
             return true;
         }
+
+        /// <summary>
+        /// Retorna true se encontrar "base legal" no rodapé da nota (infAdic).
+        /// </summary>
+        private bool HasNotaFooterBaseLegal(XElement tag)
+        {
+            var infAdic = tag.Document?.Descendants()
+                .FirstOrDefault(e => e.NameEquals("infAdic"));
+
+            if (infAdic == null) return false;
+
+            var sb = new StringBuilder();
+
+            var infCpl = infAdic.GetValue("infCpl");
+            if (!string.IsNullOrWhiteSpace(infCpl))
+                sb.Append(' ').Append(infCpl);
+
+            foreach (var obsCont in infAdic.Elements().Where(e => e.NameEquals("obsCont")))
+            {
+                var xTexto = obsCont.GetValue("xTexto");
+                if (!string.IsNullOrWhiteSpace(xTexto))
+                    sb.Append(' ').Append(xTexto);
+            }
+
+            foreach (var obsFisco in infAdic.Elements().Where(e => e.NameEquals("obsFisco")))
+            {
+                var xTexto = obsFisco.GetValue("xTexto");
+                if (!string.IsNullOrWhiteSpace(xTexto))
+                    sb.Append(' ').Append(xTexto);
+            }
+
+            var texto = sb.ToString().ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(texto)) return false;
+
+            string[] tokens = {
+                "base legal",
+                "lei ", "lei nº", "lei n.º", "lei complementar", "lc ",
+                "convênio icms", "ajuste sinief", "protocolo icms",
+                "decreto", "portaria", "art.", "artigo", "§", "inciso", "alínea",
+                "ricms", "ripi", "alinea", "convenio icms", "lei n", "lei n."
+            };
+
+            return tokens.Any(t => texto.Contains(t));
+        }
+
+        /// <summary>
+        /// Extrai o primeiro CST encontrado no grupo de tags do item (det).
+        /// </summary>
+        /// <param name="det"></param>
+        /// <returns>CST</returns>
+        private static string PegarCstDoDet(XElement det)
+        {
+            if (det == null) return null;
+
+            var imposto = det.GetElement("imposto");
+            var icms = imposto?.GetElement("ICMS");
+
+            if (icms == null) return null;
+
+            string[] grupos = { "ICMS00", "ICMS10", "ICMS20", "ICMS30", "ICMS40", "ICMS41", "ICMS51", "ICMS60", "ICMS70", "ICMS90" };
+
+            foreach (var g in grupos)
+            {
+                var el = icms.GetElement(g);
+
+                if (el == null) continue;
+
+                var v = el.GetValue("CST");
+                if (!string.IsNullOrWhiteSpace(v))
+                    return v;
+            }
+
+            return null;
+
+        }
+
+        private static bool ConsumirdorFinalMesmoEstado(XElement tag)
+        {
+            var doc = tag.Document;
+            if (doc == null) return false;
+
+            // ide/indFinal (1 = consumidor final)
+            var indFinal = doc.Descendants().FirstOrDefault(e => e.Name.LocalName == "ide")
+                ?.Elements().FirstOrDefault(e => e.Name.LocalName == "indFinal")?.Value;
+
+            // dest/indIEDest (9 = não contribuinte) – se não houver a tag, não bloqueia a regra
+            var indIEDest = doc.Descendants().FirstOrDefault(e => e.Name.LocalName == "dest")
+                ?.Elements().FirstOrDefault(e => e.Name.LocalName == "indIEDest")?.Value;
+
+            // UF emitente
+            var ufEmit = doc.Descendants().FirstOrDefault(e => e.Name.LocalName == "enderEmit")
+                ?.Elements().FirstOrDefault(e => e.Name.LocalName == "UF")?.Value;
+
+            // UF destino: prioriza <entrega><UF>, senão <dest><enderDest><UF>
+            var ufEntrega = doc.Descendants().FirstOrDefault(e => e.Name.LocalName == "entrega")
+                ?.Elements().FirstOrDefault(e => e.Name.LocalName == "UF")?.Value;
+
+            var ufDest = ufEntrega ?? doc.Descendants().FirstOrDefault(e => e.Name.LocalName == "enderDest")
+                ?.Elements().FirstOrDefault(e => e.Name.LocalName == "UF")?.Value;
+
+            // consumidor final, não contribuinte e interestadual
+            var isConsumidorFinal = indFinal == "1";
+            var isNaoContribuinte = indIEDest == "9" || string.IsNullOrWhiteSpace(indIEDest);
+            var isInterestadual = !string.IsNullOrWhiteSpace(ufEmit) &&
+                                  !string.IsNullOrWhiteSpace(ufDest) &&
+                                  !ufEmit.Equals(ufDest, System.StringComparison.OrdinalIgnoreCase);
+
+            return isConsumidorFinal && isNaoContribuinte && isInterestadual;
+        }
+
     }
 }

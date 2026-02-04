@@ -1,59 +1,94 @@
-# DFe
-DLL desenvolvida com o intuito de facilitar a integração dos Softwares ERP com o sistema de documentos fiscais eletrônicos da SEFAZ (NFe, NFCe, MDFe, CTe, NFSe, GNRE, EFDReinf, etc.).
+# Unimake.DFe
 
-# Documentação
-## Geral
-https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe
+> 📦 Biblioteca open source para emissão de documentos fiscais eletrônicos (NFe, NFCe, MDFe, CTe, NFSe, GNRE, EFDReinf, etc.) — com suporte multiplataforma e multi linguagem.
 
-## Classes
-https://www.unimake.com.br/uninfe/docdll/api/index.html
+[![NuGet](https://img.shields.io/nuget/v/Unimake.DFe.svg?logo=nuget)](https://www.nuget.org/packages/Unimake.DFe/)
+[![Documentação](https://img.shields.io/badge/docs-Wiki-blue)](https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](#)
+[![Discord](https://img.shields.io/discord/936980012257652788?label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.gg/JhCEhbfK)
 
-# Utilizando a DLL
+---
 
-## C#
+## 📚 Sumário
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/CSharp
+- [Sobre](#sobre)
+- [Documentação](#documentação)
+- [Como Usar](#como-usar)
+  - [C#](#c)
+  - [WinDev](#windev)
+  - [xHarbour / Harbour](#xharbour--harbour)
+  - [Visual FoxPro (VFP)](#visual-foxpro-vfp)
+  - [VB6 / VBS / VB.NET](#vb6--vbs--vbnet)
+  - [PHP](#php)
+- [Breaking Changes](#breaking-changes)
+- [Veja Também](#veja-também)
 
-Vídeos de treinamento: https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosCsharp
+---
 
-## WINDEV
+## 📦 Sobre
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/Windev
+**Unimake.DFe** é uma DLL desenvolvida para facilitar a integração de softwares ERP com os sistemas de documentos fiscais eletrônicos da SEFAZ. Suporta múltiplos tipos de documentos:
 
-Vídeos de treinamento: https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosWindev
+- NFe / NFCe
+- MDFe / CTe
+- NFSe / GNRE
+- EFDReinf
+- Entre outros
 
-## xHarbour/Harbour
+---
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/xharbour
+## 📄 Documentação
 
-Vídeos de treinamento: https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosxHarbour
+- 📖 **Manual Geral**: [wiki.unimake.com.br](https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe)
+- 📚 **API de Classes**: [Documentação técnica](https://www.unimake.com.br/uninfe/docdll/api/index.html)
 
-## Visual FOXPRO (VFP)
+---
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/VFP
+## 🚀 Como Usar
 
-Vídeos de treinamento: https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosVisualFoxPro
+### C#
+- [🔗 Exemplos no GitHub](https://github.com/Unimake/DFe/tree/main/Exemplos/CSharp)
+- [🎥 Vídeos de treinamento](https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosCsharp)
 
-## Visual Basic 6 (VB6)
+### WinDev
+- [🔗 Exemplos](https://github.com/Unimake/DFe/tree/main/Exemplos/Windev)
+- [🎥 Vídeos](https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosWindev)
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/VB6
+### xHarbour / Harbour
+- [🔗 Exemplos](https://github.com/Unimake/DFe/tree/main/Exemplos/xharbour)
+- [🎥 Vídeos](https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosxHarbour)
 
-## Visual Basic Scripting (VBS)
+### Visual FoxPro (VFP)
+- [🔗 Exemplos](https://github.com/Unimake/DFe/tree/main/Exemplos/VFP)
+- [🎥 Vídeos](https://wiki.unimake.com.br/index.php/Manuais:Unimake.DFe/VideosVisualFoxPro)
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/VBS
+### VB6 / VBS / VB.NET
+- [🔗 VB6](https://github.com/Unimake/DFe/tree/main/Exemplos/VB6)
+- [🔗 VBS](https://github.com/Unimake/DFe/tree/main/Exemplos/VBS)
+- [🔗 VB.NET](https://github.com/Unimake/DFe/tree/main/Exemplos/VBNET)
 
-## Visual Basic .NET (VB.Net)
+### PHP
+- [🔗 Exemplos](https://github.com/Unimake/DFe/tree/main/Exemplos/PHP)
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/VBNET
+---
 
-## Personal Home Page (PHP)
+## ⚠️ Breaking Changes
 
-Exemplos: https://github.com/Unimake/DFe/tree/main/Exemplos/PHP
+> Antes de atualizar o pacote via NuGet, consulte as mudanças que podem afetar o funcionamento do seu projeto:
 
-# Breaking Changes
+📄 [Arquivo de mudanças](https://github.com/Unimake/DFe/blob/main/Breaking-Changes.md)  
+📦 [NuGet: Unimake.DFe](https://www.nuget.org/packages/Unimake.DFe)
 
-Antes de fazer a atualização de pacotes pelo <https://www.nuget.org/packages/Unimake.DFe>, atente-se para as alterações em [Breaking Changes](https://github.com/Unimake/DFe/blob/main/Breaking-Changes.md)
+---
 
-# Veja também
+## 🖨️ Veja Também
 
-Pacote para impressão do DANFE, DACTE, DAMDFE, etc: https://wiki.unimake.com.br/index.php/Manuais:Unimake.Unidanfe
+Pacote para impressão de DANFE, DACTE, DAMDFE, entre outros:
+
+📘 [Unimake.Unidanfe – Manual](https://wiki.unimake.com.br/index.php/Manuais:Unimake.Unidanfe)
+
+---
+
+## 🏢 Sobre a Unimake
+
+https://www.unimake.com.br

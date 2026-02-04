@@ -10,7 +10,25 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, Main, ConsultarStatusNFe, EnviarNFeSincrono, EnviarNFeSincronoDesserializacao, ImprimirDANFEcomUniDANFE
+  Forms, Main, ConsultarStatusNFe, EnviarNFeSincrono,
+  EnviarNFeSincronoDesserializacao, ImprimirDANFEcomUniDANFE,
+  CertificadoDigital, ConsultarDistribuicaoDFe, ConsultarSituacaoNFe,
+  DesserializarRetornoConsultaDFe, EnviarEventoManifestacaoNFe,
+  EnviarNFCeSincrono, EnviarNFCeSincronoDesserializacao, BETHAGerarNFSe,
+  BETHACancelarNFSe, BETHAEnviarLoteRPSSincrono, BETHAConsultarNFSeRPS,
+  BETHAConsultarLoteRPS, NACIONALGerarNFSe, NACIONALCancelarNFSe,
+  NACIONALConsultarNFSe, NACIONALConsultarNFSePDF, NACIONALConsultarNFSeRPS,
+  EventoCCENFe, InutilizacaoNumeroNFe, ConsultarStatusNFCom,
+  EnviarNFComSincrono, EnviarMDFeSincrono, EnviarEventoCancelamentoMDFe,
+  EnviarEventoEncerramentoMDFe, ConsultarStatusMDFe, ConsultarSituacaoMDFe,
+  EventoPagamentoMDFe, EnviarEventoAlteracaoPagamentoMDFe,
+  ConsultarSituacaoNFCom, EnviarEventoCancelamentoNFCom, ConsultarStatusCte,
+  ConsultarMDFeNaoEncerrado, ConsultarSituacaoCTe, EnviarCteSincrono,
+  EnviarCteOsSincrono, EventoCancelamentoCTe, EnviarEventoCancelamentoCTeOS,
+  EventoCCeCTe, InsucessoEntregaCTe, CancelamentoInsucessoEntregaCTe,
+  DesserializandoXmlCTeOS, EventoCTeDesacordo, EventoEpecCte,
+  ConsultaConfigGNRE, EnviarXmlGNRe, ConsultaResultadoLoteGNRE,
+  EnviarNFCeOffline, EnviarNFeSincronoContingenciaSVC
   { you can add units after this };
 
 {$R *.res}

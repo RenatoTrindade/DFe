@@ -96,6 +96,41 @@ namespace Unimake.Business.DFe.Servicos.EFDReinf
 
         #endregion Protected Methods
 
+        #region Private Methods
+
+        /// <summary>
+        /// Remove a assinatura do objeto para ser assinado novamente evitando problemas
+        /// </summary>
+        private void RemoverAssinaturaDoERP()
+        {
+            ReinfEnvioLoteEventos = ReinfEnvioLoteEventos.LerXML<ReinfEnvioLoteEventos>(ConteudoXML);
+
+            foreach (var evento in ReinfEnvioLoteEventos.EnvioLoteEventos.Eventos.Evento)
+            {
+                var propriedades = evento.GetType().GetProperties();
+
+                foreach (var propriedade in propriedades)
+                {
+                    var valorEvento = propriedade.GetValue(evento);
+
+                    if (valorEvento!= null)
+                    {
+                        var propriedadeAssinatura = valorEvento.GetType().GetProperty("Signature");
+                        
+                        propriedadeAssinatura?.SetValue(valorEvento, null);
+                    }
+                }
+            }
+
+            ConteudoXML = ReinfEnvioLoteEventos.GerarXML();
+
+            _ = ConteudoXMLAssinado;
+
+            ReinfEnvioLoteEventos = ReinfEnvioLoteEventos.LerXML<ReinfEnvioLoteEventos>(ConteudoXML);
+        }
+
+        #endregion Private Methods
+
         #region Public Constructors
 
         /// <summary>
@@ -116,6 +151,28 @@ namespace Unimake.Business.DFe.Servicos.EFDReinf
             }
 
             Inicializar(reinfRecepcionarLoteAssinc?.GerarXML() ?? throw new ArgumentNullException(nameof(reinfRecepcionarLoteAssinc)), configuracao);
+
+            RemoverAssinaturaDoERP();
+        }
+
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="conteudoXML">String do XML a ser enviado</param>
+        /// <param name="configuracao">Configurações para conexão e envio do XML para o web-service</param>
+        public RecepcionarLoteAssincrono(string conteudoXML, Configuracao configuracao) : this()
+        {
+            if (configuracao is null)
+            {
+                throw new ArgumentNullException(nameof(configuracao));
+            }
+
+            var doc = new XmlDocument();
+            doc.LoadXml(conteudoXML);
+
+            Inicializar(doc, configuracao);
+
+            RemoverAssinaturaDoERP();
         }
 
         /// <summary>
@@ -190,7 +247,7 @@ namespace Unimake.Business.DFe.Servicos.EFDReinf
         {
             try
             {
-                throw new Exception("Não existe XML de distribuição para consulta status do serviço.");
+                throw new Exception("Utilize o serviço ConsultaLoteAssincrono para obter o XML de distribuição.");
             }
             catch (Exception ex)
             {

@@ -1,64 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuracoes>
 	<Servicos ID="NFSe">
-		<CancelarNfse versao="1.00">
-			<Descricao>Cancelar nota fiscal de serviço</Descricao>
-			<WebEnderecoHomologacao></WebEnderecoHomologacao>
-			<WebEnderecoProducao>https://simple.camboriu.sc.gov.br/LISIPMC/NFSePrefeituraCamboriu.wso</WebEnderecoProducao>
-			<SchemaArquivo></SchemaArquivo>
+		<GerarNfse versao="2.04">
+			<Descricao>Gerar NFSe</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura>Rps</TagAssinatura>
+			<TagAtributoID>InfDeclaracaoPrestacaoServico</TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>GerarNfseResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</GerarNfse>
+		<RecepcionarLoteRpsSincrono versao="2.04">
+			<Descricao>Recepcionar Lote RPS Sincrono</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura>Rps</TagAssinatura>
+			<TagAtributoID>InfDeclaracaoPrestacaoServico</TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>EnviarLoteRpsSincronoResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</RecepcionarLoteRpsSincrono>
+		<RecepcionarLoteRps versao="2.04">
+			<Descricao>Recepcionar Lote RPS</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura>Rps</TagAssinatura>
+			<TagAtributoID>InfDeclaracaoPrestacaoServico</TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>EnviarLoteRpsResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</RecepcionarLoteRps>
+		<SubstituirNfse versao="2.04">
+			<Descricao>Substituir nota fiscal de Serviço</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
 			<TagAssinatura></TagAssinatura>
 			<TagAtributoID></TagAtributoID>
-			<WebContentType>text/xml;charset=UTF-8</WebContentType>
-			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
-			<WebTagRetorno>m:CancelarNotaResponse</WebTagRetorno>
-			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
-			<WebSoapVersion>soap11</WebSoapVersion>
-			<SchemaVersao>1.00</SchemaVersao>
-			<TargetNS></TargetNS>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>SubstituirNfseResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</SubstituirNfse>
+		<ConsultarLoteRps versao="2.04">
+			<Descricao>Consulta NFSe por RPS</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>ConsultarLoteRpsResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</ConsultarLoteRps>
+		<ConsultarNfseServicoPrestado versao="2.04">
+			<Descricao>Consulta NFSe de serviços prestados</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>ConsultarNfseServicoPrestadoResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</ConsultarNfseServicoPrestado>
+		<ConsultarNfseFaixa versao="2.04">
+			<Descricao>Consulta NFSe por Faixa</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>ConsultarNfseFaixaResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
+		</ConsultarNfseFaixa>
+		<CancelarNfse versao="2.04">
+			<Descricao>Cancelar NFSe</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>CancelarNfseResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
 		</CancelarNfse>
-		<ConsultarNfsePorRps versao="1.00">
-			<Descricao>Consulta NFSe por RPS</Descricao>
-			<WebEnderecoHomologacao></WebEnderecoHomologacao>
-			<WebEnderecoProducao>https://simple.camboriu.sc.gov.br/LISIPMC/NFSePrefeituraCamboriu.wso</WebEnderecoProducao>
-			<WebActionHomologacao></WebActionHomologacao>
+		<ConsultarNfsePorRps versao="2.04">
+			<Descricao>Consulta NFSe por Rps</Descricao>
+			<RequestURIProducao>https://camboriu.atende.net/?pg=services&amp;service=WNENotaFiscalEletronicaNfe&amp;cidade=padrao</RequestURIProducao>
+			<MetodoAPI>post</MetodoAPI>
 			<WebActionProducao></WebActionProducao>
-			<SchemaArquivo></SchemaArquivo>
-			<WebContentType>text/xml;charset=UTF-8</WebContentType>
-			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
-			<WebTagRetorno>m:ConsultaNotaporRPSResponse</WebTagRetorno>
-			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
-			<WebSoapVersion>soap11</WebSoapVersion>
-			<SchemaVersao>1.00</SchemaVersao>
-			<TargetNS></TargetNS>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:net="net.atende"><soapenv:Header/><soapenv:Body>{xml}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebContentType>text/plain</WebContentType>
+			<WebTagRetorno>ConsultarNfseRpsResposta</WebTagRetorno>
+			<SchemaVersao>2.04</SchemaVersao>
+			<GZIPCompress>false</GZIPCompress>
+			<LoginConexao>true</LoginConexao>
 		</ConsultarNfsePorRps>
-		<ConsultarNfse versao="1.00">
-			<Descricao>Consulta NFSe por RPS</Descricao>
-			<WebEnderecoHomologacao></WebEnderecoHomologacao>
-			<WebEnderecoProducao>https://simple.camboriu.sc.gov.br/LISIPMC/NFSePrefeituraCamboriu.wso</WebEnderecoProducao>
-			<WebActionHomologacao></WebActionHomologacao>
-			<WebActionProducao></WebActionProducao>
-			<SchemaArquivo></SchemaArquivo>
-			<WebContentType>text/xml;charset=UTF-8</WebContentType>
-			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
-			<WebTagRetorno>m:ConsultaNotaResponse</WebTagRetorno>
-			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
-			<WebSoapVersion>soap11</WebSoapVersion>
-			<SchemaVersao>1.00</SchemaVersao>
-			<TargetNS></TargetNS>
-		</ConsultarNfse>
-		<RecepcionarLoteRps versao="1.00">
-			<Descricao>Recepcionar Lote RPS</Descricao>
-			<WebEnderecoHomologacao></WebEnderecoHomologacao>
-			<WebEnderecoProducao>https://simple.camboriu.sc.gov.br/LISIPMC/NFSePrefeituraCamboriu.wso?wsdl</WebEnderecoProducao>
-			<WebActionHomologacao></WebActionHomologacao>
-			<WebActionProducao></WebActionProducao>
-			<WebContentType>text/xml;charset=UTF-8</WebContentType>
-			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
-			<WebTagRetorno>m:LeRPSeGravaNotaResponse</WebTagRetorno>
-			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
-			<WebSoapVersion>soap11</WebSoapVersion>
-			<SchemaVersao>1.00</SchemaVersao>
-			<TargetNS></TargetNS>
-		</RecepcionarLoteRps>
 	</Servicos>
 </Configuracoes>

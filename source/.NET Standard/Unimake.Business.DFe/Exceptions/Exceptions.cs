@@ -103,6 +103,16 @@ namespace Unimake.Exceptions
         /// Erro de validação do XML de retorno da NFSe
         /// </summary>
         ValidacaoXMLRetorno = 5,
+
+        /// <summary>
+        /// Certificado digital corrompido
+        /// </summary>
+        CertificadoDigitalCorrompido = 6,
+
+        /// <summary>
+        /// Certificado digital vencido
+        /// </summary>
+        CertificadoVencido = 7
     }
 
     /// <summary>
