@@ -13,9 +13,9 @@ Ver `AGENTS.md` para convenções de arquitetura e estilo de código do projeto 
 
 ## Branches
 
+- **`gat-main`** — branch padrão do fork e branch de trabalho. Tem todo o histórico do `oficial/main` mais as customizações da GAT. É a branch usada pelo projeto/produto local (checkout local aponta pra ela). Todo desenvolvimento e atualização a partir do upstream acontece aqui.
 - **`upstream-main`** — espelho puro de `oficial/main`. Nunca recebe commit direto nem customização. Serve só como referência/base limpa pra comparar e mesclar.
-- **`gat-main`** — branch de trabalho. Tem todo o histórico do `oficial/main` mais as customizações da GAT. É a branch usada pelo projeto/produto local (checkout local aponta pra ela). Todo desenvolvimento e atualização a partir do upstream acontece aqui.
-- **`main`** — branch legada, anterior à separação em `upstream-main`/`gat-main`. Não é mais atualizada; mantida só por histórico. Não usar para novo trabalho.
+- **`main`** — branch legada, anterior à separação em `upstream-main`/`gat-main`. Descontinuada: o branch padrão do fork foi trocado para `gat-main` e a `main` foi removida (local e remota). Não usar para novo trabalho; se aparecer alguma referência antiga a ela, trocar para `gat-main`.
 
 ## Convenção das customizações GAT TECNOLOGIA
 
