@@ -28,7 +28,12 @@ uses
   EventoCCeCTe, InsucessoEntregaCTe, CancelamentoInsucessoEntregaCTe,
   DesserializandoXmlCTeOS, EventoCTeDesacordo, EventoEpecCte,
   ConsultaConfigGNRE, EnviarXmlGNRe, ConsultaResultadoLoteGNRE,
-  EnviarNFCeOffline, EnviarNFeSincronoContingenciaSVC
+  EnviarNFCeOffline, EnviarNFeSincronoContingenciaSVC,
+  NACIONALCancelarNFSeObjeto, NACIONALGerarNFSeObjeto,
+  NACIONALConsultarNFSeRPSObjeto, NACIONALConsultarNFSeObjeto,
+  NACIONALConsultarEventoNFSe, NACIONALConsultarDistribuicaoNFSeNSU,
+  ConsultarChavesNFCeSP, DownloadXMLNFCeSEFAZSP,
+  NACIONALConsultarDistribuicaoEventosNFSe, ConsultarStatusDCe, EnviarDCe
   { you can add units after this };
 
 {$R *.res}

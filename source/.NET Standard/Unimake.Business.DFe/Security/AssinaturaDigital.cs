@@ -29,6 +29,7 @@ namespace Unimake.Business.DFe.Security
         /// <param name="definirURI">Define o Reference.URI na assinatura</param>
         /// <param name="idAttributeName">Nome do atributo que tem o ID para assinatura. Se nada for passado o sistema vai tentar buscar o nome Id ou id, se não encontrar, não vai criar a URI Reference na assinatura com ID.</param>
         /// <param name="verificaAssinatura">Verificar se já existe assinatura no XML, se sim e existir o método não vai assinar o XML.</param>
+        /// <param name="exclusiveC14N">Utilizar canonicalização exclusiva (Exclusive C14N) em vez da inclusiva. Use true para web services que trafegam o XML dentro de um envelope SOAP.</param>
         public static void Assinar(XmlDocument conteudoXML,
             string tagAssinatura,
             string tagAtributoId,
@@ -36,7 +37,8 @@ namespace Unimake.Business.DFe.Security
             AlgorithmType algorithmType = AlgorithmType.Sha1,
             bool definirURI = true,
             string idAttributeName = "",
-            bool verificaAssinatura = false)
+            bool verificaAssinatura = false,
+            bool exclusiveC14N = false)
         {
             if (!string.IsNullOrEmpty(tagAssinatura))
             {
@@ -72,11 +74,35 @@ namespace Unimake.Business.DFe.Security
                             {
                                 foreach (XmlNode childNodes in nodes.ChildNodes)
                                 {
+                                    var nodeAtributoId = childNodes;
+
                                     if (!tagEhAMesma)
                                     {
                                         if (!childNodes.Name.Equals(tagAtributoId))
                                         {
                                             continue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var nodeAssinatura = (XmlElement)nodes;
+                                        var attributeName = idAttributeName;
+
+                                        if (string.IsNullOrEmpty(attributeName))
+                                        {
+                                            if (nodeAssinatura.GetAttributeNode("Id") != null)
+                                            {
+                                                attributeName = "Id";
+                                            }
+                                            else if (nodeAssinatura.GetAttributeNode("id") != null)
+                                            {
+                                                attributeName = "id";
+                                            }
+                                        }
+
+                                        if (!string.IsNullOrEmpty(attributeName) && nodeAssinatura.GetAttributeNode(attributeName) != null)
+                                        {
+                                            nodeAtributoId = nodes;
                                         }
                                     }
 
@@ -87,7 +113,7 @@ namespace Unimake.Business.DFe.Security
                                     };
 
                                     // pega o uri que deve ser assinada
-                                    var childElemen = (XmlElement)childNodes;
+                                    var childElemen = (XmlElement)nodeAtributoId;
 
                                     if (definirURI)
                                     {
@@ -113,7 +139,13 @@ namespace Unimake.Business.DFe.Security
                                     var signedXml = new SignedXml(conteudoXML);
 
                                     reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
-                                    reference.AddTransform(new XmlDsigC14NTransform());
+                                    if (exclusiveC14N)
+                                    {
+                                        signedXml.SignedInfo.CanonicalizationMethod = SignedXml.XmlDsigExcC14NTransformUrl;
+                                        reference.AddTransform(new XmlDsigExcC14NTransform());
+                                    }
+                                    else
+                                        reference.AddTransform(new XmlDsigC14NTransform());
 
                                     switch (algorithmType)
                                     {
@@ -185,11 +217,13 @@ namespace Unimake.Business.DFe.Security
         /// <param name="x509Cert">Certificado digital a ser utilizado na assinatura</param>
         /// <param name="algorithmType">Tipo de algorítimo a ser utilizado na assinatura</param>
         /// <param name="verificaAssinatura">Verificar se já existe assinatura no XML, se sim e existir o método não vai assinar o XML.</param>
+        /// <param name="exclusiveC14N">Utilizar canonicalização exclusiva (Exclusive C14N) em vez da inclusiva. Use true para web services que trafegam o XML dentro de um envelope SOAP.</param>
         public static void Assinar(XmlDocument conteudoXML,
             string tagAssinatura,
             X509Certificate2 x509Cert,
             AlgorithmType algorithmType = AlgorithmType.Sha1,
-            bool verificaAssinatura = false)
+            bool verificaAssinatura = false,
+            bool exclusiveC14N = false)
         {
             if (!string.IsNullOrEmpty(tagAssinatura))
             {
@@ -225,7 +259,13 @@ namespace Unimake.Business.DFe.Security
                             var signedXml = new SignedXml(conteudoXML);
 
                             reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
-                            reference.AddTransform(new XmlDsigC14NTransform());
+                            if (exclusiveC14N)
+                            {
+                                signedXml.SignedInfo.CanonicalizationMethod = SignedXml.XmlDsigExcC14NTransformUrl;
+                                reference.AddTransform(new XmlDsigExcC14NTransform());
+                            }
+                            else
+                                reference.AddTransform(new XmlDsigC14NTransform());
 
                             switch (algorithmType)
                             {

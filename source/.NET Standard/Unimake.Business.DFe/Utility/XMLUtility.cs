@@ -13,8 +13,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Security;
 using Unimake.Business.DFe.Servicos;
-using Unimake.Business.DFe.Validator;
 using Unimake.Exceptions;
+using Unimake.Business.DFe.Validator;
 
 namespace Unimake.Business.DFe.Utility
 {
@@ -100,9 +100,14 @@ namespace Unimake.Business.DFe.Utility
             public UFBrasil UFEmissor { get; set; }
 
             /// <summary>
-            /// Site do Autorizador que recepcionou a NF3e 
+            /// Site do Autorizador que recepcionou a NF3e ou NFCom
             /// </summary>
             public string NSiteAutoriz { get; set; }
+
+            /// <summary>
+            /// Tipo do emitente do DCe
+            /// </summary>
+            public TipoEmitenteDCe TipoEmitenteDCe { get; set; }
 
             #endregion Public Properties
         }
@@ -139,7 +144,7 @@ namespace Unimake.Business.DFe.Utility
             /// <summary>
             /// Numero da NFSe
             /// </summary>
-            public long NumeroDoctoFiscal { get; set; }
+            public string NumeroDoctoFiscal { get; set; }
 
             /// <summary>
             /// Ano de emissão do documento fiscal
@@ -295,86 +300,14 @@ namespace Unimake.Business.DFe.Utility
         /// <returns>Dígito verificador</returns>
         public static int CalcularDVChave(string chave)
         {
-            if (chave is null)
-            {
-                throw new ArgumentNullException(nameof(chave));
-            }
+            chave = NormalizarChaveSemDV(chave, 43);
 
-            var tamanhoChaveSemDV = 43; // Tamanho da chave de acesso sem o dígito verificador
-            var tipoCNPJ = TipoCNPJ(chave.Substring(6, 14));
-
-            if (tipoCNPJ == "N") //CNPJ numérico
-            {
-                int i, j, digito;
-                const string PESO = "4329876543298765432987654329876543298765432";
-
-                chave = chave.Replace("NFe", "").Replace("CTe", "").Replace("MDFe", "");
-
-                if (chave.Length != tamanhoChaveSemDV)
-                {
-                    throw new Exception(string.Format("Erro na composição da chave [{0}] para obter o dígito verificador.", chave) + Environment.NewLine);
-                }
-                else
-                {
-                    j = 0;
-                    try
-                    {
-                        for (i = 0; i < tamanhoChaveSemDV; ++i)
-                        {
-                            j += Convert.ToInt32(chave.Substring(i, 1)) * Convert.ToInt32(PESO.Substring(i, 1));
-                        }
-
-                        digito = 11 - (j % 11);
-                        if ((j % 11) < 2)
-                        {
-                            digito = 0;
-                        }
-                    }
-                    catch
-                    {
-                        digito = -1;
-                    }
-
-                    return digito == -1
-                        ? throw new Exception(string.Format("Erro no cálculo do dígito verificador da chave [{0}].", chave) + Environment.NewLine)
-                        : digito;
-                }
-            }
-            else if (tipoCNPJ == "A") //CNPJ alfanumérico
-            {
-                // Converte a string em um array de bytes, onde cada byte representa o código ASCII do caractere subtraído de 48
-                var chAcessoBytes = new byte[tamanhoChaveSemDV];
-                for (var i = 0; i < tamanhoChaveSemDV; i++)
-                {
-                    chAcessoBytes[i] = (byte)(chave[i] - 48);
-                }
-
-                var soma = 0;
-                var peso = 2; // multiplicador vai de 9 a 2
-
-                for (var i = tamanhoChaveSemDV - 1; i >= 0; i--) // Começa do final para o inicio
-                {
-                    soma += Convert.ToInt32(chAcessoBytes[i]) * peso;
-                    peso++;
-
-                    if (peso > 9)
-                    {
-                        peso = 2;
-                    }
-                }
-
-                var digito = 11 - (soma % 11);
-                if (digito >= 10)
-                {
-                    digito = 0;
-                }
-
-                return digito;
-            }
-            else
+            if (!ValidarPadraoChaveSemDV(chave) || TipoCNPJ(chave.Substring(6, 14)) == "I")
             {
                 throw new Exception("CNPJ ou CPF que compõe a chave é inválido.");
             }
+
+            return CalcularDVModulo11Alfa(chave);
         }
 
         /// <summary>
@@ -386,19 +319,22 @@ namespace Unimake.Business.DFe.Utility
         /// </returns>
         public static string TipoCNPJ(string cnpj)
         {
-            if (string.IsNullOrWhiteSpace(cnpj))
+            string cnpjLimpo;
+
+            try
+            {
+                cnpjLimpo = NormalizarCNPJCPFEmissor(cnpj);
+            }
+            catch
             {
                 return "I";
             }
-
-            // Remove máscara (pontos, barra e hífen)
-            var cnpjLimpo = Regex.Replace(cnpj, @"[^\w]", ""); // Remove tudo que não é letra ou número
 
             if (Regex.IsMatch(cnpjLimpo, @"^[0-9]{14}$"))
             {
                 return "N";
             }
-            else if (Regex.IsMatch(cnpjLimpo, @"^[A-Za-z0-9]{14}$") && Regex.IsMatch(cnpjLimpo, @"[A-Za-z]"))
+            else if (Regex.IsMatch(cnpjLimpo, @"^[0-9A-Z]{14}$") && Regex.IsMatch(cnpjLimpo, @"[A-Z]"))
             {
                 return "A";
             }
@@ -423,11 +359,23 @@ namespace Unimake.Business.DFe.Utility
         /// </example>
         public static void ChecarChaveDFe(string chave)
         {
+            if (chave is null)
+            {
+                throw new ArgumentNullException(nameof(chave));
+            }
+
+            chave = chave.Trim().ToUpper();
+
             #region Verificar o tamanho da chave
 
             if (chave.Length != 44)
             {
-                throw new Exception("Tamanho da chave do documento fiscal eletrônico está diferente de 44 dígitos. Chave deve ter exatamente 44 dígitos.");
+                throw new Exception("Tamanho da chave do documento fiscal eletrônico está diferente de 44 caracteres. Chave deve ter exatamente 44 caracteres.");
+            }
+
+            if (!ValidarPadraoChaveComDV(chave))
+            {
+                throw new Exception("Chave do documento fiscal eletrônico contém caracteres inválidos.");
             }
 
             #endregion Verificar o tamanho da chave
@@ -535,6 +483,79 @@ namespace Unimake.Business.DFe.Utility
             }
 
             #endregion Verificar se o dígito verificador está correto
+        }
+
+        private static string NormalizarCNPJCPFEmissor(string valor)
+        {
+            if (valor is null)
+            {
+                throw new ArgumentNullException(nameof(valor));
+            }
+
+            valor = valor.Trim()
+                .Replace(".", "")
+                .Replace("/", "")
+                .Replace("-", "")
+                .Replace(" ", "")
+                .ToUpper();
+
+            if (!Regex.IsMatch(valor, @"^[0-9A-Z]{14}$"))
+            {
+                throw new Exception("CNPJ ou CPF do emissor é inválido.");
+            }
+
+            return valor;
+        }
+
+        private static string NormalizarChaveSemDV(string chave, int tamanho)
+        {
+            if (chave is null)
+            {
+                throw new ArgumentNullException(nameof(chave));
+            }
+
+            chave = chave.Trim().ToUpper();
+            var prefixos = new[] { "NFCOM", "NFGAS", "MDFE", "NF3E", "NFE", "CTE", "DCE" };
+
+            foreach (var prefixo in prefixos)
+            {
+                if (chave.StartsWith(prefixo))
+                {
+                    chave = chave.Substring(prefixo.Length);
+                    break;
+                }
+            }
+
+            if (chave.Length != tamanho)
+            {
+                throw new Exception(string.Format("Erro na composição da chave [{0}] para obter o dígito verificador.", chave) + Environment.NewLine);
+            }
+
+            return chave;
+        }
+
+        private static bool ValidarPadraoChaveSemDV(string chave) => Regex.IsMatch(chave, @"^[0-9]{6}[0-9A-Z]{14}[0-9]{23}$");
+
+        private static bool ValidarPadraoChaveComDV(string chave) => Regex.IsMatch(chave, @"^[0-9]{6}[0-9A-Z]{14}[0-9]{24}$");
+
+        private static int CalcularDVModulo11Alfa(string chaveSemDV)
+        {
+            var soma = 0;
+            var peso = 2;
+
+            for (var i = chaveSemDV.Length - 1; i >= 0; i--)
+            {
+                soma += (chaveSemDV[i] - 48) * peso;
+                peso++;
+
+                if (peso > 9)
+                {
+                    peso = 2;
+                }
+            }
+
+            var digito = 11 - (soma % 11);
+            return digito >= 10 ? 0 : digito;
         }
 
         /// <summary>
@@ -701,14 +722,32 @@ namespace Unimake.Business.DFe.Utility
             {
                 if (linePosition > 0)
                 {
-                    var positionStart = xml.LastIndexOf("<", linePosition);
+                    var searchIndex = linePosition >= xml.Length ? xml.Length - 1 : linePosition;
+                    var positionStart = xml.LastIndexOf("<", searchIndex, StringComparison.Ordinal);
 
-                    if (voltarUmaTag)
+                    if (voltarUmaTag && positionStart > 0)
                     {
-                        positionStart = xml.LastIndexOf("<", positionStart - 1);
+                        var previousPositionStart = xml.LastIndexOf("<", positionStart - 1, StringComparison.Ordinal);
+
+                        if (previousPositionStart >= 0)
+                        {
+                            positionStart = previousPositionStart;
+                        }
                     }
 
-                    var positionFinal = xml.IndexOf(">", linePosition) - positionStart + 1;
+                    if (positionStart < 0)
+                    {
+                        return message;
+                    }
+
+                    var positionEnd = xml.IndexOf(">", positionStart, StringComparison.Ordinal);
+
+                    if (positionEnd < 0)
+                    {
+                        positionEnd = xml.Length - 1;
+                    }
+
+                    var positionFinal = positionEnd - positionStart + 1;
 
                     message = "TAG com caracteres inválidos: " + xml.Substring(positionStart, positionFinal);
                 }
@@ -863,6 +902,14 @@ namespace Unimake.Business.DFe.Utility
             else if (xml.Contains("<tpEvento>110181</tpEvento>"))
             {
                 tipoEventoCTe = TipoEventoCTe.CancelamentoComprovanteEntrega;
+            }
+            else if (xml.Contains("<tpEvento>110300</tpEvento>"))
+            {
+                tipoEventoCTe = TipoEventoCTe.VinculacaoPagamento;
+            }
+            else if (xml.Contains("<tpEvento>110301</tpEvento>"))
+            {
+                tipoEventoCTe = TipoEventoCTe.CancelamentoVinculacaoPagamento;
             }
             else if (xml.Contains("<tpEvento>610110</tpEvento>"))
             {
@@ -1029,6 +1076,14 @@ namespace Unimake.Business.DFe.Utility
             if (xml.Contains("<tpEvento>110111</tpEvento>"))
             {
                 tipoEventoNF3e = TipoEventoNF3e.Cancelamento;
+            }
+            else if (xml.Contains("<tpEvento>110300</tpEvento>"))
+            {
+                tipoEventoNF3e = TipoEventoNF3e.VinculacaoPagamento;
+            }
+            else if (xml.Contains("<tpEvento>110301</tpEvento>"))
+            {
+                tipoEventoNF3e = TipoEventoNF3e.CancelamentoVinculacaoPagamento;
             }
 
             return tipoEventoNF3e;
@@ -1215,6 +1270,26 @@ namespace Unimake.Business.DFe.Utility
 
                 #endregion XML da NFCom
 
+                #region XML da NFGas
+
+                case "consStatServNFGas":
+                    tipoXML = TipoXML.NFGasStatusServico;
+                    break;
+
+                case "consSitNFGas":
+                    tipoXML = TipoXML.NFGasConsultaSituacao;
+                    break;
+
+                case "eventoNFGas":
+                    tipoXML = TipoXML.NFGasEnvioEvento;
+                    break;
+
+                case "NFGas":
+                    tipoXML = TipoXML.NFGas;
+                    break;
+
+                #endregion XML da NFGas
+
                 case "eSocial":
                     tipoXML = ObterTipoXmlESocial(xmlDoc, primeiraTagFilha);
                     break;
@@ -1331,6 +1406,13 @@ namespace Unimake.Business.DFe.Utility
         /// </example>
         public static ConteudoChaveDFe ExtrairConteudoChaveDFe(string chave)
         {
+            if (chave is null)
+            {
+                throw new ArgumentNullException(nameof(chave));
+            }
+
+            chave = chave.Trim().ToUpper();
+
             var conteudo = new ConteudoChaveDFe
             {
                 UFEmissor = (UFBrasil)Convert.ToInt32(chave.Substring(0, 2)),
@@ -1370,11 +1452,46 @@ namespace Unimake.Business.DFe.Utility
         public static string MontarChaveCTe(ref ConteudoChaveDFe conteudoChaveDFe) => MontarChaveDFe(ref conteudoChaveDFe);
 
         /// <summary>
-        /// Monta a chave do CTe com base nos valores informados
+        /// Monta a chave do NFCom com base nos valores informados
+        /// </summary>
+        /// <param name="conteudoChaveDFe">Conteúdos do NFCom necessários para montagem da chave</param>
+        /// <returns>Chave do CTe</returns>
+        public static string MontarChaveNFCom(ref ConteudoChaveDFe conteudoChaveDFe) => MontarChaveNF3e(ref conteudoChaveDFe);
+
+        /// <summary>
+        /// Monta a chave da NFGas com base nos valores informados
+        /// </summary>
+        /// <param name="conteudoChaveDFe">Conteúdos da NFGas necessários para montagem da chave</param>
+        /// <returns>Chave da NFGas</returns>
+        public static string MontarChaveNFGas(ref ConteudoChaveDFe conteudoChaveDFe) => MontarChaveNF3e(ref conteudoChaveDFe);
+
+        /// <summary>
+        /// Monta a chave do DCe com base nos valores informados
         /// </summary>
         /// <param name="conteudoChaveDFe">Conteúdos do CTe necessários para montagem da chave</param>
         /// <returns>Chave do CTe</returns>
-        public static string MontarChaveNFCom(ref ConteudoChaveDFe conteudoChaveDFe) => MontarChaveNF3e(ref conteudoChaveDFe);
+        public static string MontarChaveDCe(ref ConteudoChaveDFe conteudoChaveDFe)
+        {
+            var cnpjcpfEmissor = NormalizarCNPJCPFEmissor(conteudoChaveDFe.CNPJCPFEmissor);
+            var chave = ((int)conteudoChaveDFe.UFEmissor).ToString() +
+                conteudoChaveDFe.AnoEmissao +
+                conteudoChaveDFe.MesEmissao +
+                cnpjcpfEmissor +
+                ((int)conteudoChaveDFe.Modelo).ToString().PadLeft(2, '0') +
+                conteudoChaveDFe.Serie.ToString().PadLeft(3, '0') +
+                conteudoChaveDFe.NumeroDoctoFiscal.ToString().PadLeft(9, '0') +
+                ((int)conteudoChaveDFe.TipoEmissao).ToString() +
+                ((int)conteudoChaveDFe.TipoEmitenteDCe).ToString() +
+                conteudoChaveDFe.NSiteAutoriz.ToString() +
+                conteudoChaveDFe.CodigoNumerico.PadLeft(6, '0');
+
+            conteudoChaveDFe.DigitoVerificador = XMLUtility.CalcularDVChave(chave);
+
+            chave += conteudoChaveDFe.DigitoVerificador.ToString();
+
+            return chave.ToUpper();
+
+        }
 
         /// <summary>
         /// Montar chave da NFSe Nacional com base nos valores informados
@@ -1406,10 +1523,11 @@ namespace Unimake.Business.DFe.Utility
         /// <returns>Chave do NF3e</returns>
         public static string MontarChaveNF3e(ref ConteudoChaveDFe conteudoChaveDFe)
         {
+            var cnpjcpfEmissor = NormalizarCNPJCPFEmissor(conteudoChaveDFe.CNPJCPFEmissor);
             var chave = ((int)conteudoChaveDFe.UFEmissor).ToString() +
                 conteudoChaveDFe.AnoEmissao +
                 conteudoChaveDFe.MesEmissao +
-                conteudoChaveDFe.CNPJCPFEmissor +
+                cnpjcpfEmissor +
                 ((int)conteudoChaveDFe.Modelo).ToString().PadLeft(2, '0') +
                 conteudoChaveDFe.Serie.ToString().PadLeft(3, '0') +
                 conteudoChaveDFe.NumeroDoctoFiscal.ToString().PadLeft(9, '0') +
@@ -1421,7 +1539,7 @@ namespace Unimake.Business.DFe.Utility
 
             chave += conteudoChaveDFe.DigitoVerificador.ToString();
 
-            return chave;
+            return chave.ToUpper();
         }
 
         /// <summary>
@@ -1431,10 +1549,11 @@ namespace Unimake.Business.DFe.Utility
         /// <returns>Chave do DFe</returns>
         private static string MontarChaveDFe(ref ConteudoChaveDFe conteudoChaveDFe)
         {
+            var cnpjcpfEmissor = NormalizarCNPJCPFEmissor(conteudoChaveDFe.CNPJCPFEmissor);
             var chave = ((int)conteudoChaveDFe.UFEmissor).ToString() +
                 conteudoChaveDFe.AnoEmissao +
                 conteudoChaveDFe.MesEmissao +
-                conteudoChaveDFe.CNPJCPFEmissor +
+                cnpjcpfEmissor +
                 ((int)conteudoChaveDFe.Modelo).ToString().PadLeft(2, '0') +
                 conteudoChaveDFe.Serie.ToString().PadLeft(3, '0') +
                 conteudoChaveDFe.NumeroDoctoFiscal.ToString().PadLeft(9, '0') +
@@ -1445,7 +1564,7 @@ namespace Unimake.Business.DFe.Utility
 
             chave += conteudoChaveDFe.DigitoVerificador.ToString();
 
-            return chave;
+            return chave.ToUpper();
         }
 
         /// <summary>
@@ -1721,6 +1840,14 @@ namespace Unimake.Business.DFe.Utility
                 case TipoEventoNF3e.Cancelamento:
                     typeString = "110111";
                     break;
+
+                case TipoEventoNF3e.VinculacaoPagamento:
+                    typeString = "110300";
+                    break;
+
+                case TipoEventoNF3e.CancelamentoVinculacaoPagamento:
+                    typeString = "110301";
+                    break;
             }
 
             var pedacinhos = xml.Split(new string[] { $"Id=\"ID{typeString}" }, StringSplitOptions.None);
@@ -1902,18 +2029,20 @@ namespace Unimake.Business.DFe.Utility
                 cNF = XMLUtility.GerarCodigoNumerico(nNF).ToString("00000000");
             }
 
-            var chaveDFe = ((int)cUF).ToString() +
-                dhEmi.ToString("yyMM") +
-                cnpjcpf.PadLeft(14, '0') +
-                ((int)mod).ToString().PadLeft(2, '0') +
-                serie.ToString().PadLeft(3, '0') +
-                nNF.ToString().PadLeft(9, '0') +
-                ((int)tpEmis).ToString() +
-                cNF.PadLeft(8, '0');
+            var conteudoChaveDFe = new ConteudoChaveDFe
+            {
+                UFEmissor = cUF,
+                AnoEmissao = dhEmi.ToString("yy"),
+                MesEmissao = dhEmi.ToString("MM"),
+                CNPJCPFEmissor = cnpjcpf.PadLeft(14, '0'),
+                Modelo = mod,
+                Serie = serie,
+                NumeroDoctoFiscal = nNF,
+                TipoEmissao = (TipoEmissao)(int)tpEmis,
+                CodigoNumerico = cNF
+            };
 
-            var cDV = XMLUtility.CalcularDVChave(chaveDFe);
-
-            chaveDFe += cDV.ToString();
+            var chaveDFe = MontarChaveDFe(ref conteudoChaveDFe);
 
             return chaveDFe;
         }

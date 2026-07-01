@@ -95,7 +95,13 @@ namespace Unimake.Business.DFe.Xml.CTeSimp
         public InfCteSub InfCteSub { get; set; }
 
         [XmlElement("imp")]
-        public CTe.Imp Imp { get; set; }
+        public Imp Imp { get; set; }
+
+        /// <summary>
+        /// Grupo de informações da vinculação com a transação de pagamento
+        /// </summary>
+        [XmlElement("pgtoVinc")]
+        public CTe.PgtoVinc PgtoVinc { get; set; }
 
         [XmlElement("total")]
         public Total Total { get; set; }
@@ -294,11 +300,10 @@ namespace Unimake.Business.DFe.Xml.CTeSimp
             {
                 if (value == TipoEmissao.ContingenciaFSIA ||
                    value == TipoEmissao.ContingenciaOffLine ||
-                   value == TipoEmissao.RegimeEspecialNFF ||
                    value == TipoEmissao.ContingenciaSVCAN ||
                    value == TipoEmissao.ContingenciaFSDA)
                 {
-                    throw new Exception("Conteúdo da TAG <tpEmis> inválido! Valores aceitos: 1, 4, 5, 7 ou 8.");
+                    throw new Exception("Conteúdo da TAG <tpEmis> inválido! Valores aceitos: 1, 3, 4, 7 ou 8.");
                 }
 
                 TpEmisField = value;
@@ -323,7 +328,7 @@ namespace Unimake.Business.DFe.Xml.CTeSimp
                 if (value == ProcessoEmissao.AvulsaPeloContribuinteSiteFisco ||
                     value == ProcessoEmissao.AvulsaPeloFisco)
                 {
-                    throw new Exception("Conteúdo da TAG <procEmi> inválido! Valores aceitos: 0 e 3.");
+                    throw new Exception("Conteúdo da TAG <procEmi> inválido! Valores aceitos: 0, 3 e 4.");
                 }
 
                 ProcEmiField = value;
@@ -358,10 +363,10 @@ namespace Unimake.Business.DFe.Xml.CTeSimp
         public string RetiraField { get; set; }
 
         [XmlIgnore]
-        public SimNao Retira
+        public SimNao01 Retira
         {
-            get => (RetiraField.Equals("0") ? SimNao.Sim : SimNao.Nao);
-            set => RetiraField = (value == SimNao.Sim ? "0" : "1");
+            get => (RetiraField.Equals("0") ? SimNao01.Sim : SimNao01.Nao);
+            set => RetiraField = (value == SimNao01.Sim ? "0" : "1");
         }
 
         [XmlElement("xDetRetira")]
@@ -1039,6 +1044,66 @@ namespace Unimake.Business.DFe.Xml.CTeSimp
         #region ShouldSerialize
 
         public bool ShouldSerializeVTotDFeField() => VTotDFe > 0;
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Informações dos impostos do CTe.
+    /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.CTeSimp.Imp")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(Namespace = "http://www.portalfiscal.inf.br/cte")]
+    public class Imp
+    {
+        /// <summary>
+        /// Informações do ICMS.
+        /// </summary>
+        [XmlElement("ICMS")]
+        public CTe.ICMS ICMS { get; set; }
+
+        /// <summary>
+        /// Valor total dos tributos.
+        /// </summary>
+        [XmlIgnore]
+        public double VTotTrib { get; set; }
+
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade "VTotTrib" para atribuir ou resgatar o valor)
+        /// </summary>
+        [XmlElement("vTotTrib")]
+        public string VTotTribField
+        {
+            get => VTotTrib.ToString("F2", CultureInfo.InvariantCulture);
+            set => VTotTrib = Utility.Converter.ToDouble(value);
+        }
+
+        /// <summary>
+        /// Informações adicionais do fisco.
+        /// </summary>
+        [XmlElement("infAdFisco")]
+        public string InfAdFisco { get; set; }
+
+        /// <summary>
+        /// Informações do ICMS para a UF de destino.
+        /// </summary>
+        [XmlElement("ICMSUFFim")]
+        public CTe.ICMSUFFim ICMSUFFim { get; set; }
+
+        /// <summary>
+        /// Grupo de informações da Tributação IBS/CBS
+        /// </summary>
+        [XmlElement("IBSCBS")]
+        public CTe.IBSCBS IBSCBS { get; set; }
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeVTotTribField() => VTotTrib > 0;
+        public bool ShouldSerializeInfAdFisco() => !string.IsNullOrWhiteSpace(InfAdFisco);
 
         #endregion
     }

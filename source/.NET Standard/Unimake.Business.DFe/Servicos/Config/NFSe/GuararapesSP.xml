@@ -7,9 +7,9 @@
 			<WebEnderecoProducao>http://138.97.36.146:5657/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoProducao>
 			<WebActionHomologacao>recepcionarDPS</WebActionHomologacao>
 			<WebActionProducao>recepcionarDPS</WebActionProducao>
-			<SchemaArquivo/>
-			<TagAssinatura>nfse:DPS</TagAssinatura>
-			<TagAtributoID>nfse1:infDPS</TagAtributoID>
+			<SchemaArquivo></SchemaArquivo>
+			<TagAssinatura>DPS</TagAssinatura>
+			<TagAtributoID>infDPS</TagAtributoID>
 			<TagLoteAssinatura/>
 			<TagLoteAtributoID/>
 			<WebContentType>text/xml;charset=UTF-8</WebContentType>
@@ -17,8 +17,10 @@
 			<WebTagRetorno>ns3:RecepcionarDpsResposta</WebTagRetorno>
 			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
 			<WebSoapVersion>soap11</WebSoapVersion>
-			<SchemaVersao>1.00</SchemaVersao>
-			<TargetNS/>
+			<SchemaVersao></SchemaVersao>
+			<TargetNS></TargetNS>
+			<AssinaCanonicalizacaoExclusiva>true</AssinaCanonicalizacaoExclusiva>
+			<SignatureAlgorithmType>Sha256</SignatureAlgorithmType>
 		</GerarNfse>
 		<RecepcionarLoteRps versao="1.00">
 			<Descricao>Recepcionar Lote DPS</Descricao>
@@ -38,7 +40,8 @@
 			<WebSoapVersion>soap11</WebSoapVersion>
 			<SchemaVersao></SchemaVersao>
 			<TargetNS></TargetNS>
-			<NaoAssina></NaoAssina>
+			<AssinaCanonicalizacaoExclusiva>true</AssinaCanonicalizacaoExclusiva>
+			<SignatureAlgorithmType>Sha256</SignatureAlgorithmType>
 		</RecepcionarLoteRps>
 		<RecepcionarLoteRpsSincrono versao="1.00">
 			<Descricao>Recepcionar Lote DPS Sincrono</Descricao>
@@ -58,12 +61,13 @@
 			<WebSoapVersion>soap11</WebSoapVersion>
 			<SchemaVersao></SchemaVersao>
 			<TargetNS></TargetNS>
-			<NaoAssina></NaoAssina>
+			<AssinaCanonicalizacaoExclusiva>true</AssinaCanonicalizacaoExclusiva>
+			<SignatureAlgorithmType>Sha256</SignatureAlgorithmType>
 		</RecepcionarLoteRpsSincrono>
 		<ConsultarLoteRps versao="1.00">
 			<Descricao>Consulta lote DPS</Descricao>
 			<WebEnderecoHomologacao>http://fi1.fiorilli.com.br:5663/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoHomologacao>
-			<WebEnderecoProducao>https://nfsews.assis.sp.gov.br/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoProducao>
+			<WebEnderecoProducao>http://138.97.36.146:5657/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoProducao>
 			<WebActionHomologacao>consultarLoteDps</WebActionHomologacao>
 			<WebActionProducao>consultarLoteDps</WebActionProducao>
 			<SchemaArquivo></SchemaArquivo>
@@ -78,7 +82,66 @@
 			<WebSoapVersion>soap11</WebSoapVersion>
 			<SchemaVersao></SchemaVersao>
 			<TargetNS></TargetNS>
-			<NaoAssina></NaoAssina>
 		</ConsultarLoteRps>
+		<!-- 1.01 -->
+		<GerarNfse versao="1.01">
+			<Descricao>Gerar Nota Fiscal de Serviço</Descricao>
+			<WebEnderecoHomologacao>http://fi1.fiorilli.com.br:5663/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoHomologacao>
+			<WebEnderecoProducao>http://138.97.36.146:5657/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoProducao>
+			<WebActionHomologacao>recepcionarDPS</WebActionHomologacao>
+			<WebActionProducao>recepcionarDPS</WebActionProducao>
+			<SchemaArquivo></SchemaArquivo>
+			<TagAssinatura>DPS</TagAssinatura>
+			<TagAtributoID>infDPS</TagAtributoID>
+			<TagLoteAssinatura/>
+			<TagLoteAtributoID/>
+			<WebContentType>text/xml;charset=UTF-8</WebContentType>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:nfse="http://www.fiorilli.com.br/nfse-nacional" xmlns:nfse1="http://www.sped.fazenda.gov.br/nfse" xmlns:xd="http://www.w3.org/2000/09/xmldsig#" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebTagRetorno>ns3:RecepcionarDpsResposta</WebTagRetorno>
+			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
+			<WebSoapVersion>soap11</WebSoapVersion>
+			<SchemaVersao></SchemaVersao>
+			<TargetNS></TargetNS>
+			<AssinaCanonicalizacaoExclusiva>true</AssinaCanonicalizacaoExclusiva>
+			<SignatureAlgorithmType>Sha1</SignatureAlgorithmType>
+		</GerarNfse>
+		<ConsultarLoteRps versao="1.01">
+			<Descricao>Consultar lote DPS</Descricao>
+			<WebEnderecoHomologacao>http://fi1.fiorilli.com.br:5663/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoHomologacao>
+			<WebEnderecoProducao>http://138.97.36.146:5657/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoProducao>
+			<WebActionHomologacao>consultarLoteDps</WebActionHomologacao>
+			<WebActionProducao>consultarLoteDps</WebActionProducao>
+			<SchemaArquivo></SchemaArquivo>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<TagLoteAssinatura></TagLoteAssinatura>
+			<TagLoteAtributoID></TagLoteAtributoID>
+			<WebContentType>text/xml;charset=UTF-8</WebContentType>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nfse="http://www.fiorilli.com.br/nfse-nacional"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebTagRetorno>soap:Body</WebTagRetorno>
+			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
+			<WebSoapVersion>soap11</WebSoapVersion>
+			<SchemaVersao></SchemaVersao>
+			<TargetNS></TargetNS>
+		</ConsultarLoteRps>
+		<ConsultarNfse versao="1.01">
+			<Descricao>Consultar NFSe</Descricao>
+			<WebEnderecoHomologacao>http://fi1.fiorilli.com.br:5663/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoHomologacao>
+			<WebEnderecoProducao>http://138.97.36.146:5657/IssWeb-ejb/IssWebWSNacional/IssWebWSNacionalPortType?wsdl</WebEnderecoProducao>
+			<WebActionHomologacao>consultarNfse</WebActionHomologacao>
+			<WebActionProducao>consultarNfse</WebActionProducao>
+			<SchemaArquivo></SchemaArquivo>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<TagLoteAssinatura></TagLoteAssinatura>
+			<TagLoteAtributoID></TagLoteAtributoID>
+			<WebContentType>text/xml;charset=UTF-8</WebContentType>
+			<WebSoapString><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nfse="http://www.fiorilli.com.br/nfse-nacional"><soapenv:Header/><soapenv:Body>{xmlBody}</soapenv:Body></soapenv:Envelope>]]></WebSoapString>
+			<WebTagRetorno>soap:Body</WebTagRetorno>
+			<WebEncodingRetorno>UTF-8</WebEncodingRetorno>
+			<WebSoapVersion>soap11</WebSoapVersion>
+			<SchemaVersao></SchemaVersao>
+			<TargetNS></TargetNS>
+		</ConsultarNfse>
 	</Servicos>
 </Configuracoes>

@@ -40,7 +40,7 @@ namespace Unimake.DFe.Test.ESocial
                     IdeEmpregador = new IdeEmpregador
                     {
                         TpInsc = TiposInscricao.CNPJ,
-                        NrInsc = "06117473"
+                        NrInsc = "06117473000150"
                     },
 
                     IdeTransmissor = new IdeTransmissor
@@ -70,7 +70,7 @@ namespace Unimake.DFe.Test.ESocial
                                         IdeEmpregador = new IdeEmpregador
                                         {
                                             TpInsc = TiposInscricao.CNPJ,
-                                            NrInsc = "06117473"
+                                            NrInsc = "06117473000150"
                                         },
                                         InfoEmpregador = new InfoEmpregador
                                         {
@@ -145,7 +145,7 @@ namespace Unimake.DFe.Test.ESocial
                     IdeEmpregador = new IdeEmpregador
                     {
                         TpInsc = TiposInscricao.CNPJ,
-                        NrInsc = "06117473"
+                        NrInsc = "06117473000150"
                     },
 
                     IdeTransmissor = new IdeTransmissor
@@ -177,7 +177,7 @@ namespace Unimake.DFe.Test.ESocial
                                         IdeEmpregador = new IdeEmpregador
                                         {
                                             TpInsc = TiposInscricao.CNPJ,
-                                            NrInsc = "06117473"
+                                            NrInsc = "06117473000150"
                                         },
                                         IdeTrabalhador =  new IdeTrabalhador
                                         {
@@ -190,7 +190,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     new()
                                                     {
                                                         TpInsc = TiposInscricao.CNPJ,
-                                                        NrInsc = "06117473",
+                                                        NrInsc = "06117473000150",
                                                         CodCateg = CodCateg.EmpregadoAprendiz,
                                                         VlrRemunOE = 123.45
                                                     }
@@ -243,7 +243,7 @@ namespace Unimake.DFe.Test.ESocial
                                                                     },
                                                                     InfoAgNocivo = new InfoAgNocivo1200
                                                                     {
-                                                                        GrauExp = "123"
+                                                                        GrauExp = GrauExposicaoAgentesNocivos.NaoEnsejadorAposentadoriaEspecial
                                                                     }
                                                                 }
                                                             }
@@ -270,7 +270,7 @@ namespace Unimake.DFe.Test.ESocial
                                                                     },
                                                                     InfoAgNocivo = new InfoAgNocivo1200
                                                                     {
-                                                                        GrauExp = "123"
+                                                                        GrauExp = GrauExposicaoAgentesNocivos.NaoEnsejadorAposentadoriaEspecial
                                                                     }
                                                                 }
                                                             }
@@ -279,7 +279,7 @@ namespace Unimake.DFe.Test.ESocial
                                                 },
                                                 InfoComplCont = new InfoComplCont
                                                 {
-                                                    CodCBO = "14",
+                                                    CodCBO = "123456",
                                                     NatAtividade = NatAtividade.TrabalhoUrbano,
                                                     QtdDiasTrab = "2"
                                                 }
@@ -404,14 +404,14 @@ namespace Unimake.DFe.Test.ESocial
                                         IdeEvento = new IdeEvento2400
                                         {
                                             IndRetif = IndicativoRetificacao.ArquivoOriginal,
-                                            NrRecibo = "1.1.11111111111111",
+                                            NrRecibo = "1.0.1234567890123456789",
                                             TpAmb = tipoAmbiente,
-                                            ProcEmi = ProcEmiESocial.AppDoEmpregador,
+                                            ProcEmi = ProcEmiESocialPJ.AppDoEmpregador,
                                             VerProc = "Versao Teste"
                                         },
-                                        IdeEmpregador = new IdeEmpregador
+                                        IdeEmpregador = new IdeEmpregador2400
                                         {
-                                            TpInsc = TiposInscricao.CNPJ,
+                                            TpInsc = TipoInscricaoCNPJ.CNPJ,
                                             NrInsc = "06117473000150"
                                         },
                                         Beneficiario = new Beneficiario
@@ -421,7 +421,7 @@ namespace Unimake.DFe.Test.ESocial
                                             DtNascto = DateTime.ParseExact("1990-02-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
                                             DtInicio = DateTime.ParseExact("2025-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture),
                                             Sexo = TipoSexo.Masculino,
-                                            RacaCor = RacaCor.Branca,
+                                            RacaCor = RacaCorBeneficiario.Branca,
                                             EstCiv = EstadoCivil.Viuvo,
                                             IncFisMen = SimNaoLetra.Nao,
                                             DtIncFisMen = DateTime.Now,
@@ -446,7 +446,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     TpDep = TiposDeDependente.FilhoOuEnteado,
                                                     NmDep = "Jose dos Santos",
                                                     DtNascto = DateTime.ParseExact("2024-05-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                                                    CpfDep = "987654321098",
+                                                    CpfDep = "00000000000",
                                                     DepIRRF = SimNaoLetra.Sim,
                                                     IncFisMen = SimNaoLetra.Sim
                                                 },
@@ -455,7 +455,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     TpDep = TiposDeDependente.FilhoOuEnteado,
                                                     NmDep = "Maria dos Santos",
                                                     DtNascto = DateTime.ParseExact("2024-05-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                                                    CpfDep = "987654321098",
+                                                    CpfDep = "00000000000",
                                                     SexoDep = TipoSexo.Feminino,
                                                     DepIRRF = SimNaoLetra.Sim,
                                                     IncFisMen = SimNaoLetra.Sim
@@ -465,7 +465,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     TpDep = TiposDeDependente.FilhoOuEnteado,
                                                     NmDep = "Jorge dos Santos",
                                                     DtNascto = DateTime.ParseExact("2024-05-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                                                    CpfDep = "987654321098",
+                                                    CpfDep = "00000000000",
                                                     DepIRRF = SimNaoLetra.Sim,
                                                     IncFisMen = SimNaoLetra.Sim
                                                 }
@@ -485,14 +485,14 @@ namespace Unimake.DFe.Test.ESocial
                                         IdeEvento = new IdeEvento2400
                                         {
                                             IndRetif = IndicativoRetificacao.ArquivoOriginal,
-                                            NrRecibo = "1.1.11111111111111",
+                                            NrRecibo = "1.0.1234567890123456789",
                                             TpAmb = tipoAmbiente,
-                                            ProcEmi = ProcEmiESocial.AppDoEmpregador,
+                                            ProcEmi = ProcEmiESocialPJ.AppDoEmpregador,
                                             VerProc = "Versao Teste"
                                         },
-                                        IdeEmpregador = new IdeEmpregador
+                                        IdeEmpregador = new IdeEmpregador2400
                                         {
-                                            TpInsc = TiposInscricao.CNPJ,
+                                            TpInsc = TipoInscricaoCNPJ.CNPJ,
                                             NrInsc = "06117473000150"
                                         },
                                         Beneficiario = new Beneficiario
@@ -502,7 +502,7 @@ namespace Unimake.DFe.Test.ESocial
                                             DtNascto = DateTime.ParseExact("1990-02-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
                                             DtInicio = DateTime.ParseExact("2025-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture),
                                             Sexo = TipoSexo.Masculino,
-                                            RacaCor = RacaCor.Branca,
+                                            RacaCor = RacaCorBeneficiario.Branca,
                                             EstCiv = EstadoCivil.Viuvo,
                                             IncFisMen = SimNaoLetra.Nao,
                                             DtIncFisMen = DateTime.Now,
@@ -527,7 +527,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     TpDep = TiposDeDependente.FilhoOuEnteado,
                                                     NmDep = "Jose dos Santos",
                                                     DtNascto = DateTime.ParseExact("2024-05-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                                                    CpfDep = "987654321098",
+                                                    CpfDep = "00000000000",
                                                     DepIRRF = SimNaoLetra.Sim,
                                                     IncFisMen = SimNaoLetra.Sim
                                                 },
@@ -536,7 +536,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     TpDep = TiposDeDependente.FilhoOuEnteado,
                                                     NmDep = "Maria dos Santos",
                                                     DtNascto = DateTime.ParseExact("2024-05-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                                                    CpfDep = "987654321098",
+                                                    CpfDep = "00000000000",
                                                     SexoDep = TipoSexo.Feminino,
                                                     DepIRRF = SimNaoLetra.Sim,
                                                     IncFisMen = SimNaoLetra.Sim
@@ -546,7 +546,7 @@ namespace Unimake.DFe.Test.ESocial
                                                     TpDep = TiposDeDependente.FilhoOuEnteado,
                                                     NmDep = "Jorge dos Santos",
                                                     DtNascto = DateTime.ParseExact("2024-05-05", "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                                                    CpfDep = "987654321098",
+                                                    CpfDep = "00000000000",
                                                     DepIRRF = SimNaoLetra.Sim,
                                                     IncFisMen = SimNaoLetra.Sim
                                                 }
@@ -613,7 +613,7 @@ namespace Unimake.DFe.Test.ESocial
                                         IdeEvento = new IdeEvento2405
                                         {
                                             IndRetif = IndicativoRetificacao.ArquivoOriginal,
-                                            NrRecibo = "1.1.11111111111111",
+                                            NrRecibo = "1.0.1234567890123456789",                                                        
                                             TpAmb = tipoAmbiente,
                                             ProcEmi = ProcEmiESocial.AppDoEmpregador,
                                             VerProc = "Versao Teste"
@@ -692,7 +692,7 @@ namespace Unimake.DFe.Test.ESocial
                                         IdeEvento = new IdeEvento2405
                                         {
                                             IndRetif = IndicativoRetificacao.ArquivoOriginal,
-                                            NrRecibo = "1.1.11111111111111",
+                                            NrRecibo = "1.0.1234567890123456789",
                                             TpAmb = tipoAmbiente,
                                             ProcEmi = ProcEmiESocial.AppDoEmpregador,
                                             VerProc = "Versao Teste"

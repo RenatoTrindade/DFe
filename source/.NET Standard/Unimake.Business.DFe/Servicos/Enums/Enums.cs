@@ -571,6 +571,196 @@ namespace Unimake.Business.DFe.Servicos
         [Description("Consultar Eventos Diversos da NFSe NACIONAL")]
         NFSeConsultarEventosDiversos = 92,
 
+        ///<summary>
+        ///93 - Download de XML da NFCe
+        /// </summary>
+        [Description("Download de XML da NFCe")]
+        NFCeDownloadXML = 93,
+
+        ///<summary>
+        ///94 - Consultar Lista de Chaves de NFCe
+        /// </summary>
+        [Description("Consultar Lista de Chaves de NFCe")]
+        NFCeConsultaChaves = 94,
+
+        /// <summary>
+        /// 95 - Consultar NSU da NFSe NACIONAL
+        /// </summary>
+        [Description("Consultar NSU da NFSe NACIONAL")]
+        NFSeConsultarDistribuicaoNFSeNSU = 95,
+
+        /// <summary>
+        /// 96 - Consultar Eventos da NFSe por Chave de Acesso da NFSe NACIONAL
+        /// </summary>
+        [Description("Consultar Eventos da NFSe por Chave de Acesso da NFSe NACIONAL")]
+        NFSeConsultarEventosNFSeChaveAcesso = 96,
+
+        /// <summary>
+        /// 97 - Consulta status serviço DCe
+        /// </summary>
+        [Description("Consulta status do serviço da DCe")]
+        DCeStatusServico = 97,
+
+        /// <summary>
+        /// 98 - Consulta protocolo da DCe
+        /// </summary>
+        [Description("Consulta situação da DCe")]
+        DCeConsultaProtocolo = 98,
+
+        /// <summary>
+        /// 99 - Envio de Eventos da DCe
+        /// </summary>
+        [Description("Envio de eventos da DCe")]
+        DCeRecepcaoEvento = 99,
+
+        /// <summary>
+        /// 100 - Envio do XML de DCe
+        /// </summary>
+        [Description("Autorização síncrona de DCe")]
+        DCeAutorizacaoSinc = 100,
+
+        /// <summary>
+        /// 101 - Consulta status serviço NFGas
+        /// </summary>
+        [Description("Consulta status do serviço da NFGas")]
+        NFGasStatusServico = 101,
+
+        /// <summary>
+        /// 102 - Consulta protocolo da NFGas
+        /// </summary>
+        [Description("Consulta situação da NFGas")]
+        NFGasConsultaProtocolo = 102,
+
+        /// <summary>
+        /// 103 - Envio de Eventos da NFGas
+        /// </summary>
+        [Description("Envio de eventos da NFGas")]
+        NFGasRecepcaoEvento = 103,
+
+        /// <summary>
+        /// 104 - Envio do XML de NFGas
+        /// </summary>
+        [Description("Autorização síncrona de NFGas")]
+        NFGasAutorizacaoSinc = 104,
+
+        /// <summary>
+        /// 105 - uMessenger - Publicar mensagem de texto via WhatsApp
+        /// </summary>
+        [Description("uMessenger Publicar Mensagem")]
+        UMessengerPublish = 105,
+
+        /// <summary>
+        /// 106 - CIOT - Consultar situação do transportador
+        /// </summary>
+        [Description("CIOT - Consultar situação do transportador")]
+        CIOTConsultarSituacaoTransportador = 106,
+
+        /// <summary>
+        /// 107 - CIOT - Consultar frota do transportador
+        /// </summary>
+        [Description("CIOT - Consultar frota do transportador")]
+        CIOTConsultarFrotaTransportador = 107,
+
+        /// <summary>
+        /// 108 - CIOT - Declaração da operação de transporte
+        /// </summary>
+        [Description("CIOT - Declaração da operação de transporte")]
+        CIOTDeclaracaoOperacaoTransporte = 108,
+
+        /// <summary>
+        /// 109 - CIOT - Cancelamento da operação de transporte
+        /// </summary>
+        [Description("CIOT - Cancelamento da operação de transporte")]
+        CIOTCancelamentoOperacaoTransporte = 109,
+
+        /// <summary>
+        /// 110 - CIOT - Retificação da operação de transporte
+        /// </summary>
+        [Description("CIOT - Retificação da operação de transporte")]
+        CIOTRetificacaoOperacaoTransporte = 110,
+
+        /// <summary>
+        /// 111 - CIOT - Encerramento da operação de transporte
+        /// </summary>
+        [Description("CIOT - Encerramento da operação de transporte")]
+        CIOTEncerramentoOperacaoTransporte = 111,
+
+        /// <summary>
+        /// 112 - CIOT - Consultar exceção
+        /// </summary>
+        [Description("CIOT - Consultar exceção")]
+        CIOTConsultarExcecao = 112,
+
+        /// <summary>
+        /// 113 - CIOT - Consultar CIOT gerado
+        /// </summary>
+        [Description("CIOT - Consultar CIOT gerado")]
+        CIOTConsultarCIOTGerado = 113,
+
+        /// <summary>
+        /// 123 - CIOT - Gerar identificador da operação de transporte
+        /// </summary>
+        [Description("CIOT - Gerar identificador da operação de transporte")]
+        CIOTGerarIdOperacaoTransporte = 123,
+
+        /// <summary>
+        /// 114 - EBoleto - Registrar boleto
+        /// </summary>
+        [Description("EBoleto - Registrar boleto")]
+        EBoletoRegistrar = 114,
+
+        /// <summary>
+        /// 115 - EBoleto - Cancelar boleto
+        /// </summary>
+        [Description("EBoleto - Cancelar boleto")]
+        EBoletoCancelar = 115,
+
+        /// <summary>
+        /// 116 - EBoleto - Consultar boleto
+        /// </summary>
+        [Description("EBoleto - Consultar boleto")]
+        EBoletoConsultar = 116,
+
+        /// <summary>
+        /// 117 - EBoleto - Alterar vencimento
+        /// </summary>
+        [Description("EBoleto - Alterar vencimento")]
+        EBoletoAlterarVencto = 117,
+
+        /// <summary>
+        /// 118 - EBoleto - Enviar instrução
+        /// </summary>
+        [Description("EBoleto - Enviar instrução")]
+        EBoletoEnviarInstrucao = 118,
+
+        /// <summary>
+        /// 119 - EBoleto - Informar pagamento
+        /// </summary>
+        [Description("EBoleto - Informar pagamento")]
+        EBoletoInformarPagt = 119,
+
+        #endregion
+
+        #region PIX
+
+        /// <summary>
+        /// 120 - PIX - Criar cobrança
+        /// </summary>
+        [Description("PIX - Criar cobrança")]
+        PIXCobrancaCriar = 120,
+
+        /// <summary>
+        /// 121 - PIX - Consultar cobrança
+        /// </summary>
+        [Description("PIX - Consultar cobrança")]
+        PIXCobrancaConsultar = 121,
+
+        /// <summary>
+        /// 122 - PIX - Consultar
+        /// </summary>
+        [Description("PIX - Consultar")]
+        PIXConsultar = 122,
+
         #endregion
 
         #region Gerais
@@ -660,6 +850,35 @@ namespace Unimake.Business.DFe.Servicos
         /// 15 - NFCom - Nota fiscal fatura de serviço de comunicação eletrônica
         /// </summary>
         NFCom = 15,
+        /// <summary>
+        /// 16 - DCe - Declaração de Conteúdo eletrônica
+        /// </summary>
+        DCe = 16,
+
+        /// <summary>
+        /// 17 - NFGas - Nota Fiscal Eletrônica do Gás
+        /// </summary>
+        NFGas = 17,
+
+        /// <summary>
+        /// 18 - uMessenger - Serviço de mensageria da Unimake
+        /// </summary>
+        UMessenger = 18,
+
+        /// <summary>
+        /// 19 - CIOT - Código Identificador da Operação de Transporte
+        /// </summary>
+        CIOT = 19,
+
+        /// <summary>
+        /// 20 - EBoleto - Serviço de boletos eletrônicos
+        /// </summary>
+        EBoleto = 20,
+
+        /// <summary>
+        /// 21 - PIX - Serviço de PIX
+        /// </summary>
+        PIX = 21,
 
     }
 
@@ -941,6 +1160,40 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("62")]
         NFCom = 62,
+
+        /// <summary>
+        /// DCe (Modelo: 99)
+        /// </summary>
+        [XmlEnum("99")]
+        DCe = 99,
+
+        /// <summary>
+        /// NFGas (Modelo: 76)
+        /// </summary>
+        [XmlEnum("76")]
+        NFGas = 76,
+    }
+
+    #endregion
+
+    #region TipoEventoDCe
+
+    /// <summary>
+    /// Tipos de eventos da DCe
+    /// </summary>
+    public enum TipoEventoDCe
+    {
+        /// <summary>
+        /// 0 - Evento desconhecido
+        /// </summary>
+        [XmlEnum("0")]
+        Desconhecido = 0,
+
+        /// <summary>
+        /// 110111 - Cancelamento DCe
+        /// </summary>
+        [XmlEnum("110111")]
+        Cancelamento = 110111,
     }
 
     #endregion
@@ -1419,6 +1672,18 @@ namespace Unimake.Business.DFe.Servicos
         CancelamentoInsucessoEntrega = 110191,
 
         /// <summary>
+        /// 110300 - Vinculação do Pagamento
+        /// </summary>
+        [XmlEnum("110300")]
+        VinculacaoPagamento = 110300,
+
+        /// <summary>
+        /// 110301 - Cancelamento da vinculação do pagamento
+        /// </summary>
+        [XmlEnum("110301")]
+        CancelamentoVinculacaoPagamento = 110301,
+
+        /// <summary>
         /// 240130 - Autorizado CT-e Complementar
         /// </summary>
         [XmlEnum("240130")]
@@ -1594,6 +1859,29 @@ namespace Unimake.Business.DFe.Servicos
 
     #endregion
 
+    #region SimNao
+
+    /// <summary>
+    /// Sim ou Não (0 ou 1)
+    /// </summary>
+    public enum SimNao01
+    {
+        /// <summary>
+        /// 0 - Sim
+        /// </summary>
+        [XmlEnum("0")]
+        Sim = 0,
+
+        /// <summary>
+        /// 0 - Não
+        /// </summary>
+        [XmlEnum("1")]
+        Nao = 1
+    }
+
+    #endregion
+
+
     #region TipoOperacao
 
     /// <summary>
@@ -1685,7 +1973,35 @@ namespace Unimake.Business.DFe.Servicos
         /// 5 - DANFE NFC-e em mensagem eletrônica
         /// </summary>
         [XmlEnum("5")]
-        NFCeMensagemEletronica = 5
+        NFCeMensagemEletronica = 5,
+
+        /// <summary>
+        /// 6 - DANFE Simplificado Tipo 2
+        /// </summary>
+        [XmlEnum("6")]
+        SimplificadoTipo2 = 6
+    }
+
+    #endregion
+
+    #region TipoAplicacaoAliquotaZeroCBS
+
+    /// <summary>
+    /// Tipo de aplicação da alíquota zero da CBS
+    /// </summary>
+    public enum TipoAplicacaoAliquotaZeroCBS
+    {
+        /// <summary>
+        /// 1 - Sem processo aprovado na Suframa
+        /// </summary>
+        [XmlEnum("1")]
+        SemProcessoSuframa = 1,
+
+        /// <summary>
+        /// 2 - Com processo aprovado na Suframa
+        /// </summary>
+        [XmlEnum("2")]
+        ComProcessoSuframa = 2
     }
 
     #endregion
@@ -1874,7 +2190,7 @@ namespace Unimake.Business.DFe.Servicos
         /// <summary>
         /// 08 - Desenquadramento do Simples Nacional
         /// </summary>
-        [XmlEnum("8")]
+        [XmlEnum("08")]
         DesenquadramentoSN = 8
     }
 
@@ -1888,7 +2204,7 @@ namespace Unimake.Business.DFe.Servicos
     public enum TipoNFCredito
     {
         /// <summary>
-        /// 01 - A Definir (SEFAZ ainda não definiu esta tabela)
+        /// 01 - Multa e juros
         /// </summary>
         [XmlEnum("01")]
         MultaJuros = 1,
@@ -1908,14 +2224,20 @@ namespace Unimake.Business.DFe.Servicos
         /// <summary>
         /// 04 - Redução de valores
         /// </summary>
-        [XmlEnum("4")]
+        [XmlEnum("04")]
         ReducaoValores = 4,
 
         /// <summary>
         /// 05 - Transferência de crédito na sucessão
         /// </summary>
-        [XmlEnum("5")]
-        TransferenciaDeCreditoNaSucessao = 5
+        [XmlEnum("05")]
+        TransferenciaDeCreditoNaSucessao = 5,
+
+        /// <summary>
+        /// 06 - Retorno por recusa parcial na entrega
+        /// </summary>
+        [XmlEnum("06")]
+        RetornoRecusaParcialEntrega = 6
     }
 
     #endregion
@@ -1949,7 +2271,19 @@ namespace Unimake.Business.DFe.Servicos
         /// 4 - Município
         /// </summary>
         [XmlEnum("4")]
-        Municipio = 4
+        Municipio = 4,
+
+        /// <summary>
+        /// 5=Consórcio Público
+        /// </summary>
+        [XmlEnum("5")]
+        ConsorcioPublico = 5,
+
+        /// <summary>
+        /// 6=Comitê Gestor do IBS
+        /// </summary>
+        [XmlEnum("6")]
+        ComiteGestorIBS = 6
     }
 
     #endregion
@@ -2002,16 +2336,28 @@ namespace Unimake.Business.DFe.Servicos
     public enum TipoOperacaoEnteGovernamental
     {
         /// <summary>
-        /// 1 - Fornecimento
+        /// 1 -  Fornecimento com pagamento posterior;
         /// </summary>
         [XmlEnum("1")]
-        Fornecimento = 1,
+        FornecimentoPagamentoPosterior = 1,
 
         /// <summary>
-        /// 2 - Recebimento do pagamento, conforme fato gerador do IBS/CBS definido no Art. 10 § 2º
+        ///  Recebimento do pagamento com fornecimento já realizado;
         /// </summary>
         [XmlEnum("2")]
-        RecebimentoPagamento = 2,
+        RecebimentoPagamentoFornecimentoJaRealizado = 2,
+
+        /// <summary>
+        /// 3 – Fornecimento com pagamento já realizado;
+        /// </summary>
+        [XmlEnum("3")]
+        FornecimentoPagamentoJaRealizado = 3,
+
+        /// <summary>
+        /// 4 – Recebimento do pagamento com fornecimento posterior
+        /// </summary>
+        [XmlEnum("4")]
+        RecebimentoPagamentoFornecimentoPosterior = 4
     }
 
     #endregion
@@ -2098,7 +2444,13 @@ namespace Unimake.Business.DFe.Servicos
         /// 3 - Emissão NF-e pelo contribuinte com aplicativo fornecido pelo Fisco.
         /// </summary>
         [XmlEnum("3")]
-        AplicativoFisco = 3
+        AplicativoFisco = 3,
+
+        /// <summary>
+        /// 4 - Emissão de CT-e pelo Provedor de Autorização e Assinatura - PAA.
+        /// </summary>
+        [XmlEnum("4")]
+        ProvedorAutorizacaoAssinatura = 4
     }
 
     #endregion
@@ -2919,10 +3271,10 @@ namespace Unimake.Business.DFe.Servicos
         PagamentoInstantaneo = 17,
 
         /// <summary>
-        /// 18 - Transferência bancária, Carteira Digital
+        /// TED (Transferência Eletrônica Disponível) - Transferência entre contas de diferentes bancos.
         /// </summary> 
         [XmlEnum("18")]
-        TransferenciaBancaria = 18,
+        TED = 18,
 
         /// <summary>
         /// 19 - Programa de fidelidade, Cashback, Crédito Virtual
@@ -2947,6 +3299,18 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("22")]
         PagamentoEletronicoNaoInformado = 22,
+
+        /// <summary>
+        /// Pagamentos recorrentes configurados para serem debitados automaticamente via Pix, a partir de autorização do pagador.
+        /// </summary>
+        [XmlEnum("23")]
+        PagamentoInstantaneoAutomatico = 23,
+
+        /// <summary>
+        /// Transferência entre contas do mesmo banco.
+        /// </summary>
+        [XmlEnum("24")]
+        TEFBookTransfer = 24,
 
         /// <summary>
         /// 90 - Sem pagamento
@@ -5287,6 +5651,68 @@ namespace Unimake.Business.DFe.Servicos
 
     #endregion
 
+    #region Tipo de Emitente DCe
+
+    /// <summary>
+    /// Tipo de emitente do DCe
+    /// </summary>
+    public enum TipoEmitenteDCe
+    {
+        /// <summary>
+        /// 0 - APP do Fisco
+        /// </summary>
+        [XmlEnum("0")]
+        AppFisco = 0,
+
+        /// <summary>
+        /// 1 - Marketplace
+        /// </summary>
+        [XmlEnum("1")]
+        Marketplace = 1,
+
+        /// <summary>
+        /// 2 - Emissor Próprio
+        /// </summary>
+        [XmlEnum("2")]
+        EmissorProprio = 2,
+
+        /// <summary>
+        /// 3 - Transportadora
+        /// </summary>
+        [XmlEnum("3")]
+        Transportadora = 3
+    }
+
+    #endregion
+
+    #region ModalidadeTransporteDCe
+
+    /// <summary>
+    /// Modalidade do transporte da DCe
+    /// </summary>
+    public enum ModalidadeTransporteDCe
+    {
+        /// <summary>
+        /// 0 - Transporte pelos correios
+        /// </summary>
+        [XmlEnum("0")]
+        Correios = 0,
+
+        /// <summary>
+        /// 1 - Transporte por conta própria
+        /// </summary>
+        [XmlEnum("1")]
+        ContaPropria = 1,
+
+        /// <summary>
+        /// 2 - Transporte por empresa transportadora
+        /// </summary>
+        [XmlEnum("2")]
+        EmpresaTransportadora = 2
+    }
+
+    #endregion
+
     #region Tipo do Transportador para o MDFe
 
     /// <summary>
@@ -6554,6 +6980,22 @@ namespace Unimake.Business.DFe.Servicos
 
     #endregion
 
+    #region IndicativoSimLetra
+
+    /// <summary>
+    /// Indicativo Sim (S)
+    /// </summary>
+    public enum IndicativoSimLetra
+    {
+        /// <summary>
+        /// Sim
+        /// </summary>
+        [XmlEnum("S")]
+        Sim = 1
+    }
+
+    #endregion
+
     #region SimNaoOpcionalLetra
 
     /// <summary>
@@ -6941,12 +7383,6 @@ namespace Unimake.Business.DFe.Servicos
         None = 0,
 
         /// <summary>
-        /// BETHA Sistemas
-        /// </summary>
-        [Description("BETHA Sistemas")]
-        BETHA = 1,
-
-        /// <summary>
         /// SIGCORP - Tecnologia da informação
         /// </summary>
         [Description("SIGCORP - Tecnologia da informação")]
@@ -6965,516 +7401,322 @@ namespace Unimake.Business.DFe.Servicos
         EL = 4,
 
         /// <summary>
-        /// NOTAINTELIGENTE
-        /// </summary>
-        [Description("Nota Inteligente")]
-        NOTAINTELIGENTE = 5,
-
-        /// <summary>
         /// AVMB Soluções em TI
         /// </summary>
         [Description("AVMB Soluções em TI")]
-        AVMB = 6,
+        AVMB = 5,
 
         /// <summary>
         /// WebISS
         /// </summary>
         [Description("WebISS")]
-        WEBISS = 7,
+        WEBISS = 6,
 
         /// <summary>
         /// SIMPLISS Sistema de Informação LTDA
         /// </summary>
         [Description("SIMPLISS Sistema de Informação LTDA")]
-        SIMPLISS = 8,
+        SIMPLISS = 7,
 
         /// <summary>
         /// COPLAN
         /// </summary>
         [Description("Coplan")]
-        COPLAN = 9,
-
-        /// <summary>
-        /// Próprio Joinville SC 
-        /// </summary>
-        [Description("Próprio Joinville SC")]
-        PROPRIOJOINVILLESC = 10,
+        COPLAN = 8,
 
         /// <summary>
         /// Sonner - Sistemas integrados, governos inteligentes (Antigo GOVDIGITAL)
         /// </summary>
         [Description("SONNER - Sistemas integrados")]
-        SONNER = 11,
+        SONNER = 9,
 
         /// <summary>
         /// SMARAPD
         /// </summary>
         [Description("SMARAPD")]
-        SMARAPD = 12,
+        SMARAPD = 10,
 
         /// <summary>
         /// NobeSistemas - Software de gestão integrada
         /// </summary>
         [Description("NOBESISTEMAS")]
-        NOBESISTEMAS = 13,
+        NOBESISTEMAS = 11,
 
         /// <summary>
         /// TRIBUTUS - Gestão integrada
         /// </summary>
         [Description("TRIBUTUS")]
-        TRIBUTUS = 14,
-
-        /// <summary>
-        /// BHISS Digital
-        /// </summary>
-        [Description("BHISS")]
-        BHISS = 15,
+        TRIBUTUS = 12,
 
         /// <summary>
         /// PAULISTANA
         /// </summary>
         [Description("PAULISTANA")]
-        PAULISTANA = 16,
+        PAULISTANA = 13,
 
         /// <summary>
         /// DSF - Desenvolvimento de Sistemas Fiscais Ltda
         /// </summary>
         [Description("DSF")]
-        DSF = 17,
+        DSF = 14,
 
         /// <summary>
         /// Digifred - Soluções em Tecnologia para a Gestão Pública
         /// </summary>
         [Description("DIGIFRED")]
-        DIGIFRED = 18,
-
-        /// <summary>
-        /// VersaTEC – Tecnologia, Educação e Comunicação
-        /// </summary>
-        [Description("VERSATEC")]
-        VERSATEC = 19,
+        DIGIFRED = 15,
 
         /// <summary>
         /// GINFES – Gestão Inteligente da Nota Fiscal de Serviço Eletrônica
         /// </summary>
         [Description("GINFES")]
-        GINFES = 20,
+        GINFES = 17,
 
         /// <summary>
         /// QUASAR - Sistemas Inteligentes de Gestão
         /// </summary>
         [Description("QUASAR")]
-        QUASAR = 21,
-
-        /// <summary>
-        /// Próprio Goiânia GO
-        /// </summary>
-        [Description("Próprio Goiânia GO")]
-        PROPRIOGOIANIA = 22,
-
-        /// <summary>
-        /// OBARATEC
-        /// </summary>
-        [Description("OBARATEC")]
-        OBARATEC = 23,
+        QUASAR = 18,
 
         /// <summary>
         /// GIF
         /// </summary>
         [Description("GIF")]
-        GIF = 24,
+        GIF = 19,
 
         /// <summary>
         /// ISSNET
         /// </summary>
         [Description("ISSNET")]
-        ISSNET = 25,
+        ISSNET = 20,
 
         /// <summary>
         /// CENTI
         /// </summary>
         [Description("CENTI")]
-        CENTI = 26,
+        CENTI = 21,
 
         /// <summary>
         /// NACIONAL
         /// </summary>
         [Description("NACIONAL")]
-        NACIONAL = 27,
+        NACIONAL = 22,
 
         /// <summary>
         /// GIAP
         /// </summary>
         [Description("GIAP")]
-        GIAP = 28,
+        GIAP = 23,
 
         /// <summary>
         /// EQUIPLANO 
         /// </summary>
         [Description("EQUIPLANO")]
-        EQUIPLANO = 29,
+        EQUIPLANO = 24,
 
         /// <summary>
         /// MEMORY 
         /// </summary>
         [Description("MEMORY")]
-        MEMORY = 30,
+        MEMORY = 25,
 
         /// <summary>
         /// ABASE Sistemas
         /// </summary>
         [Description("ABASE")]
-        ABASE = 31,
+        ABASE = 26,
 
         /// <summary>
         /// FIORILLI
         /// </summary>
         [Description("FIORILLI")]
-        FIORILLI = 32,
+        FIORILLI = 27,
 
         /// <summary>
         /// IPM
         /// </summary>
         [Description("IPM")]
-        IPM = 33,
+        IPM = 28,
 
         /// <summary>
         /// TECNOSISTEMAS
         /// </summary>
         [Description("TECNOSISTEMAS")]
-        TECNOSISTEMAS = 34,
-
-        /// <summary>
-        /// BAUHAUS - Prefeitura Moderna
-        /// </summary>
-        [Description("BAUHAUS")]
-        BAUHAUS = 35,
+        TECNOSISTEMAS = 29,
 
         /// <summary>
         /// TINUS
         /// </summary>
         [Description("TINUS")]
-        TINUS = 36,
-
-        /// <summary>
-        /// EMBRAS
-        /// </summary>
-        [Description("EMBRAS")]
-        EMBRAS = 37,
+        TINUS = 30,
 
         /// <summary>
         /// BSITBR
         /// </summary>
         [Description("BSITBR")]
-        BSITBR = 38,
-
-        /// <summary>
-        /// SIMPLE
-        /// </summary>
-        [Description("SIMPLE")]
-        SIMPLE = 39,
+        BSITBR = 31,
 
         /// <summary>
         /// PRONIM
         /// </summary>
         [Description("PRONIM")]
-        PRONIM = 40,
+        PRONIM = 32,
 
         /// <summary>
         /// PROPRIOBARUERISP
         /// </summary>
         [Description("PROPRIOBARUERISP")]
-        PROPRIOBARUERISP = 41,
-
-        /// <summary>
-        /// THEMA
-        /// </summary>
-        [Description("THEMA")]
-        THEMA = 42,
+        PROPRIOBARUERISP = 33,
 
         /// <summary>
         /// AGILI
         /// </summary>
         [Description("AGILI")]
-        AGILI = 43,
+        AGILI = 34,
 
         /// <summary>
         /// WEBFISCO_TECNOLOGIA
         /// </summary>
         [Description("WEBFISCO")]
-        WEBFISCO = 44,
-
-        /// <summary>
-        /// IIBRASIL
-        /// </summary>
-        [Description("IIBRASIL")]
-        IIBRASIL = 45,
+        WEBFISCO = 35,
 
         /// <summary>
         /// ADM_SISTEMAS
         /// </summary>
         [Description("ADM_SISTEMAS")]
-        ADM_SISTEMAS = 46,
-
-        /// <summary>
-        /// SYSTEMPRO
-        /// </summary>
-        [Description("SYSTEMPRO")]
-        SYSTEMPRO = 47,
+        ADM_SISTEMAS = 37,
 
         /// <summary>
         /// FINTEL
         /// </summary>
         [Description("FINTEL")]
-        FINTEL = 48,
-
-        /// <summary>
-        /// CARIOCA
-        /// </summary>
-        [Description("CARIOCA")]
-        CARIOCA = 49,
+        FINTEL = 38,
 
         /// <summary>
         /// SALVADOR_BA
         /// </summary>
         [Description("SALVADOR_BA")]
-        SALVADOR_BA = 50,
+        SALVADOR_BA = 39,
 
         /// <summary>
         /// FISCO
         /// </summary>
         [Description("FISCO")]
-        FISCO = 51,
-
-        /// <summary>
-        /// ABACO
-        /// </summary>
-        [Description("ABACO")]
-        ABACO = 52,
+        FISCO = 40,
 
         /// <summary>
         /// GISSONLINE (Antigo GINFES)
         /// </summary>
         [Description("GISSONLINE")]
-        GISSONLINE = 53,
+        GISSONLINE = 41,
 
         /// <summary>
         /// PUBLICA
         /// </summary>
         [Description("PUBLICA")]
-        PUBLICA = 54,
+        PUBLICA = 42,
 
         /// <summary>
         /// TIPLAN
         /// </summary>
         [Description("TIPLAN")]
-        TIPLAN = 55,
+        TIPLAN = 43,
 
         /// <summary>
         /// PRODEB
         /// </summary>
         [Description("PRODEB")]
-        PRODEB = 56,
-
-        /// <summary>
-        /// LIBRE
-        /// </summary>
-        [Description("LIBRE")]
-        LIBRE = 57,
-
-        /// <summary>
-        /// MANAUS_AM
-        /// </summary>
-        [Description("MANAUS_AM")]
-        MANAUS_AM = 58,
-
-        /// <summary>
-        /// NATALENSE
-        /// </summary>
-        [Description("NATALENSE")]
-        NATALENSE = 59,
-
-        /// <summary>
-        /// VITORIAS_ES
-        /// </summary>
-        [Description("VITORIA_ES")]
-        VITORIA_ES = 60,
+        PRODEB = 44,
 
         /// <summary>
         /// RLZ_INFORMATICA
         /// </summary>
         [Description("RLZ_INFORMATICA")]
-        RLZ_INFORMATICA = 61,
-
-        /// <summary>
-        /// SISPMJP
-        /// </summary>
-        [Description("SISPMJP")]
-        SISPMJP = 62,
+        RLZ_INFORMATICA = 45,
 
         /// <summary>
         /// HM2SOLUCOES
         /// </summary>
         [Description("HM2SOLUCOES")]
-        HM2SOLUCOES = 63,
+        HM2SOLUCOES = 46,
 
         /// <summary>
         /// ELOTECH
         /// </summary>
         [Description("ELOTECH")]
-        ELOTECH = 64,
+        ELOTECH = 47,
 
         /// <summary>
         /// CONAM
         /// </summary>
         [Description("CONAM")]
-        CONAM = 65,
-
-        /// <summary>
-        /// EGOVERNE
-        /// </summary>
-        [Description("EGOVERNE")]
-        EGOVERNE = 66,
+        CONAM = 48,
 
         /// <summary>
         /// PORTAL_FACIL
         /// </summary>
         [Description("PORTAL_FACIL")]
-        PORTAL_FACIL = 67,
-
-        /// <summary>
-        /// E_RECEITA
-        /// </summary>
-        [Description("E_RECEITA")]
-        E_RECEITA = 68,
+        PORTAL_FACIL = 49,
 
         ///<summary>
         ///DBSELLER
         /// </summary>
         [Description("DBSELLER")]
-        DBSELLER = 69,
-
-        ///<summary>
-        ///CECAM
-        /// </summary>
-        [Description("CECAM")]
-        CECAM = 70,
-
-        ///<summary>
-        ///JLSOFT
-        /// </summary>
-        [Description("JLSOFT")]
-        JLSOFT = 71,
-
-        ///<summary>
-        ///SH3
-        /// </summary>
-        [Description("SH3")]
-        SH3 = 72,
+        DBSELLER = 50,
 
         ///<summary>
         ///MODERNIZACAO_PUBLICA
         /// </summary>
         [Description("MODERNIZACAO_PUBLICA")]
-        MODERNIZACAO_PUBLICA = 73,
+        MODERNIZACAO_PUBLICA = 51,
 
         ///<summary>
         ///METROPOLIS
         /// </summary>
         [Description("METROPOLIS")]
-        METROPOLIS = 74,
+        METROPOLIS = 52,
 
         ///<summary>
         ///MEGASOFT
         /// </summary>
         [Description("MEGASOFT")]
-        MEGASOFT = 75,
-
-        ///<summary>
-        ///ISSONLINE_ASSESSORPUBLICO
-        /// </summary>
-        [Description("ISSONLINE_ASSESSORPUBLICO")]
-        ISSONLINE_ASSESSORPUBLICO = 76,
-
-
-        ///<summary>
-        ///SINSOFT
-        /// </summary>
-        [Description("SINSOFT")]
-        SINSOFT = 77,
+        MEGASOFT = 53,
 
         /// <summary>
         /// PRIMAX
         /// </summary>
         [Description("PRIMAX")]
-        PRIMAX = 78,
+        PRIMAX = 54,
 
         ///<summary>
         ///EGOVERNEISS
         /// </summary>
         [Description("EGOVERNEISS")]
-        EGOVERNEISS = 79,
-
-        ///<summary>
-        ///DESENVOLVECIDADE
-        /// </summary>
-        [Description("DESENVOLVECIDADE")]
-        DESENVOLVECIDADE = 80,
-
-
-        ///<summary>
-        ///INDAIATUBA_SP
-        /// </summary>
-        [Description("INDAIATUBA_SP")]
-        INDAIATUBA_SP = 81,
+        EGOVERNEISS = 55,
 
         ///<summary>
         ///INTERSOL
         /// </summary>
         [Description("INTERSOL")]
-        INTERSOL = 82,
-
-        ///<summary>
-        ///PUBLICENTER
-        /// </summary>
-        [Description("PUBLICENTER")]
-        PUBLICENTER = 83,
-
-        /// <summary>
-        /// LEXSOM
-        /// </summary>
-        [Description("LEXSOM")]
-        LEXSOM = 84,
-
-        ///<summary>
-        ///SUPERNOVA
-        /// </summary>
-        [Description("SUPERNOVA")]
-        SUPERNOVA = 85,
-
-        ///<summary>
-        ///SIGISSWEB
-        /// </summary>
-        [Description("SIGISSWEB")]
-        SIGISSWEB = 86,
-
-        /// <summary>
-        /// SOFTPLAN
-        /// </summary>
-        [Description("SOFTPLAN")]
-        SOFTPLAN = 87,
+        INTERSOL = 56,
 
         /// <summary>
         /// BETHA_CLOUD
         /// </summary>
         [Description("BETHA_CLOUD")]
-        BETHA_CLOUD = 88,
+        BETHA_CLOUD = 58,
 
         /// <summary>
         /// FUTURIZE
         /// </summary>
         [Description("FUTURIZE")]
-        FUTURIZE = 89,
+        FUTURIZE = 59,
+
+        /// <summary>
+        /// PADRÃO PROPRIO DE FORTALEZA-CE MAS É BASEADO NO GINFES
+        /// </summary>
+        [Description("PROPRIOFORTALEZACE")]
+        PROPRIOFORTALEZACE = 60
     }
 
     #endregion
@@ -7504,12 +7746,6 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [Description("ABASE")]
         ABASE = 9999902,
-
-        /// <summary>
-        /// PADRÃO BETHA
-        /// </summary>
-        [Description("BETHA Sistemas")]
-        BETHA = 9999903,
 
         /// <summary>
         /// PADRÃO WEBFISCO
@@ -7820,6 +8056,34 @@ namespace Unimake.Business.DFe.Servicos
         NFCom = 36,
 
         #endregion NFCom
+
+        #region NFGas
+
+        /// <summary>
+        /// XML de consulta status do serviço da NFGas
+        /// </summary>
+        [Description("XML de consulta status do serviço da NFGas")]
+        NFGasStatusServico = 100,
+
+        /// <summary>
+        /// XML de consulta situação da NFGas
+        /// </summary>
+        [Description("XML de consulta situação da NFGas")]
+        NFGasConsultaSituacao = 101,
+
+        /// <summary>
+        /// XML de envio de evento da NFGas
+        /// </summary>
+        [Description("XML de envio de evento da NFGas")]
+        NFGasEnvioEvento = 102,
+
+        /// <summary>
+        /// XML individual da NFGas
+        /// </summary>
+        [Description("XML individual da NFGas")]
+        NFGas = 103,
+
+        #endregion NFGas
 
         #region eSocial
 
@@ -8286,6 +8550,22 @@ namespace Unimake.Business.DFe.Servicos
 
     #endregion
 
+    #region Tipo de Inscrição CNPJ
+
+    /// <summary>
+    /// Tipo de inscrição CNPJ
+    /// </summary>
+    public enum TipoInscricaoCNPJ
+    {
+        /// <summary>
+        /// 1 - CNPJ
+        /// </summary>
+        [XmlEnum("1")]
+        CNPJ = 1
+    }
+
+    #endregion
+
     #region Indicativo escrituração
 
     /// <summary>
@@ -8555,27 +8835,27 @@ namespace Unimake.Business.DFe.Servicos
     public enum TipoEntidadeLigada
     {
         /// <summary>
-        /// 01 - Fundo de investimento.
+        /// 1 - Fundo de investimento.
         /// </summary>
-        [XmlEnum("01")]
+        [XmlEnum("1")]
         FundoDeInvestimento = 1,
 
         /// <summary>
-        /// 02 - Fundo de investimento imobiliário.
+        /// 2 - Fundo de investimento imobiliário.
         /// </summary>
-        [XmlEnum("02")]
+        [XmlEnum("2")]
         FundoDeInvestimentoImobiliario = 2,
 
         /// <summary>
-        /// 03 - Clube de Investimento.
+        /// 3 - Clube de Investimento.
         /// </summary>
-        [XmlEnum("03")]
+        [XmlEnum("3")]
         ClubeDeInvestimento = 3,
 
         /// <summary>
-        /// 04 - Sociedade em conta de participação.
+        /// 4 - Sociedade em conta de participação.
         /// </summary>
-        [XmlEnum("04")]
+        [XmlEnum("4")]
         SociedadeEmContaDeParticipacao = 4,
     }
     #endregion
@@ -10024,6 +10304,520 @@ namespace Unimake.Business.DFe.Servicos
 
     #endregion
 
+    #region CodigoReceitaContribuicaoDescontadaTrabalhador
+
+    /// <summary>
+    /// Código de Receita - CR da contribuição descontada do trabalhador
+    /// </summary>
+    public enum CodigoReceitaContribuicaoDescontadaTrabalhador
+    {
+        /// <summary>
+        /// 108201 - Contribuição Previdenciária - CP descontada do segurado empregado/avulso
+        /// </summary>
+        [XmlEnum("108201")]
+        CPDescontadaSeguradoEmpregadoAvulso = 108201,
+
+        /// <summary>
+        /// 108202 - CP descontada do segurado empregado rural curto prazo - Lei 11.718/2008
+        /// </summary>
+        [XmlEnum("108202")]
+        CPDescontadaSeguradoEmpregadoRuralCurtoPrazo = 108202,
+
+        /// <summary>
+        /// 108203 - CP descontada do segurado empregado doméstico
+        /// </summary>
+        [XmlEnum("108203")]
+        CPDescontadaSeguradoEmpregadoDomestico = 108203,
+
+        /// <summary>
+        /// 108204 - CP descontada do segurado especial curto prazo - Lei 11.718/2008
+        /// </summary>
+        [XmlEnum("108204")]
+        CPDescontadaSeguradoEspecialCurtoPrazo = 108204,
+
+        /// <summary>
+        /// 108205 - CP descontada do segurado empregado do segurado especial
+        /// </summary>
+        [XmlEnum("108205")]
+        CPDescontadaSeguradoEmpregadoSeguradoEspecial = 108205,
+
+        /// <summary>
+        /// 108207 - CP descontada do segurado empregado do MEI
+        /// </summary>
+        [XmlEnum("108207")]
+        CPDescontadaSeguradoEmpregadoMEI = 108207,
+
+        /// <summary>
+        /// 108221 - CP descontada do segurado empregado/avulso 13° salário
+        /// </summary>
+        [XmlEnum("108221")]
+        CPDescontadaSeguradoEmpregadoAvulsoDecimoTerceiro = 108221,
+
+        /// <summary>
+        /// 108222 - CP descontada do segurado empregado rural curto prazo 13° salário - Lei 11.718/2008
+        /// </summary>
+        [XmlEnum("108222")]
+        CPDescontadaSeguradoEmpregadoRuralCurtoPrazoDecimoTerceiro = 108222,
+
+        /// <summary>
+        /// 108223 - CP descontada do segurado empregado doméstico 13° salário
+        /// </summary>
+        [XmlEnum("108223")]
+        CPDescontadaSeguradoEmpregadoDomesticoDecimoTerceiro = 108223,
+
+        /// <summary>
+        /// 108224 - CP descontada do segurado especial curto prazo 13° salário - Lei 11.718/2008
+        /// </summary>
+        [XmlEnum("108224")]
+        CPDescontadaSeguradoEspecialCurtoPrazoDecimoTerceiro = 108224,
+
+        /// <summary>
+        /// 108225 - CP descontada do segurado empregado do segurado especial 13° salário
+        /// </summary>
+        [XmlEnum("108225")]
+        CPDescontadaSeguradoEmpregadoSeguradoEspecialDecimoTerceiro = 108225,
+
+        /// <summary>
+        /// 109901 - CP descontada do contribuinte individual, alíquota de 11%
+        /// </summary>
+        [XmlEnum("109901")]
+        CPDescontadaContribuinteIndividualAliquota11 = 109901,
+
+        /// <summary>
+        /// 109902 - CP descontada do contribuinte individual, alíquota de 20%
+        /// </summary>
+        [XmlEnum("109902")]
+        CPDescontadaContribuinteIndividualAliquota20 = 109902,
+
+        /// <summary>
+        /// 109921 - CP descontada do contribuinte individual, alíquota de 11% - 13º salário
+        /// </summary>
+        [XmlEnum("109921")]
+        CPDescontadaContribuinteIndividualAliquota11DecimoTerceiro = 109921,
+
+        /// <summary>
+        /// 109922 - CP descontada do contribuinte individual, alíquota de 20% - 13º salário
+        /// </summary>
+        [XmlEnum("109922")]
+        CPDescontadaContribuinteIndividualAliquota20DecimoTerceiro = 109922,
+
+        /// <summary>
+        /// 160601 - Empréstimo Consignado do Trabalhador, Lei nº 10.820/2003
+        /// </summary>
+        [XmlEnum("160601")]
+        EmprestimoConsignadoTrabalhador = 160601
+    }
+
+    #endregion
+
+    #region CodigoReceitaContribuicaoTerceiros
+
+    /// <summary>
+    /// Código de Receita - CR da contribuição descontada do trabalhador para terceiros
+    /// </summary>
+    public enum CodigoReceitaContribuicaoTerceiros
+    {
+        /// <summary>
+        /// 121802 - Contribuição ao SEST, descontada do transportador autônomo
+        /// </summary>
+        [XmlEnum("121802")]
+        ContribuicaoSESTTransportadorAutonomo = 121802,
+
+        /// <summary>
+        /// 122102 - Contribuição ao SENAT, descontada do transportador autônomo
+        /// </summary>
+        [XmlEnum("122102")]
+        ContribuicaoSENATTransportadorAutonomo = 122102
+    }
+
+    #endregion
+
+    #region TipoValorInfoBaseCS
+
+    /// <summary>
+    /// Tipo de valor que influi na apuração da contribuição social devida
+    /// </summary>
+    public enum TipoValorInfoBaseCS
+    {
+        /// <summary>
+        /// 11 - Base de cálculo da contribuição previdenciária normal
+        /// </summary>
+        [XmlEnum("11")]
+        BaseCalculoContribuicaoPrevidenciariaNormal = 11,
+
+        /// <summary>
+        /// 12 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos
+        /// </summary>
+        [XmlEnum("12")]
+        BaseCalculoAposentadoriaEspecial15Anos = 12,
+
+        /// <summary>
+        /// 13 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos
+        /// </summary>
+        [XmlEnum("13")]
+        BaseCalculoAposentadoriaEspecial20Anos = 13,
+
+        /// <summary>
+        /// 14 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos
+        /// </summary>
+        [XmlEnum("14")]
+        BaseCalculoAposentadoriaEspecial25Anos = 14,
+
+        /// <summary>
+        /// 15 - Base de cálculo da contribuição previdenciária adicional normal - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("15")]
+        BaseCalculoAdicionalNormalExclusivaEmpregador = 15,
+
+        /// <summary>
+        /// 16 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("16")]
+        BaseCalculoAposentadoriaEspecial15AnosExclusivaEmpregador = 16,
+
+        /// <summary>
+        /// 17 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("17")]
+        BaseCalculoAposentadoriaEspecial20AnosExclusivaEmpregador = 17,
+
+        /// <summary>
+        /// 18 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("18")]
+        BaseCalculoAposentadoriaEspecial25AnosExclusivaEmpregador = 18,
+
+        /// <summary>
+        /// 19 - Base de cálculo da contribuição previdenciária exclusiva do empregado
+        /// </summary>
+        [XmlEnum("19")]
+        BaseCalculoExclusivaEmpregado = 19,
+
+        /// <summary>
+        /// 21 - Valor total descontado do trabalhador para recolhimento à Previdência Social
+        /// </summary>
+        [XmlEnum("21")]
+        ValorTotalDescontadoTrabalhadorPrevidenciaSocial = 21,
+
+        /// <summary>
+        /// 22 - Valor descontado do trabalhador para recolhimento ao SEST
+        /// </summary>
+        [XmlEnum("22")]
+        ValorDescontadoTrabalhadorSEST = 22,
+
+        /// <summary>
+        /// 23 - Valor descontado do trabalhador para recolhimento ao SENAT
+        /// </summary>
+        [XmlEnum("23")]
+        ValorDescontadoTrabalhadorSENAT = 23,
+
+        /// <summary>
+        /// 31 - Valor pago ao trabalhador a título de salário-família
+        /// </summary>
+        [XmlEnum("31")]
+        ValorSalarioFamilia = 31,
+
+        /// <summary>
+        /// 32 - Valor pago ao trabalhador a título de salário-maternidade
+        /// </summary>
+        [XmlEnum("32")]
+        ValorSalarioMaternidade = 32,
+
+        /// <summary>
+        /// 41 - Base de cálculo da contribuição previdenciária normal - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("41")]
+        BaseCalculoNormalCategorias107108 = 41,
+
+        /// <summary>
+        /// 42 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("42")]
+        BaseCalculoAposentadoriaEspecial15AnosCategorias107108 = 42,
+
+        /// <summary>
+        /// 43 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("43")]
+        BaseCalculoAposentadoriaEspecial20AnosCategorias107108 = 43,
+
+        /// <summary>
+        /// 44 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("44")]
+        BaseCalculoAposentadoriaEspecial25AnosCategorias107108 = 44,
+
+        /// <summary>
+        /// 45 - Base de cálculo da contribuição previdenciária adicional normal - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("45")]
+        BaseCalculoAdicionalNormalExclusivaEmpregadorCategorias107108 = 45,
+
+        /// <summary>
+        /// 46 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("46")]
+        BaseCalculoAposentadoriaEspecial15AnosExclusivaEmpregadorCategorias107108 = 46,
+
+        /// <summary>
+        /// 47 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("47")]
+        BaseCalculoAposentadoriaEspecial20AnosExclusivaEmpregadorCategorias107108 = 47,
+
+        /// <summary>
+        /// 48 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("48")]
+        BaseCalculoAposentadoriaEspecial25AnosExclusivaEmpregadorCategorias107108 = 48,
+
+        /// <summary>
+        /// 49 - Base de cálculo da contribuição previdenciária exclusiva do empregado - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("49")]
+        BaseCalculoExclusivaEmpregadoCategorias107108 = 49,
+
+        /// <summary>
+        /// 51 - Base de cálculo da contribuição previdenciária normal - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("51")]
+        BaseCalculoNormalDecimoTerceiroLei14973 = 51,
+
+        /// <summary>
+        /// 52 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("52")]
+        BaseCalculoAposentadoriaEspecial15AnosDecimoTerceiroLei14973 = 52,
+
+        /// <summary>
+        /// 53 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("53")]
+        BaseCalculoAposentadoriaEspecial20AnosDecimoTerceiroLei14973 = 53,
+
+        /// <summary>
+        /// 54 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("54")]
+        BaseCalculoAposentadoriaEspecial25AnosDecimoTerceiroLei14973 = 54,
+
+        /// <summary>
+        /// 71 - Incidência suspensa em decorrência de decisão judicial - BC CP normal - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("71")]
+        IncidenciaSuspensaBCNormalDecimoTerceiroLei14973 = 71,
+
+        /// <summary>
+        /// 72 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 15 anos - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("72")]
+        IncidenciaSuspensaBCAposentadoriaEspecial15AnosDecimoTerceiroLei14973 = 72,
+
+        /// <summary>
+        /// 73 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 20 anos - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("73")]
+        IncidenciaSuspensaBCAposentadoriaEspecial20AnosDecimoTerceiroLei14973 = 73,
+
+        /// <summary>
+        /// 74 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 25 anos - 13º salário - Lei 14.973/2024
+        /// </summary>
+        [XmlEnum("74")]
+        IncidenciaSuspensaBCAposentadoriaEspecial25AnosDecimoTerceiroLei14973 = 74,
+
+        /// <summary>
+        /// 81 - Incidência suspensa em decorrência de decisão judicial - BC CP normal - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("81")]
+        IncidenciaSuspensaBCNormalCategorias107108 = 81,
+
+        /// <summary>
+        /// 82 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 15 anos - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("82")]
+        IncidenciaSuspensaBCAposentadoriaEspecial15AnosCategorias107108 = 82,
+
+        /// <summary>
+        /// 83 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 20 anos - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("83")]
+        IncidenciaSuspensaBCAposentadoriaEspecial20AnosCategorias107108 = 83,
+
+        /// <summary>
+        /// 84 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 25 anos - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("84")]
+        IncidenciaSuspensaBCAposentadoriaEspecial25AnosCategorias107108 = 84,
+
+        /// <summary>
+        /// 85 - Incidência suspensa em decorrência de decisão judicial - BC CP normal - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("85")]
+        IncidenciaSuspensaBCNormalExclusivaEmpregadorCategorias107108 = 85,
+
+        /// <summary>
+        /// 86 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 15 anos - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("86")]
+        IncidenciaSuspensaBCAposentadoriaEspecial15AnosExclusivaEmpregadorCategorias107108 = 86,
+
+        /// <summary>
+        /// 87 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 20 anos - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("87")]
+        IncidenciaSuspensaBCAposentadoriaEspecial20AnosExclusivaEmpregadorCategorias107108 = 87,
+
+        /// <summary>
+        /// 88 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 25 anos - Exclusiva do empregador - Categorias 107 e 108
+        /// </summary>
+        [XmlEnum("88")]
+        IncidenciaSuspensaBCAposentadoriaEspecial25AnosExclusivaEmpregadorCategorias107108 = 88,
+
+        /// <summary>
+        /// 91 - Incidência suspensa em decorrência de decisão judicial - BC CP normal
+        /// </summary>
+        [XmlEnum("91")]
+        IncidenciaSuspensaBCNormal = 91,
+
+        /// <summary>
+        /// 92 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 15 anos
+        /// </summary>
+        [XmlEnum("92")]
+        IncidenciaSuspensaBCAposentadoriaEspecial15Anos = 92,
+
+        /// <summary>
+        /// 93 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 20 anos
+        /// </summary>
+        [XmlEnum("93")]
+        IncidenciaSuspensaBCAposentadoriaEspecial20Anos = 93,
+
+        /// <summary>
+        /// 94 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 25 anos
+        /// </summary>
+        [XmlEnum("94")]
+        IncidenciaSuspensaBCAposentadoriaEspecial25Anos = 94,
+
+        /// <summary>
+        /// 95 - Incidência suspensa em decorrência de decisão judicial - BC CP normal - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("95")]
+        IncidenciaSuspensaBCNormalExclusivaEmpregador = 95,
+
+        /// <summary>
+        /// 96 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 15 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("96")]
+        IncidenciaSuspensaBCAposentadoriaEspecial15AnosExclusivaEmpregador = 96,
+
+        /// <summary>
+        /// 97 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 20 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("97")]
+        IncidenciaSuspensaBCAposentadoriaEspecial20AnosExclusivaEmpregador = 97,
+
+        /// <summary>
+        /// 98 - Incidência suspensa em decorrência de decisão judicial - BC CP aposentadoria especial aos 25 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("98")]
+        IncidenciaSuspensaBCAposentadoriaEspecial25AnosExclusivaEmpregador = 98
+    }
+
+    #endregion
+
+    #region TipoValorPerRef
+
+    /// <summary>
+    /// Tipo de valor que influi na apuração da contribuição devida por período de referência
+    /// </summary>
+    public enum TipoValorPerRef
+    {
+        /// <summary>
+        /// 11 - Base de cálculo da contribuição previdenciária normal
+        /// </summary>
+        [XmlEnum("11")]
+        BaseCalculoContribuicaoPrevidenciariaNormal = 11,
+
+        /// <summary>
+        /// 12 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos
+        /// </summary>
+        [XmlEnum("12")]
+        BaseCalculoAposentadoriaEspecial15Anos = 12,
+
+        /// <summary>
+        /// 13 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos
+        /// </summary>
+        [XmlEnum("13")]
+        BaseCalculoAposentadoriaEspecial20Anos = 13,
+
+        /// <summary>
+        /// 14 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos
+        /// </summary>
+        [XmlEnum("14")]
+        BaseCalculoAposentadoriaEspecial25Anos = 14,
+
+        /// <summary>
+        /// 15 - Base de cálculo da contribuição previdenciária adicional normal - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("15")]
+        BaseCalculoAdicionalNormalExclusivaEmpregador = 15,
+
+        /// <summary>
+        /// 16 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 15 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("16")]
+        BaseCalculoAposentadoriaEspecial15AnosExclusivaEmpregador = 16,
+
+        /// <summary>
+        /// 17 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 20 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("17")]
+        BaseCalculoAposentadoriaEspecial20AnosExclusivaEmpregador = 17,
+
+        /// <summary>
+        /// 18 - Base de cálculo da contribuição previdenciária adicional para aposentadoria especial após 25 anos - Exclusiva do empregador
+        /// </summary>
+        [XmlEnum("18")]
+        BaseCalculoAposentadoriaEspecial25AnosExclusivaEmpregador = 18,
+
+        /// <summary>
+        /// 19 - Base de cálculo da contribuição previdenciária exclusiva do empregado
+        /// </summary>
+        [XmlEnum("19")]
+        BaseCalculoExclusivaEmpregado = 19,
+
+        /// <summary>
+        /// 21 - Valor total descontado do trabalhador para recolhimento à Previdência Social
+        /// </summary>
+        [XmlEnum("21")]
+        ValorTotalDescontadoTrabalhadorPrevidenciaSocial = 21,
+
+        /// <summary>
+        /// 22 - Valor descontado do trabalhador para recolhimento ao SEST
+        /// </summary>
+        [XmlEnum("22")]
+        ValorDescontadoTrabalhadorSEST = 22,
+
+        /// <summary>
+        /// 23 - Valor descontado do trabalhador para recolhimento ao SENAT
+        /// </summary>
+        [XmlEnum("23")]
+        ValorDescontadoTrabalhadorSENAT = 23,
+
+        /// <summary>
+        /// 31 - Valor pago ao trabalhador a título de salário-família
+        /// </summary>
+        [XmlEnum("31")]
+        ValorSalarioFamilia = 31,
+
+        /// <summary>
+        /// 32 - Valor pago ao trabalhador a título de salário-maternidade
+        /// </summary>
+        [XmlEnum("32")]
+        ValorSalarioMaternidade = 32
+    }
+
+    #endregion
+
     #region IndicativoDecimoTerceiro
 
     /// <summary>
@@ -10275,6 +11069,34 @@ namespace Unimake.Business.DFe.Servicos
     }
 
     #endregion Processo de emissão do evento eSocial 
+
+    #region Processo de emissão do evento eSocial Pessoa Jurídica
+
+    /// <summary>
+    /// Processo de emissão do evento eSocial Pessoa Jurídica.
+    /// </summary>
+    public enum ProcEmiESocialPJ
+    {
+        /// <summary>
+        /// 1 - Aplicativo do empregador.
+        /// </summary>
+        [XmlEnum("1")]
+        AppDoEmpregador = 1,
+
+        /// <summary>
+        /// 3 - Aplicativo governamental - Web Geral.
+        /// </summary>
+        [XmlEnum("3")]
+        AppGovernamentalWebGeral = 3,
+
+        /// <summary>
+        /// 4 - Aplicativo governamental - Simplificado Pessoa Jurídica.
+        /// </summary>
+        [XmlEnum("4")]
+        AppGovernamentalPJ = 4
+    }
+
+    #endregion Processo de emissão do evento eSocial Pessoa Jurídica
 
     #region Tipo Processo eSocial
 
@@ -10822,6 +11644,46 @@ namespace Unimake.Business.DFe.Servicos
         [XmlEnum("92")]
         SuspensaoDecisaoJudicialDecimoTerceiro = 92
     }
+    #endregion
+
+    #region eSocial - Código de incidência da rubrica para o PIS/PASEP
+
+    /// <summary>
+    /// Código de incidência da rubrica para o PIS/PASEP sobre a folha de salários.
+    /// </summary>
+    public enum CodigoIncidenciaPisPasep
+    {
+        /// <summary>
+        /// 00 - Não é base de cálculo do PIS/PASEP
+        /// </summary>
+        [XmlEnum("00")]
+        NaoBaseCalculo = 0,
+
+        /// <summary>
+        /// 11 - Base de cálculo do PIS/PASEP mensal
+        /// </summary>
+        [XmlEnum("11")]
+        BaseCalculoMensal = 11,
+
+        /// <summary>
+        /// 12 - Base de cálculo do PIS/PASEP 13º salário
+        /// </summary>
+        [XmlEnum("12")]
+        BaseCalculoDecimoTerceiro = 12,
+
+        /// <summary>
+        /// 91 - Incidência suspensa em decorrência de decisão judicial - PIS/PASEP mensal
+        /// </summary>
+        [XmlEnum("91")]
+        SuspensaoDecisaoJudicialMensal = 91,
+
+        /// <summary>
+        /// 92 - Incidência suspensa em decorrência de decisão judicial - PIS/PASEP 13º salário
+        /// </summary>
+        [XmlEnum("92")]
+        SuspensaoDecisaoJudicialDecimoTerceiro = 92
+    }
+
     #endregion
 
     #region eSocial - Extensão da decisão/sentença.
@@ -11942,6 +12804,44 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("6")]
         NaoInformado = 6
+    }
+    #endregion
+
+    #region Etnia e raça do beneficiário, conforme sua autoclassificação(art. 39, § 8º, da Lei 12.288/2010). - eSocial
+    /// <summary>
+    /// Etnia e raça do beneficiário, conforme sua autoclassificação(art. 39, § 8º, da Lei 12.288/2010).
+    /// </summary>
+    public enum RacaCorBeneficiario
+    {
+        /// <summary>
+        /// 1 - Branca
+        /// </summary>
+        [XmlEnum("1")]
+        Branca = 1,
+
+        /// <summary>
+        /// 2 - Preta
+        /// </summary>
+        [XmlEnum("2")]
+        Preta = 2,
+
+        /// <summary>
+        /// 3 - Parda
+        /// </summary>
+        [XmlEnum("3")]
+        Parda = 3,
+
+        /// <summary>
+        /// 4 - Amarela
+        /// </summary>
+        [XmlEnum("4")]
+        Amarela = 4,
+
+        /// <summary>
+        /// 5 - Indígena
+        /// </summary>
+        [XmlEnum("5")]
+        Indigena = 5
     }
     #endregion
 
@@ -13666,6 +14566,120 @@ namespace Unimake.Business.DFe.Servicos
 
     #endregion
 
+    #region indRemunTSVTermino - eSocial
+
+    /// <summary>
+    /// Indicativo de situação de remuneração após o término.
+    /// </summary>
+    public enum IndRemunTSVTermino
+    {
+        /// <summary>
+        /// 1 - Quarentena
+        /// </summary>
+        [XmlEnum("1")]
+        Quarentena = 1,
+
+        /// <summary>
+        /// 2 - Término reconhecido judicialmente com data anterior a competências com remunerações já informadas no eSocial
+        /// </summary>
+        [XmlEnum("2")]
+        TerminoReconhecidoJudicialmente = 2
+    }
+
+    #endregion
+
+    #region tpAcConv - eSocial
+
+    /// <summary>
+    /// Tipo do instrumento ou situação ensejadora da remuneração relativa a períodos de apuração anteriores.
+    /// </summary>
+    public enum TpAcConv
+    {
+        /// <summary>
+        /// A - Acordo Coletivo de Trabalho
+        /// </summary>
+        [XmlEnum("A")]
+        AcordoColetivoTrabalho = 0,
+
+        /// <summary>
+        /// B - Legislação federal, estadual, municipal ou distrital
+        /// </summary>
+        [XmlEnum("B")]
+        LegislacaoFederalEstadualMunicipalDistrital = 1,
+
+        /// <summary>
+        /// C - Convenção Coletiva de Trabalho
+        /// </summary>
+        [XmlEnum("C")]
+        ConvencaoColetivaTrabalho = 2,
+
+        /// <summary>
+        /// D - Sentença normativa - Dissídio
+        /// </summary>
+        [XmlEnum("D")]
+        SentencaNormativaDissidio = 3,
+
+        /// <summary>
+        /// E - Conversão de licença saúde em acidente de trabalho
+        /// </summary>
+        [XmlEnum("E")]
+        ConversaoLicencaSaudeAcidenteTrabalho = 4,
+
+        /// <summary>
+        /// G - Antecipação de diferenças de acordo, convenção ou dissídio coletivo
+        /// </summary>
+        [XmlEnum("G")]
+        AntecipacaoDiferencasAcordoConvencaoDissidio = 5,
+
+        /// <summary>
+        /// H - Declaração de base de cálculo de FGTS anterior ao início do FGTS Digital
+        /// </summary>
+        [XmlEnum("H")]
+        DeclaracaoBaseCalculoFgtsAnteriorInicioFgtsDigital = 6,
+
+        /// <summary>
+        /// I - Sentença judicial (exceto reclamatória trabalhista)
+        /// </summary>
+        [XmlEnum("I")]
+        SentencaJudicial = 7,
+
+        /// <summary>
+        /// J - Parcelas complementares conhecidas após o fechamento da folha
+        /// </summary>
+        [XmlEnum("J")]
+        ParcelasComplementaresAposFechamentoFolha = 8
+    }
+
+    #endregion
+
+    #region tpAcConvFGTS - eSocial
+
+    /// <summary>
+    /// Tipo do instrumento ou situação ensejadora da remuneração relativa a períodos de apuração anteriores para FGTS.
+    /// </summary>
+    public enum TpAcConvFGTS
+    {
+        /// <summary>
+        /// E - Conversão de licença saúde em acidente de trabalho
+        /// </summary>
+        [XmlEnum("E")]
+        ConversaoLicencaSaudeAcidenteTrabalho = 0,
+
+        /// <summary>
+        /// H - Declaração de base de cálculo de FGTS anterior ao início do FGTS Digital
+        /// </summary>
+        [XmlEnum("H")]
+        DeclaracaoBaseCalculoFgtsAnteriorInicioFgtsDigital = 1,
+
+        /// <summary>
+        /// I - Sentença judicial (exceto reclamatória trabalhista)
+        /// </summary>
+        [XmlEnum("I")]
+        SentencaJudicial = 2
+    }
+
+    #endregion
+
     #region natEstagio - eSocial
 
     /// <summary>
@@ -13780,6 +14794,152 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("2")]
         Temporaria = 2
+    }
+
+    #endregion
+
+    #region tpDepInst - eSocial
+
+    /// <summary>
+    /// Tipo de dependente do instituidor da pensão por morte.
+    /// </summary>
+    public enum TpDepInst
+    {
+        /// <summary>
+        /// 01 - Cônjuge
+        /// </summary>
+        [XmlEnum("01")]
+        Conjuge = 01,
+
+        /// <summary>
+        /// 02 - Companheiro(a)
+        /// </summary>
+        [XmlEnum("02")]
+        Companheiro = 02,
+
+        /// <summary>
+        /// 03 - Filho(a) até 21 anos
+        /// </summary>
+        [XmlEnum("03")]
+        FilhoAte21Anos = 03,
+
+        /// <summary>
+        /// 04 - Enteado(a)
+        /// </summary>
+        [XmlEnum("04")]
+        Enteado = 04,
+
+        /// <summary>
+        /// 05 - Ex-companheiro(a)
+        /// </summary>
+        [XmlEnum("05")]
+        ExCompanheiro = 05,
+
+        /// <summary>
+        /// 06 - Irmão(a)
+        /// </summary>
+        [XmlEnum("06")]
+        Irmao = 06,
+
+        /// <summary>
+        /// 07 - Neto(a)
+        /// </summary>
+        [XmlEnum("07")]
+        Neto = 07,
+
+        /// <summary>
+        /// 08 - Filha maior solteira
+        /// </summary>
+        [XmlEnum("08")]
+        FilhaMaiorSolteira = 08,
+
+        /// <summary>
+        /// 09 - Pais
+        /// </summary>
+        [XmlEnum("09")]
+        Pais = 09,
+
+        /// <summary>
+        /// 10 - Menor sob guarda ou tutela
+        /// </summary>
+        [XmlEnum("10")]
+        MenorSobGuardaOuTutela = 10,
+
+        /// <summary>
+        /// 11 - Filho(a) maior inválido ou com deficiência
+        /// </summary>
+        [XmlEnum("11")]
+        FilhoMaiorInvalidoOuComDeficiencia = 11,
+
+        /// <summary>
+        /// 12 - Ex-cônjuge
+        /// </summary>
+        [XmlEnum("12")]
+        ExConjuge = 12,
+
+        /// <summary>
+        /// 13 - Avós
+        /// </summary>
+        [XmlEnum("13")]
+        Avos = 13,
+
+        /// <summary>
+        /// 14 - Bisavós
+        /// </summary>
+        [XmlEnum("14")]
+        Bisavos = 14,
+
+        /// <summary>
+        /// 15 - Bisneto(a)
+        /// </summary>
+        [XmlEnum("15")]
+        Bisneto = 15,
+
+        /// <summary>
+        /// 16 - Curatelado(a)
+        /// </summary>
+        [XmlEnum("16")]
+        Curatelado = 16,
+
+        /// <summary>
+        /// 17 - Designado(a)
+        /// </summary>
+        [XmlEnum("17")]
+        Designado = 17,
+
+        /// <summary>
+        /// 99 - Agregados/Outros
+        /// </summary>
+        [XmlEnum("99")]
+        AgregadosOuOutros = 99
+    }
+
+    #endregion
+
+    #region sitHomolog - eSocial
+
+    /// <summary>
+    /// Informar se o benefício requer ou não homologação pelo Tribunal de Contas.
+    /// </summary>
+    public enum SitHomolog
+    {
+        /// <summary>
+        /// 0 - Não homologado
+        /// </summary>
+        [XmlEnum("0")]
+        NaoHomologado = 0,
+
+        /// <summary>
+        /// 1 - Homologado
+        /// </summary>
+        [XmlEnum("1")]
+        Homologado = 1,
+
+        /// <summary>
+        /// 2 - Não requer homologação
+        /// </summary>
+        [XmlEnum("2")]
+        NaoRequerHomologacao = 2
     }
 
     #endregion
@@ -13962,6 +15122,12 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("06")]
         ExoneracaoDiretorNaoEmpregadoFalencia = 06,
+
+        /// <summary>
+        /// 07 - Mudança de CPF
+        /// </summary>
+        [XmlEnum("07")]
+        MudancaCpf = 07,
 
         /// <summary>
         /// 99 - Outros
@@ -14166,6 +15332,32 @@ namespace Unimake.Business.DFe.Servicos
         [XmlEnum("047301")]
         IrrfResidentesExteriorFinsFiscais = 047301
 
+    }
+    #endregion
+
+    #region tpCRIRRF2501 - eSocial
+    /// <summary>
+    /// Código de Receita - CR relativo a Imposto sobre a renda retido na fonte.
+    /// </summary>
+    public enum TpCRIRRF2501
+    {
+        /// <summary>
+        /// 593656 - IRRF - Decisão da Justiça do Trabalho
+        /// </summary>
+        [XmlEnum("593656")]
+        IrrfDecisaoJusticaTrabalho = 593656,
+
+        /// <summary>
+        /// 056152 - IRRF - CCP/NINTER
+        /// </summary>
+        [XmlEnum("056152")]
+        IrrfCcpNinter = 056152,
+
+        /// <summary>
+        /// 188951 - IRRF - RRA
+        /// </summary>
+        [XmlEnum("188951")]
+        IrrfRra = 188951
     }
     #endregion
 
@@ -14730,6 +15922,40 @@ namespace Unimake.Business.DFe.Servicos
     }
 
     #endregion TpDesc - eSocial
+
+    #region grauExp - eSocial
+
+    /// <summary>
+    /// Grau de exposição a agentes nocivos.
+    /// </summary>
+    public enum GrauExposicaoAgentesNocivos
+    {
+        /// <summary>
+        /// 1 - Não ensejador de aposentadoria especial
+        /// </summary>
+        [XmlEnum("1")]
+        NaoEnsejadorAposentadoriaEspecial = 1,
+
+        /// <summary>
+        /// 2 - Ensejador de aposentadoria especial - FAE15_12% (15 anos de contribuição e alíquota de 12%)
+        /// </summary>
+        [XmlEnum("2")]
+        EnsejadorAposentadoriaEspecial15Anos = 2,
+
+        /// <summary>
+        /// 3 - Ensejador de aposentadoria especial - FAE20_09% (20 anos de contribuição e alíquota de 9%)
+        /// </summary>
+        [XmlEnum("3")]
+        EnsejadorAposentadoriaEspecial20Anos = 3,
+
+        /// <summary>
+        /// 4 - Ensejador de aposentadoria especial - FAE25_06% (25 anos de contribuição e alíquota de 6%)
+        /// </summary>
+        [XmlEnum("4")]
+        EnsejadorAposentadoriaEspecial25Anos = 4,
+    }
+
+    #endregion grauExp - eSocial
 
     #endregion ESocial
 
@@ -15961,6 +17187,18 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("110111")]
         Cancelamento = 110111,
+
+        /// <summary>
+        /// Evento de vinculação do pagamento
+        /// </summary>
+        [XmlEnum("110300")]
+        VinculacaoPagamento = 110300,
+
+        /// <summary>
+        /// Evento de cancelamento da vinculação do pagamento
+        /// </summary>
+        [XmlEnum("110301")]
+        CancelamentoVinculacaoPagamento = 110301,
     }
 
     #endregion TipoEventoNF3e
@@ -16074,6 +17312,34 @@ namespace Unimake.Business.DFe.Servicos
     }
 
     #endregion
+
+    #region TipoPagamentoAntecipadoNFCom
+
+    /// <summary>
+    /// Tipo pagamento ou pagamento antecipado da NFCom
+    /// </summary>
+    public enum TipoPagamentoAntecipadoNFCom
+    {
+        /// <summary>
+        /// 1 - Pagamento antecipado de serviços não continuados
+        /// </summary>
+        [XmlEnum("1")]
+        PagamentoAntecipadoServicosNaoContinuados = 1,
+
+        /// <summary>
+        /// 2 - Pagamento de serviços continuados antes da prestação
+        /// </summary>
+        [XmlEnum("2")]
+        PagamentoServicosContinuadosAntesPrestacao = 2,
+
+        /// <summary>
+        /// 3 - Fornecimento com pagamento realizado anteriormente
+        /// </summary>
+        [XmlEnum("3")]
+        FornecimentoPagamentoRealizadoAnteriormente = 3
+    }
+
+    #endregion TipoPagamentoAntecipadoNFCom
 
     #region TipoAssinante
 
@@ -16228,7 +17494,13 @@ namespace Unimake.Business.DFe.Servicos
         /// 05 - Descontinuidade do serviço
         /// </summary>
         [XmlEnum("05")]
-        DescontinuidadeServico = 5
+        DescontinuidadeServico = 5,
+
+        /// <summary>
+        /// 06 - Regime especial
+        /// </summary>
+        [XmlEnum("06")]
+        RegimeEspecial = 6
 
     }
 
@@ -16323,6 +17595,18 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("110111")]
         Cancelamento = 110111,
+
+        /// <summary>
+        /// 110300 - Vinculação do Pagamento
+        /// </summary>
+        [XmlEnum("110300")]
+        VinculacaoPagamento = 110300,
+
+        /// <summary>
+        /// 110301 - Cancelamento da vinculação do pagamento
+        /// </summary>
+        [XmlEnum("110301")]
+        CancelamentoVinculacaoPagamento = 110301,
     }
 
     #endregion TipoEventoNFCom
@@ -16423,24 +17707,152 @@ namespace Unimake.Business.DFe.Servicos
     #endregion Tipo de Retenção ISSQN NFS-e NACIONAL
 
     #region Tipo de Retenção PIS/COFINS NFS-e NACIONAL
+
     /// <summary>
     /// Tipo de Retenção PIS/COFINS NFS-e NACIONAL
     /// </summary>
     public enum TipoRetPisCofins
     {
         /// <summary>
-        /// 1 - Retido
+        /// 0 - PIS/COFINS/CSLL Não Retidos
         /// </summary>
-        [XmlEnum("1")]
-        Retido = 1,
+        [XmlEnum("0")]
+        PISCOFINSCSLLNaoRetidos = 0,
 
         /// <summary>
-        /// 2 - Não Retido
+        /// 1 - PIS/COFINS Retidos
+        /// </summary>
+        [XmlEnum("1")]
+        PISCOFINSRetidos = 1,
+
+        /// <summary>
+        /// 2 - PIS/COFINS Não Retidos
         /// </summary>
         [XmlEnum("2")]
-        NaoRetido = 2,
+        PISCOFINSNaoRetidos = 2,
+
+        /// <summary>
+        /// 3 - PIS/COFINS/CSLL Retidos
+        /// </summary>
+        [XmlEnum("3")]
+        PISCOFINSCSLLRetidos = 3,
+
+        /// <summary>
+        /// 4 - PIS/COFINS Retidos, CSLL Não Retido
+        /// </summary>
+        [XmlEnum("4")]
+        PISCOFINSRetidosCSLLNaoRetido = 4,
+
+        /// <summary>
+        /// 5 - PIS Retido, COFINS/CSLL Não Retido;
+        /// </summary>
+        [XmlEnum("5")]
+        PISRetidoCOFINSCSLLNaoRetido = 5,
+
+        /// <summary>
+        /// 6 - COFINS Retido, PIS/CSLL Não Retido;
+        /// </summary>
+        [XmlEnum("6")]
+        COFINSRetidoPISCSLLNaoRetido = 6,
+
+        /// <summary>
+        /// 7 - PIS Não Retido, COFINS/CSLL Retidos;
+        /// </summary>
+        [XmlEnum("7")]
+        PISNaoRetidoCOFINSCSLLRetidos = 7,
+
+        /// <summary>
+        /// 8 - PIS/COFINS Não Retidos, CSLL Retido;
+        /// </summary>
+        [XmlEnum("8")]
+        PISCOFINSNaoRetidosCSLLRetido = 8,
+
+        /// <summary>
+        /// 9 - COFINS Não Retido, PIS/CSLL Retidos
+        /// </summary>
+        [XmlEnum("9")]
+        COFINSNaoRetidoPISCSLLRetidos = 9
     }
+
     #endregion Tipo de Retenção PIS/COFINS NFS-e NACIONAL
+
+    #region Tipo de emissão NFS-e NACIONAL
+    /// <summary>
+    /// Tipo de emissão da NFS-e NACIONAL
+    /// </summary>
+    public enum TipoEmissaoNFSe
+    {
+        /// <summary>
+        /// 1 - Emissão normal no modelo da NFS-e Nacional
+        /// </summary>
+        [XmlEnum("1")]
+        Normal = 1,
+
+        /// <summary>
+        /// 2 - Emissão original em leiaute próprio do município com transcrição para o modelo da NFS-e Nacional
+        /// </summary>
+        [XmlEnum("2")]
+        TranscricaoLeiauteProprioMunicipio = 2,
+    }
+    #endregion Tipo de emissão NFS-e NACIONAL
+
+    #region Processo de emissão NFS-e NACIONAL
+    /// <summary>
+    /// Processo de emissão da NFS-e NACIONAL
+    /// </summary>
+    public enum ProcessoEmissaoNFSe
+    {
+        /// <summary>
+        /// 1 - Emissão com aplicativo do contribuinte (via Web Service)
+        /// </summary>
+        [XmlEnum("1")]
+        AplicativoContribuinte = 1,
+
+        /// <summary>
+        /// 2 - Emissão com aplicativo disponibilizado pelo fisco (Web)
+        /// </summary>
+        [XmlEnum("2")]
+        AplicativoFiscoWeb = 2,
+
+        /// <summary>
+        /// 3 - Emissão com aplicativo disponibilizado pelo fisco (App)
+        /// </summary>
+        [XmlEnum("3")]
+        AplicativoFiscoApp = 3,
+    }
+    #endregion Processo de emissão NFS-e NACIONAL
+
+    #region Tipo Benefício Municipal NFS-e NACIONAL
+    /// <summary>
+    /// Tipo Benefício Municipal NFS-e NACIONAL
+    /// </summary>
+    public enum TipoBeneficioMunicipalNFSe
+    {
+        /// <summary>
+        /// 1 - Isenção
+        /// </summary>
+        [XmlEnum("1")]
+        Isencao = 1,
+
+        /// <summary>
+        /// 2 - Redução da BC em percentual
+        /// </summary>
+        [XmlEnum("2")]
+        ReducaoBCPercentual = 2,
+
+        /// <summary>
+        /// 3 - Redução da BC em valor
+        /// </summary>
+        [XmlEnum("3")]
+        ReducaoBCValor = 3,
+
+        /// <summary>
+        /// 4 - Alíquota diferenciada
+        /// </summary>
+        [XmlEnum("4")]
+        AliquotaDiferenciada = 4,
+    }
+    #endregion Tipo Benefício Municipal NFS-e NACIONAL
 
     #region Tipo Chave DFe NACIONAL
     /// <summary>
@@ -16471,6 +17883,130 @@ namespace Unimake.Business.DFe.Servicos
     }
     #endregion Tipo Chave DFe NACIONAL
 
+    #region Tipo de reembolso, repasse ou ressarcimento NFS-e NACIONAL
+    /// <summary>
+    /// Tipo de reembolso, repasse ou ressarcimento NFS-e NACIONAL
+    /// </summary>
+    public enum TipoReembolsoRepasseRessarcimentoNFSe
+    {
+        /// <summary>
+        /// 01 - Repasse de remuneração por intermediação de imóveis a demais corretores envolvidos na operação
+        /// </summary>
+        [XmlEnum("01")]
+        RepasseRemuneracaoIntermediacaoImoveis = 1,
+
+        /// <summary>
+        /// 02 - Repasse de valores a fornecedor relativo a fornecimento intermediado por agência de turismo
+        /// </summary>
+        [XmlEnum("02")]
+        RepasseValoresFornecedorAgenciaTurismo = 2,
+
+        /// <summary>
+        /// 03 - Reembolso ou ressarcimento recebido por agência de propaganda e publicidade por serviços de produção externa
+        /// </summary>
+        [XmlEnum("03")]
+        ReembolsoRessarcimentoProducaoExterna = 3,
+
+        /// <summary>
+        /// 04 - Reembolso ou ressarcimento recebido por agência de propaganda e publicidade por serviços de mídia
+        /// </summary>
+        [XmlEnum("04")]
+        ReembolsoRessarcimentoMidia = 4,
+
+        /// <summary>
+        /// 99 - Outros reembolsos ou ressarcimentos recebidos por valores pagos relativos a operações por conta e ordem de terceiro
+        /// </summary>
+        [XmlEnum("99")]
+        Outros = 99,
+    }
+    #endregion Tipo de reembolso, repasse ou ressarcimento NFS-e NACIONAL
+
+    #region Finalidade da emissão NFS-e RTC
+    /// <summary>
+    /// Indicador da finalidade da emissão de NFS-e RTC
+    /// </summary>
+    public enum FinalidadeNFSeRTC
+    {
+        /// <summary>
+        /// 0 - NFS-e regular
+        /// </summary>
+        [XmlEnum("0")]
+        Regular = 0,
+    }
+    #endregion Finalidade da emissão NFS-e RTC
+
+    #region Indicador de operação final NFS-e RTC
+    /// <summary>
+    /// Indicador de operação de uso ou consumo pessoal NFS-e RTC
+    /// </summary>
+    public enum IndicadorFinalNFSeRTC
+    {
+        /// <summary>
+        /// 0 - Não
+        /// </summary>
+        [XmlEnum("0")]
+        Nao = 0,
+
+        /// <summary>
+        /// 1 - Sim
+        /// </summary>
+        [XmlEnum("1")]
+        Sim = 1,
+    }
+    #endregion Indicador de operação final NFS-e RTC
+
+    #region Tipo de ente governamental NFS-e RTC
+    /// <summary>
+    /// Tipo de ente governamental NFS-e RTC
+    /// </summary>
+    public enum TipoEnteGovernamentalNFSeRTC
+    {
+        /// <summary>
+        /// 1 - União
+        /// </summary>
+        [XmlEnum("1")]
+        Uniao = 1,
+
+        /// <summary>
+        /// 2 - Estado
+        /// </summary>
+        [XmlEnum("2")]
+        Estado = 2,
+
+        /// <summary>
+        /// 3 - Distrito Federal
+        /// </summary>
+        [XmlEnum("3")]
+        DistritoFederal = 3,
+
+        /// <summary>
+        /// 4 - Município
+        /// </summary>
+        [XmlEnum("4")]
+        Municipio = 4,
+    }
+    #endregion Tipo de ente governamental NFS-e RTC
+
+    #region Indicador de destinatário NFS-e RTC
+    /// <summary>
+    /// Indicador de destinatário dos serviços NFS-e RTC
+    /// </summary>
+    public enum IndicadorDestinatarioNFSeRTC
+    {
+        /// <summary>
+        /// 0 - O destinatário é o próprio tomador/adquirente identificado na NFS-e
+        /// </summary>
+        [XmlEnum("0")]
+        ProprioTomadorAdquirente = 0,
+
+        /// <summary>
+        /// 1 - O destinatário não é o próprio adquirente
+        /// </summary>
+        [XmlEnum("1")]
+        DestinatarioDiferenteAdquirente = 1,
+    }
+    #endregion Indicador de destinatário NFS-e RTC
+
     #region Código de justificativa para substituição de NFS-e NACIONAL
     /// <summary>
     /// Código de justificativa para substituição de NFS-e NACIONAL
@@ -16480,31 +18016,31 @@ namespace Unimake.Business.DFe.Servicos
         /// <summary>
         /// 1 -  Desenquandramento Simples NACIONAL
         /// </summary>
-        [XmlEnum("1")]
+        [XmlEnum("01")]
         DesenquadaSimplesNacional = 1,
 
         /// <summary>
         /// 2 - Enquadramento Simples NACIONAL
         /// </summary>
-        [XmlEnum("2")]
+        [XmlEnum("02")]
         EnquadraSimplesNacional = 2,
 
         /// <summary>
         /// 3 - Inclusão Retroativa Imunidade
         /// </summary>
-        [XmlEnum("3")]
+        [XmlEnum("03")]
         InclusaoRetroImunidade = 3,
 
         /// <summary>
         /// 4 - Exclusão Retroativa Imunidade
         /// </summary>
-        [XmlEnum("4")]
+        [XmlEnum("04")]
         ExclusaoRetroImunidade = 4,
 
         /// <summary>
         /// 5 - Rejeição tomador ou intermediário
         /// </summary>
-        [XmlEnum("5")]
+        [XmlEnum("05")]
         RejeicaoTomadorIntermediario = 5,
 
         /// <summary>
@@ -17073,6 +18609,12 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [XmlEnum("6")]
         SociedadeProfissionais = 6,
+
+        /// <summary>
+        /// 9 - Outros
+        /// </summary>
+        [XmlEnum("9")]
+        Outros = 9,
     }
     #endregion Tipo de regimes especiais de tributação NFS-e NACIONAL
 
@@ -17278,7 +18820,1568 @@ namespace Unimake.Business.DFe.Servicos
     }
     #endregion Código Motivo Cancelamento Por substituição NFS-e NACIONAL
 
+    #region Código Motivo Rejeição NFS-e NACIONAL
+    /// <summary>
+    /// Código de Motivo de Rejeição NFS-e NACIONAL
+    /// </summary>
+    public enum CodigoMotivoRejeicao
+    {
+        /// <summary>
+        /// 1 - NFS-e em duplicidade
+        /// </summary>
+        [XmlEnum("1")]
+        NFSeEmDuplicidadae = 1,
+
+        /// <summary>
+        /// 2 - NFS-e Já emitida pelo tomador
+        /// </summary>
+        [XmlEnum("2")]
+        NFSeJaEmitidaPeloTomador = 2,
+
+        /// <summary>
+        /// 3 - Não ocorrência do fato gerador
+        /// </summary>
+        [XmlEnum("3")]
+        NaoOcorrenciaDoFatoGerador = 3,
+
+        /// <summary>
+        /// 4 - Erro quanto a responsabilidade tributária 
+        /// </summary>
+        [XmlEnum("4")]
+        ErroQuantoAResponsabilidadeTributaria = 4,
+
+        /// <summary>
+        /// 5 - Erro quanto ao valor do serviço, valor das deduções ou serviço prestado ou data do fato gerador
+        /// </summary>
+        [XmlEnum("5")]
+        ErroQuantoAoValorDoServicoValorDasDeducoesOuServicoPrestadoOuDataDoFatoGerador = 5,
+
+        /// <summary>
+        /// 99 - Outros
+        /// </summary>
+        [XmlEnum("9")]
+        Outros = 9
+    }
+    #endregion Código Motivo Rejeição NFS-e NACIONAL
+
+    #region Código do motivo da solicitação de análise fiscal para cancelamento de NFS-e
+    /// <summary>
+    /// Código do motivo da solicitação de análise fiscal para cancelamento de NFS-e
+    /// </summary>
+    public enum CodigoMotivoSolicitacaoAnaliseFiscalCancelamento
+    {
+        /// <summary>
+        /// 1 - Erro na Emissão
+        /// </summary>
+        [XmlEnum("1")]
+        ErroNaEmissao = 1,
+
+        /// <summary>
+        /// 2 - Serviço não Prestado
+        /// </summary>
+        [XmlEnum("2")]
+        ServicoNaoPrestado = 2,
+
+        /// <summary>
+        /// 3 - Outros
+        /// </summary>
+        [XmlEnum("3")]
+        Outros = 3,
+    }
+    #endregion Código do motivo da solicitação de análise fiscal para cancelamento de NFS-e
+
+    #region Código de Justificativa da Análise Fiscal para Cancelamento Indeferido por Análise Fiscal NFS-e NACIONAL
+    /// <summary>
+    /// Resposta da análise da solicitação do cancelamento extemporâneo de NFS-e
+    /// </summary>
+    public enum CodJustAnaliseFiscalCancIndef
+    {
+        /// <summary>
+        /// 1 - Cancelamento Extemporâneo Indeferido
+        /// </summary>
+        [XmlEnum("1")]
+        CancelamentoExtemporaneoIndeferido = 1,
+
+        /// <summary>
+        /// 2 - Cancelamento Extemporâneo Indeferido Sem Análise de Mérito
+        /// </summary>
+        [XmlEnum("2")]
+        CancelamentoExtemporaneoIndeferidoSemAnaliseDeMerito = 2,
+    }
+    #endregion Código de Justificativa da Análise Fiscal para Cancelamento Indeferido por Análise Fiscal NFS-e NACIONAL
+
+    #region Código do Evento da NFS-e NACIONAL
+    /// <summary>
+    /// Código do Evento da NFS-e NACIONAL
+    /// </summary>
+    public enum CodigoEventoNFSe
+    {
+        /// <summary>
+        /// 1 - Cancelamento
+        /// </summary>
+        [XmlEnum("e101101")]
+        CancelamentoDeNFSe = 101101,
+
+        /// <summary>
+        /// 2 - Substituição
+        /// </summary>
+        [XmlEnum("e105102")]
+        CancelamentoDeNFSePorSubstituicao = 105102,
+
+        /// <summary>
+        /// 3 - Rejeição
+        /// </summary>
+        [XmlEnum("e105104")]
+        CancelamentoDeNFSeDeferidoPorAnaliseFiscal = 105104,
+
+        /// <summary>
+        /// 4 - Análise Fiscal para Cancelamento Extemporâneo
+        /// </summary>
+        [XmlEnum("e105105")]
+        CancelamentoDeNFSeIndeferidoPorAnaliseFiscal = 105105,
+
+        /// <summary>
+        /// 4 - Análise Fiscal para Cancelamento Extemporâneo
+        /// </summary>
+        [XmlEnum("e305101")]
+        CancelamentoDeNFSePorOficio = 305101,
+    }
+    #endregion Código do Evento da NFS-e NACIONAL
+
+    #region Código da Resposta da solicitação de análise fiscal para cancelamento de NFS-e
+    /// <summary>
+    /// Código da Resposta da solicitação de análise fiscal para cancelamento de NFS-e
+    /// </summary>
+    public enum CodJustAnaliseFiscalCancDef
+    {
+        /// <summary>
+        /// 1 - Cancelamento Extemporâneo Deferido
+        /// </summary>
+        [XmlEnum("1")]
+        CancelamentoExtemporaneoDeferido = 1,
+    }
+    #endregion Código da Resposta da solicitação de análise fiscal para cancelamento de NFS-e
+
+
     #endregion NFS-e NACIONAL
 
+    #region NFGas
 
+    /// <summary>
+    /// Tipo de emissão da NFGas
+    /// </summary>
+    public enum TipoEmissaoNFGas
+    {
+        /// <summary>
+        /// 1 - Normal
+        /// </summary>
+        [XmlEnum("1")]
+        Normal = 1,
+
+        /// <summary>
+        /// 2 - Contingência Off Line
+        /// </summary>
+        [XmlEnum("2")]
+        ContingenciaOffLine = 2
+    }
+
+    /// <summary>
+    /// Finalidade de emissão da NFGas
+    /// </summary>
+    public enum FinalidadeNFGas
+    {
+        /// <summary>
+        /// 0 - NFGas normal
+        /// </summary>
+        [XmlEnum("0")]
+        Normal = 0,
+
+        /// <summary>
+        /// 3 - NFGas substituição
+        /// </summary>
+        [XmlEnum("3")]
+        Substituicao = 3
+    }
+
+    /// <summary>
+    /// Tipo de faturamento da NFGas
+    /// </summary>
+    public enum TipoFaturamentoNFGas
+    {
+        /// <summary>
+        /// 1 - Faturamento Normal
+        /// </summary>
+        [XmlEnum("1")]
+        Normal = 1,
+
+        /// <summary>
+        /// 2 - Faturamento Agregado
+        /// </summary>
+        [XmlEnum("2")]
+        Agregado = 2,
+
+        /// <summary>
+        /// 3 - Faturamento Agregador
+        /// </summary>
+        [XmlEnum("3")]
+        Agregador = 3
+    }
+
+    /// <summary>
+    /// Tipo de operação governamental da NFGas
+    /// </summary>
+    public enum TipoOperacaoGovernamentalNFGas
+    {
+        /// <summary>
+        /// 1 - Fornecimento com pagamento posterior
+        /// </summary>
+        [XmlEnum("1")]
+        FornecimentoComPagamentoPosterior = 1,
+
+        /// <summary>
+        /// 2 - Recebimento do pagamento com fornecimento já realizado
+        /// </summary>
+        [XmlEnum("2")]
+        RecebimentoPagamentoFornecimentoRealizado = 2,
+
+        /// <summary>
+        /// 3 - Fornecimento com pagamento já realizado
+        /// </summary>
+        [XmlEnum("3")]
+        FornecimentoPagamentoRealizado = 3,
+
+        /// <summary>
+        /// 4 - Recebimento do pagamento com fornecimento posterior
+        /// </summary>
+        [XmlEnum("4")]
+        RecebimentoPagamentoPosterior = 4
+    }
+
+    /// <summary>
+    /// Tipo de ente governamental da NFGas
+    /// </summary>
+    public enum TipoEnteGovernamentalNFGas
+    {
+        /// <summary>
+        /// 1 - União
+        /// </summary>
+        [XmlEnum("1")]
+        Uniao = 1,
+
+        /// <summary>
+        /// 2 - Estados
+        /// </summary>
+        [XmlEnum("2")]
+        Estado = 2,
+
+        /// <summary>
+        /// 3 - Distrito Federal
+        /// </summary>
+        [XmlEnum("3")]
+        DistritoFederal = 3,
+
+        /// <summary>
+        /// 4 - Municípios
+        /// </summary>
+        [XmlEnum("4")]
+        Municipio = 4,
+
+        /// <summary>
+        /// 5 - Consórcio Público
+        /// </summary>
+        [XmlEnum("5")]
+        ConsorcioPublico = 5,
+
+        /// <summary>
+        /// 6 - Comitê Gestor do IBS
+        /// </summary>
+        [XmlEnum("6")]
+        ComiteGestorIBS = 6
+    }
+
+    /// <summary>
+    /// Tipo de instalação da NFGas
+    /// </summary>
+    public enum TipoInstalacaoNFGas
+    {
+        /// <summary>
+        /// 1 - Cativo
+        /// </summary>
+        [XmlEnum("1")]
+        Cativo = 1,
+
+        /// <summary>
+        /// 2 - Livre
+        /// </summary>
+        [XmlEnum("2")]
+        Livre = 2,
+
+        /// <summary>
+        /// 3 - Parcialmente Livre
+        /// </summary>
+        [XmlEnum("3")]
+        ParcialmenteLivre = 3
+    }
+
+    /// <summary>
+    /// Classe de consumo da NFGas
+    /// </summary>
+    public enum ClasseConsumoNFGas
+    {
+        /// <summary>
+        /// 01 - Comercial
+        /// </summary>
+        [XmlEnum("01")]
+        Comercial = 1,
+
+        /// <summary>
+        /// 02 - Industrial
+        /// </summary>
+        [XmlEnum("02")]
+        Industrial = 2,
+
+        /// <summary>
+        /// 03 - Residencial
+        /// </summary>
+        [XmlEnum("03")]
+        Residencial = 3,
+
+        /// <summary>
+        /// 04 - Termico
+        /// </summary>
+        [XmlEnum("04")]
+        Termico = 4,
+
+        /// <summary>
+        /// 05 - Veicular Posto
+        /// </summary>
+        [XmlEnum("05")]
+        VeicularPosto = 5,
+
+        /// <summary>
+        /// 06 - Veicular Frota
+        /// </summary>
+        [XmlEnum("06")]
+        VeicularFrota = 6,
+
+        /// <summary>
+        /// 07 - GNC
+        /// </summary>
+        [XmlEnum("07")]
+        GNC = 7,
+
+        /// <summary>
+        /// 08 - GNL
+        /// </summary>
+        [XmlEnum("08")]
+        GNL = 8,
+
+        /// <summary>
+        /// 09 - Cogeracao
+        /// </summary>
+        [XmlEnum("09")]
+        Cogeracao = 9,
+
+        /// <summary>
+        /// 10 - Refinaria
+        /// </summary>
+        [XmlEnum("10")]
+        Refinaria = 10,
+
+        /// <summary>
+        /// 99 - Outros
+        /// </summary>
+        [XmlEnum("99")]
+        Outros = 99
+    }
+
+    /// <summary>
+    /// Motivo de substituição da NFGas
+    /// </summary>
+    public enum MotivoSubstituicaoNFGas
+    {
+        /// <summary>
+        /// 01 - Erro de Leitura
+        /// </summary>
+        [XmlEnum("01")]
+        ErroLeitura = 1,
+
+        /// <summary>
+        /// 02 - Erro de Preço ou Erro de Tarifa
+        /// </summary>
+        [XmlEnum("02")]
+        ErroPrecoOuTarifa = 2,
+
+        /// <summary>
+        /// 03 - Decisão Judicial
+        /// </summary>
+        [XmlEnum("03")]
+        DecisaoJudicial = 3,
+
+        /// <summary>
+        /// 04 - Erro Cadastral
+        /// </summary>
+        [XmlEnum("04")]
+        ErroCadastral = 4,
+
+        /// <summary>
+        /// 05 - Erro de Tributação
+        /// </summary>
+        [XmlEnum("05")]
+        ErroTributacao = 5,
+
+        /// <summary>
+        /// 06 - Decisão da Reguladora
+        /// </summary>
+        [XmlEnum("06")]
+        DecisaoReguladora = 6
+    }
+
+    /// <summary>
+    /// Grandeza contratada da NFGas
+    /// </summary>
+    public enum GrandezaContratadaNFGas
+    {
+        /// <summary>
+        /// 1 - Demanda mínima
+        /// </summary>
+        [XmlEnum("1")]
+        DemandaMinima = 1,
+
+        /// <summary>
+        /// 2 - Montante de Uso do Sistema de Distribuição
+        /// </summary>
+        [XmlEnum("2")]
+        MontanteUsoSistemaDistribuicao = 2,
+
+        /// <summary>
+        /// 3 - Encargo de Capacidade
+        /// </summary>
+        [XmlEnum("3")]
+        EncargoCapacidade = 3,
+
+        /// <summary>
+        /// 4 - Volume Contratado
+        /// </summary>
+        [XmlEnum("4")]
+        VolumeContratado = 4
+    }
+
+    /// <summary>
+    /// Grupo de medida de gás da NFGas
+    /// </summary>
+    public enum GrupoMedidaGasNFGas
+    {
+        /// <summary>
+        /// 01 - Grupo Medida 01
+        /// </summary>
+        [XmlEnum("01")]
+        GrupoMedida01 = 1,
+
+        /// <summary>
+        /// 02 - Grupo Medida 02
+        /// </summary>
+        [XmlEnum("02")]
+        GrupoMedida02 = 2,
+
+        /// <summary>
+        /// 03 - Grupo Medida 03
+        /// </summary>
+        [XmlEnum("03")]
+        GrupoMedida03 = 3,
+
+        /// <summary>
+        /// 04 - Grupo Medida 04
+        /// </summary>
+        [XmlEnum("04")]
+        GrupoMedida04 = 4,
+
+        /// <summary>
+        /// 05 - Grupo Medida 05
+        /// </summary>
+        [XmlEnum("05")]
+        GrupoMedida05 = 5,
+
+        /// <summary>
+        /// 06 - Grupo Medida 06
+        /// </summary>
+        [XmlEnum("06")]
+        GrupoMedida06 = 6,
+
+        /// <summary>
+        /// 07 - Grupo Medida 07
+        /// </summary>
+        [XmlEnum("07")]
+        GrupoMedida07 = 7,
+
+        /// <summary>
+        /// 08 - Grupo Medida 08
+        /// </summary>
+        [XmlEnum("08")]
+        GrupoMedida08 = 8,
+
+        /// <summary>
+        /// 99 - Outros
+        /// </summary>
+        [XmlEnum("99")]
+        Outros = 99
+    }
+
+    /// <summary>
+    /// Unidade básica de medida da NFGas
+    /// </summary>
+    public enum UnidadeMedidaNFGas
+    {
+        /// <summary>
+        /// 1 - m3
+        /// </summary>
+        [XmlEnum("1")]
+        M3 = 1,
+
+        /// <summary>
+        /// 2 - Unidade
+        /// </summary>
+        [XmlEnum("2")]
+        Unidade = 2
+    }
+
+    /// <summary>
+    /// Origem da quantidade faturada da NFGas
+    /// </summary>
+    public enum OrigemQuantidadeFaturadaNFGas
+    {
+        /// <summary>
+        /// 1 - Média
+        /// </summary>
+        [XmlEnum("1")]
+        Media = 1,
+
+        /// <summary>
+        /// 2 - Medido
+        /// </summary>
+        [XmlEnum("2")]
+        Medido = 2,
+
+        /// <summary>
+        /// 3 - Contratada
+        /// </summary>
+        [XmlEnum("3")]
+        Contratada = 3,
+
+        /// <summary>
+        /// 4 - Residual estimado
+        /// </summary>
+        [XmlEnum("4")]
+        ResidualEstimado = 4,
+
+        /// <summary>
+        /// 5 - Residual medido
+        /// </summary>
+        [XmlEnum("5")]
+        ResidualMedido = 5,
+
+        /// <summary>
+        /// 6 - Sem quantidade
+        /// </summary>
+        [XmlEnum("6")]
+        SemQuantidade = 6,
+
+        /// <summary>
+        /// 7 - Por Faixa
+        /// </summary>
+        [XmlEnum("7")]
+        PorFaixa = 7
+    }
+
+    /// <summary>
+    /// Tipo de evento da NFGas
+    /// </summary>
+    public enum TipoEventoNFGas
+    {
+        /// <summary>
+        /// 110111 - Cancelamento
+        /// </summary>
+        [XmlEnum("110111")]
+        Cancelamento = 110111,
+
+        /// <summary>
+        /// 110300 - Vinculação do Pagamento
+        /// </summary>
+        [XmlEnum("110300")]
+        VinculacaoPagamento = 110300,
+
+        /// <summary>
+        /// 110301 - Cancelamento da vinculação do pagamento
+        /// </summary>
+        [XmlEnum("110301")]
+        CancelamentoVinculacaoPagamento = 110301
+    }
+
+    #endregion NFGas
+
+    #region CIOT
+
+    /// <summary>
+    /// Tipo da operação de transporte do CIOT
+    /// </summary>
+    public enum TipoOperacaoTransporteCIOT
+    {
+        /// <summary>
+        /// 1 - Operação carga lotação
+        /// </summary>
+        [XmlEnum("1")]
+        CargaLotacao = 1,
+
+        /// <summary>
+        /// 2 - Operação carga fracionada
+        /// </summary>
+        [XmlEnum("2")]
+        CargaFracionada = 2,
+
+        /// <summary>
+        /// 3 - Operação TAC-agregado
+        /// </summary>
+        [XmlEnum("3")]
+        TACAgregado = 3
+    }
+
+    /// <summary>
+    /// Tipo de pagamento do frete do CIOT
+    /// </summary>
+    public enum TipoPagamentoFreteCIOT
+    {
+        /// <summary>
+        /// 1 - Instituição de pagamento
+        /// </summary>
+        [XmlEnum("1")]
+        InstituicaoPagamento = 1,
+
+        /// <summary>
+        /// 2 - Conta corrente
+        /// </summary>
+        [XmlEnum("2")]
+        ContaCorrente = 2,
+
+        /// <summary>
+        /// 3 - Conta poupança
+        /// </summary>
+        [XmlEnum("3")]
+        ContaPoupanca = 3,
+
+        /// <summary>
+        /// 4 - Conta pagamento
+        /// </summary>
+        [XmlEnum("4")]
+        ContaPagamento = 4,
+
+        /// <summary>
+        /// 5 - Outros
+        /// </summary>
+        [XmlEnum("5")]
+        Outros = 5,
+
+        /// <summary>
+        /// 6 - Pix
+        /// </summary>
+        [XmlEnum("6")]
+        Pix = 6
+    }
+
+    /// <summary>
+    /// Indicador da forma de pagamento do CIOT
+    /// </summary>
+    public enum IndicadorPagamentoCIOT
+    {
+        /// <summary>
+        /// 0 - A vista
+        /// </summary>
+        [XmlEnum("0")]
+        AVista = 0,
+
+        /// <summary>
+        /// 1 - A prazo
+        /// </summary>
+        [XmlEnum("1")]
+        APrazo = 1
+    }
+
+    /// <summary>
+    /// Tipo de carga do CIOT
+    /// </summary>
+    public enum TipoCargaCIOT
+    {
+        /// <summary>
+        /// 1 - Granel sólido
+        /// </summary>
+        [XmlEnum("1")]
+        GranelSolido = 1,
+
+        /// <summary>
+        /// 2 - Granel líquido
+        /// </summary>
+        [XmlEnum("2")]
+        GranelLiquido = 2,
+
+        /// <summary>
+        /// 3 - Frigorificada ou aquecida
+        /// </summary>
+        [XmlEnum("3")]
+        FrigorificadaOuAquecida = 3,
+
+        /// <summary>
+        /// 4 - Conteinerizada
+        /// </summary>
+        [XmlEnum("4")]
+        Conteinerizada = 4,
+
+        /// <summary>
+        /// 5 - Carga geral
+        /// </summary>
+        [XmlEnum("5")]
+        CargaGeral = 5,
+
+        /// <summary>
+        /// 6 - Neogranel
+        /// </summary>
+        [XmlEnum("6")]
+        Neogranel = 6,
+
+        /// <summary>
+        /// 7 - Perigosa granel sólido
+        /// </summary>
+        [XmlEnum("7")]
+        PerigosaGranelSolido = 7,
+
+        /// <summary>
+        /// 8 - Perigosa granel líquido
+        /// </summary>
+        [XmlEnum("8")]
+        PerigosaGranelLiquido = 8,
+
+        /// <summary>
+        /// 9 - Perigosa frigorificada ou aquecida
+        /// </summary>
+        [XmlEnum("9")]
+        PerigosaFrigorificadaOuAquecida = 9,
+
+        /// <summary>
+        /// 10 - Perigosa conteinerizada
+        /// </summary>
+        [XmlEnum("10")]
+        PerigosaConteinerizada = 10,
+
+        /// <summary>
+        /// 11 - Perigosa carga geral
+        /// </summary>
+        [XmlEnum("11")]
+        PerigosaCargaGeral = 11,
+
+        /// <summary>
+        /// 12 - Carga granel pressurizada
+        /// </summary>
+        [XmlEnum("12")]
+        CargaGranelPressurizada = 12
+    }
+
+    /// <summary>
+    /// Tipo de transportador retornado pelo CIOT
+    /// </summary>
+    public enum TipoTransportadorCIOT
+    {
+        /// <summary>
+        /// TAC - Transportador Autônomo de Cargas
+        /// </summary>
+        [XmlEnum("TAC")]
+        TAC,
+
+        /// <summary>
+        /// ETC - Empresa de Transporte Rodoviário de Cargas
+        /// </summary>
+        [XmlEnum("ETC")]
+        ETC,
+
+        /// <summary>
+        /// CTC - Cooperativa de Transporte Rodoviário de Cargas
+        /// </summary>
+        [XmlEnum("CTC")]
+        CTC
+    }
+
+    #endregion CIOT
+
+    #region EBoleto
+
+    /// <summary>
+    /// Tipo de inscricao (EBoleto)
+    /// </summary>
+    public enum EBoletoTipoInscricao
+    {
+        /// <summary>
+        /// 0 - Nao informado
+        /// </summary>
+        [XmlEnum("0")]
+        NaoInformado = 0,
+
+        /// <summary>
+        /// 1 - CPF
+        /// </summary>
+        [XmlEnum("1")]
+        CPF = 1,
+
+        /// <summary>
+        /// 2 - CNPJ
+        /// </summary>
+        [XmlEnum("2")]
+        CNPJ = 2,
+
+        /// <summary>
+        /// 3 - CNPJ com mais de 14 digitos
+        /// </summary>
+        [XmlEnum("3")]
+        CNPJMais14 = 3,
+
+        /// <summary>
+        /// 9 - Outros
+        /// </summary>
+        [XmlEnum("9")]
+        Outros = 9
+    }
+
+    /// <summary>
+    /// Especie do titulo (EBoleto)
+    /// </summary>
+    public enum EBoletoEspecieTitulo
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 4 - Codigo 4
+        /// </summary>
+        [XmlEnum("4")]
+        Codigo4 = 4,
+
+        /// <summary>
+        /// 5 - Codigo 5
+        /// </summary>
+        [XmlEnum("5")]
+        Codigo5 = 5,
+
+        /// <summary>
+        /// 6 - Codigo 6
+        /// </summary>
+        [XmlEnum("6")]
+        Codigo6 = 6,
+
+        /// <summary>
+        /// 7 - Codigo 7
+        /// </summary>
+        [XmlEnum("7")]
+        Codigo7 = 7,
+
+        /// <summary>
+        /// 8 - Codigo 8
+        /// </summary>
+        [XmlEnum("8")]
+        Codigo8 = 8,
+
+        /// <summary>
+        /// 9 - Codigo 9
+        /// </summary>
+        [XmlEnum("9")]
+        Codigo9 = 9,
+
+        /// <summary>
+        /// 10 - Codigo 10
+        /// </summary>
+        [XmlEnum("10")]
+        Codigo10 = 10,
+
+        /// <summary>
+        /// 11 - Codigo 11
+        /// </summary>
+        [XmlEnum("11")]
+        Codigo11 = 11,
+
+        /// <summary>
+        /// 12 - Codigo 12
+        /// </summary>
+        [XmlEnum("12")]
+        Codigo12 = 12,
+
+        /// <summary>
+        /// 13 - Codigo 13
+        /// </summary>
+        [XmlEnum("13")]
+        Codigo13 = 13,
+
+        /// <summary>
+        /// 14 - Codigo 14
+        /// </summary>
+        [XmlEnum("14")]
+        Codigo14 = 14,
+
+        /// <summary>
+        /// 15 - Codigo 15
+        /// </summary>
+        [XmlEnum("15")]
+        Codigo15 = 15,
+
+        /// <summary>
+        /// 16 - Codigo 16
+        /// </summary>
+        [XmlEnum("16")]
+        Codigo16 = 16,
+
+        /// <summary>
+        /// 17 - Codigo 17
+        /// </summary>
+        [XmlEnum("17")]
+        Codigo17 = 17,
+
+        /// <summary>
+        /// 18 - Codigo 18
+        /// </summary>
+        [XmlEnum("18")]
+        Codigo18 = 18,
+
+        /// <summary>
+        /// 19 - Codigo 19
+        /// </summary>
+        [XmlEnum("19")]
+        Codigo19 = 19,
+
+        /// <summary>
+        /// 20 - Codigo 20
+        /// </summary>
+        [XmlEnum("20")]
+        Codigo20 = 20,
+
+        /// <summary>
+        /// 21 - Codigo 21
+        /// </summary>
+        [XmlEnum("21")]
+        Codigo21 = 21,
+
+        /// <summary>
+        /// 22 - Codigo 22
+        /// </summary>
+        [XmlEnum("22")]
+        Codigo22 = 22,
+
+        /// <summary>
+        /// 23 - Codigo 23
+        /// </summary>
+        [XmlEnum("23")]
+        Codigo23 = 23,
+
+        /// <summary>
+        /// 24 - Codigo 24
+        /// </summary>
+        [XmlEnum("24")]
+        Codigo24 = 24,
+
+        /// <summary>
+        /// 25 - Codigo 25
+        /// </summary>
+        [XmlEnum("25")]
+        Codigo25 = 25,
+
+        /// <summary>
+        /// 26 - Codigo 26
+        /// </summary>
+        [XmlEnum("26")]
+        Codigo26 = 26,
+
+        /// <summary>
+        /// 27 - Codigo 27
+        /// </summary>
+        [XmlEnum("27")]
+        Codigo27 = 27,
+
+        /// <summary>
+        /// 28 - Codigo 28
+        /// </summary>
+        [XmlEnum("28")]
+        Codigo28 = 28,
+
+        /// <summary>
+        /// 29 - Codigo 29
+        /// </summary>
+        [XmlEnum("29")]
+        Codigo29 = 29,
+
+        /// <summary>
+        /// 30 - Codigo 30
+        /// </summary>
+        [XmlEnum("30")]
+        Codigo30 = 30,
+
+        /// <summary>
+        /// 31 - Codigo 31
+        /// </summary>
+        [XmlEnum("31")]
+        Codigo31 = 31,
+
+        /// <summary>
+        /// 32 - Codigo 32
+        /// </summary>
+        [XmlEnum("32")]
+        Codigo32 = 32,
+
+        /// <summary>
+        /// 43 - Codigo 43
+        /// </summary>
+        [XmlEnum("43")]
+        Codigo43 = 43,
+
+        /// <summary>
+        /// 44 - Codigo 44
+        /// </summary>
+        [XmlEnum("44")]
+        Codigo44 = 44,
+
+        /// <summary>
+        /// 47 - Codigo 47
+        /// </summary>
+        [XmlEnum("47")]
+        Codigo47 = 47,
+
+        /// <summary>
+        /// 50 - Codigo 50
+        /// </summary>
+        [XmlEnum("50")]
+        Codigo50 = 50,
+
+        /// <summary>
+        /// 54 - Codigo 54
+        /// </summary>
+        [XmlEnum("54")]
+        Codigo54 = 54,
+
+        /// <summary>
+        /// 55 - Codigo 55
+        /// </summary>
+        [XmlEnum("55")]
+        Codigo55 = 55,
+
+        /// <summary>
+        /// 56 - Codigo 56
+        /// </summary>
+        [XmlEnum("56")]
+        Codigo56 = 56,
+
+        /// <summary>
+        /// 99 - Codigo 99
+        /// </summary>
+        [XmlEnum("99")]
+        Codigo99 = 99
+    }
+
+    /// <summary>
+    /// Identificacao de distribuicao (EBoleto)
+    /// </summary>
+    public enum EBoletoIdentificacaoDistribuicao
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1
+    }
+
+    /// <summary>
+    /// Identificacao de emissao (EBoleto)
+    /// </summary>
+    public enum EBoletoIdentificacaoEmissao
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1
+    }
+
+    /// <summary>
+    /// Tipo de baixa/devolucao (EBoleto)
+    /// </summary>
+    public enum EBoletoTipoBaixaDevolucao
+    {
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 9 - Codigo 9
+        /// </summary>
+        [XmlEnum("9")]
+        Codigo9 = 9
+    }
+
+    /// <summary>
+    /// Tipo de desconto (EBoleto)
+    /// </summary>
+    public enum EBoletoTipoDesconto
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 4 - Codigo 4
+        /// </summary>
+        [XmlEnum("4")]
+        Codigo4 = 4,
+
+        /// <summary>
+        /// 5 - Codigo 5
+        /// </summary>
+        [XmlEnum("5")]
+        Codigo5 = 5,
+
+        /// <summary>
+        /// 6 - Codigo 6
+        /// </summary>
+        [XmlEnum("6")]
+        Codigo6 = 6,
+
+        /// <summary>
+        /// 7 - Codigo 7
+        /// </summary>
+        [XmlEnum("7")]
+        Codigo7 = 7,
+
+        /// <summary>
+        /// 8 - Codigo 8
+        /// </summary>
+        [XmlEnum("8")]
+        Codigo8 = 8,
+
+        /// <summary>
+        /// 9 - Codigo 9
+        /// </summary>
+        [XmlEnum("9")]
+        Codigo9 = 9,
+
+        /// <summary>
+        /// 10 - Codigo 10
+        /// </summary>
+        [XmlEnum("10")]
+        Codigo10 = 10,
+
+        /// <summary>
+        /// 11 - Codigo 11
+        /// </summary>
+        [XmlEnum("11")]
+        Codigo11 = 11,
+
+        /// <summary>
+        /// 12 - Codigo 12
+        /// </summary>
+        [XmlEnum("12")]
+        Codigo12 = 12,
+
+        /// <summary>
+        /// 13 - Codigo 13
+        /// </summary>
+        [XmlEnum("13")]
+        Codigo13 = 13
+    }
+
+    /// <summary>
+    /// Tipo de juros (EBoleto)
+    /// </summary>
+    public enum EBoletoTipoJuros
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 4 - Codigo 4
+        /// </summary>
+        [XmlEnum("4")]
+        Codigo4 = 4,
+
+        /// <summary>
+        /// 5 - Codigo 5
+        /// </summary>
+        [XmlEnum("5")]
+        Codigo5 = 5,
+
+        /// <summary>
+        /// 6 - Codigo 6
+        /// </summary>
+        [XmlEnum("6")]
+        Codigo6 = 6
+    }
+
+    /// <summary>
+    /// Tipo de multa (EBoleto)
+    /// </summary>
+    public enum EBoletoTipoMulta
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3
+    }
+
+    /// <summary>
+    /// Tipo de protesto (EBoleto)
+    /// </summary>
+    public enum EBoletoTipoProtesto
+    {
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 4 - Codigo 4
+        /// </summary>
+        [XmlEnum("4")]
+        Codigo4 = 4,
+
+        /// <summary>
+        /// 5 - Codigo 5
+        /// </summary>
+        [XmlEnum("5")]
+        Codigo5 = 5,
+
+        /// <summary>
+        /// 6 - Codigo 6
+        /// </summary>
+        [XmlEnum("6")]
+        Codigo6 = 6,
+
+        /// <summary>
+        /// 7 - Codigo 7
+        /// </summary>
+        [XmlEnum("7")]
+        Codigo7 = 7,
+
+        /// <summary>
+        /// 8 - Codigo 8
+        /// </summary>
+        [XmlEnum("8")]
+        Codigo8 = 8,
+
+        /// <summary>
+        /// 9 - Codigo 9
+        /// </summary>
+        [XmlEnum("9")]
+        Codigo9 = 9
+    }
+
+    /// <summary>
+    /// Instrucao (EBoleto)
+    /// </summary>
+    public enum EBoletoInstrucao
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 4 - Codigo 4
+        /// </summary>
+        [XmlEnum("4")]
+        Codigo4 = 4,
+
+        /// <summary>
+        /// 5 - Codigo 5
+        /// </summary>
+        [XmlEnum("5")]
+        Codigo5 = 5,
+
+        /// <summary>
+        /// 6 - Codigo 6
+        /// </summary>
+        [XmlEnum("6")]
+        Codigo6 = 6,
+
+        /// <summary>
+        /// 7 - Codigo 7
+        /// </summary>
+        [XmlEnum("7")]
+        Codigo7 = 7,
+
+        /// <summary>
+        /// 8 - Codigo 8
+        /// </summary>
+        [XmlEnum("8")]
+        Codigo8 = 8,
+
+        /// <summary>
+        /// 9 - Codigo 9
+        /// </summary>
+        [XmlEnum("9")]
+        Codigo9 = 9,
+
+        /// <summary>
+        /// 10 - Codigo 10
+        /// </summary>
+        [XmlEnum("10")]
+        Codigo10 = 10
+    }
+
+    /// <summary>
+    /// Instrucao adicional (EBoleto)
+    /// </summary>
+    public enum EBoletoInstrucaoAdicional
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3,
+
+        /// <summary>
+        /// 4 - Codigo 4
+        /// </summary>
+        [XmlEnum("4")]
+        Codigo4 = 4
+    }
+
+    /// <summary>
+    /// Formato de imagem do QRCode (EBoleto)
+    /// </summary>
+    public enum EBoletoQrCodeImageFormat
+    {
+        /// <summary>
+        /// 0 - Codigo 0
+        /// </summary>
+        [XmlEnum("0")]
+        Codigo0 = 0,
+
+        /// <summary>
+        /// 1 - Codigo 1
+        /// </summary>
+        [XmlEnum("1")]
+        Codigo1 = 1,
+
+        /// <summary>
+        /// 2 - Codigo 2
+        /// </summary>
+        [XmlEnum("2")]
+        Codigo2 = 2,
+
+        /// <summary>
+        /// 3 - Codigo 3
+        /// </summary>
+        [XmlEnum("3")]
+        Codigo3 = 3
+    }
+
+    #endregion EBoleto
+
+    #region PIX
+
+    /// <summary>
+    /// Tipo de cobrança (PIX)
+    /// </summary>
+    public enum PixTipoCobranca
+    {
+        /// <summary>
+        /// 0 - Cobrança imediata
+        /// </summary>
+        [XmlEnum("0")]
+        Cob = 0,
+
+        /// <summary>
+        /// 1 - Cobrança com vencimento
+        /// </summary>
+        [XmlEnum("1")]
+        CobV = 1
+    }
+
+    /// <summary>
+    /// Formato de imagem do QRCode (PIX)
+    /// </summary>
+    public enum PixQrCodeImageFormat
+    {
+        /// <summary>
+        /// 0 - PNG
+        /// </summary>
+        [XmlEnum("0")]
+        PNG = 0,
+
+        /// <summary>
+        /// 1 - JPEG
+        /// </summary>
+        [XmlEnum("1")]
+        JPEG = 1,
+
+        /// <summary>
+        /// 2 - BMP
+        /// </summary>
+        [XmlEnum("2")]
+        BMP = 2,
+
+        /// <summary>
+        /// 3 - GIF
+        /// </summary>
+        [XmlEnum("3")]
+        GIF = 3
+    }
+
+    #endregion PIX
 }

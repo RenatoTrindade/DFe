@@ -1,0 +1,65 @@
+<RecepcionarDpsEnvio xmlns="http://www.fiorilli.com.br/nfse-nacional">
+	<DPS xmlns="http://www.sped.fazenda.gov.br/nfse" versao="1.01">
+		<infDPS Id="DPS999999999999999999999999999999999999999999">
+			<tpAmb>1</tpAmb>
+			<dhEmi>2026-05-19T00:00:00-03:00</dhEmi>
+			<verAplic>1.01.01</verAplic>
+			<serie>1</serie>
+			<nDPS>999</nDPS>
+			<dCompet>2026-05-19</dCompet>
+			<tpEmit>1</tpEmit>
+			<cLocEmi>9999999</cLocEmi>
+			<prest>
+				<CNPJ>99999999999999</CNPJ>
+				<regTrib>
+					<opSimpNac>3</opSimpNac>
+					<regApTribSN>1</regApTribSN>
+					<regEspTrib>0</regEspTrib>
+				</regTrib>
+			</prest>
+			<toma>
+				<CNPJ>88888888888888</CNPJ>
+				<xNome>NOME DO TOMADOR DE SERVICOS LTDA</xNome>
+				<end>
+					<endNac>
+						<cMun>9999999</cMun>
+						<CEP>99999999</CEP>
+					</endNac>
+					<xLgr>NOME DO LOGRADOURO OU AVENIDA</xLgr>
+					<nro>999</nro>
+					<xBairro>NOME DO BAIRRO</xBairro>
+				</end>
+				<email>email@dominio.com.br</email>
+			</toma>
+			<serv>
+				<locPrest>
+					<cLocPrestacao>9999999</cLocPrestacao>
+				</locPrest>
+				<cServ>
+					<cTribNac>070901</cTribNac>
+					<xDescServ>DESCRICAO PADRAO DOS SERVICOS PRESTADOS NO PERIODO</xDescServ>
+					<cNBS>124043300</cNBS>
+					<cIntContrib>00001</cIntContrib>
+				</cServ>
+			</serv>
+			<valores>
+				<vServPrest>
+					<vServ>100.00</vServ>
+				</vServPrest>
+				<trib>
+					<tribMun>
+						<tribISSQN>1</tribISSQN>
+						<tpRetISSQN>1</tpRetISSQN>
+					</tribMun>
+					<totTrib>
+						<vTotTrib>
+							<vTotTribFed>0.00</vTotTribFed>
+							<vTotTribEst>0.00</vTotTribEst>
+							<vTotTribMun>0.00</vTotTribMun>
+						</vTotTrib>
+					</totTrib>
+				</trib>
+			</valores>
+		</infDPS>
+	</DPS>
+</RecepcionarDpsEnvio>

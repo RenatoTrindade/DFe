@@ -146,8 +146,19 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Informações da NFe/NFCe
         /// </summary>
-        [XmlElement("infNFe")]
+        [XmlIgnore]
+        [Obsolete("Utilize a propriedade InfNFeField para acessar as informações da NFe/NFCe. A propriedade InfNFe é uma lista para manter a compatibilidade com o schema, mas a NFe/NFCe só pode conter um elemento InfNFe, logo, o conteúdo da lista InfNFe deve ser sempre 0 (zero) ou 1 (um).", false)]
         public List<InfNFe> InfNFe { get; set; }
+
+        /// <summary>
+        /// Informações da NFe/NFCe
+        /// </summary>
+        [XmlElement("infNFe")]
+        public InfNFe InfNFeField
+        {
+            get => (InfNFe != null && InfNFe.Count > 0 ? InfNFe[0] : null);
+            set => InfNFe = (value == null ? null : new List<InfNFe> { value });
+        }
 
         /// <summary>
         /// Informações suplementares da NFe/NFCe
@@ -436,6 +447,16 @@ namespace Unimake.Business.DFe.Xml.NFe
         public Agropecuario Agropecuario { get; set; }
 
         /// <summary>
+        /// Grupo de Informação do Provedor de Assinatura e Autorização
+        /// </summary>
+#if INTEROP
+        [XmlElement("infPAA", Order = 21)]
+#else
+        [XmlElement("infPAA")]
+#endif
+        public InfPAA InfPAA { get; set; }
+
+        /// <summary>
         /// ID da NFe/NFCe. Composição: NFe + chave
         /// </summary>
         [XmlAttribute(AttributeName = "Id", DataType = "ID")]
@@ -459,12 +480,20 @@ namespace Unimake.Business.DFe.Xml.NFe
         {
             get
             {
+                var cnpjcpfEmissor = (string.IsNullOrWhiteSpace(Emit.CNPJ) ? Emit.CPF?.PadLeft(14, '0') : Emit.CNPJ.PadLeft(14, '0'));
+
+                //Nota fiscal emitida, normalmente, pelo site da SEFAZ. Neste caso, o CNPJ/CPF do emitente será buscado na tag Avulsa.
+                if (Avulsa != null && !string.IsNullOrWhiteSpace(Avulsa.CNPJ))
+                {
+                    cnpjcpfEmissor = Avulsa.CNPJ.PadLeft(14, '0');
+                }
+
                 var conteudoChaveDFe = new XMLUtility.ConteudoChaveDFe
                 {
                     UFEmissor = (UFBrasil)(int)Ide.CUF,
                     AnoEmissao = Ide.DhEmi.ToString("yy"),
                     MesEmissao = Ide.DhEmi.ToString("MM"),
-                    CNPJCPFEmissor = (string.IsNullOrWhiteSpace(Emit.CNPJ) ? Emit.CPF?.PadLeft(14, '0') : Emit.CNPJ.PadLeft(14, '0')),
+                    CNPJCPFEmissor = cnpjcpfEmissor,
                     Modelo = (ModeloDFe)(int)Ide.Mod,
                     Serie = Ide.Serie,
                     NumeroDoctoFiscal = Ide.NNF,
@@ -820,6 +849,12 @@ namespace Unimake.Business.DFe.Xml.NFe
 #endif
 
         /// <summary>
+        /// Código indicador do local da operação de fornecimento
+        /// </summary>
+        [XmlElement("cIndOp")]
+        public string CIndOp { get; set; }
+
+        /// <summary>
         /// Processo de emissão utilizado
         /// </summary>
         [XmlElement("procEmi")]
@@ -920,6 +955,8 @@ namespace Unimake.Business.DFe.Xml.NFe
 
             return retorna;
         }
+
+        public bool ShouldSerializeCIndOp() => !string.IsNullOrWhiteSpace(CIndOp);
 
         public bool ShouldSerializeDhSaiEntField()
         {
@@ -1360,6 +1397,12 @@ namespace Unimake.Business.DFe.Xml.NFe
         [XmlElement("CRT")]
         public CRT CRT { get; set; }
 
+        /// <summary>
+        /// Inscrição do emitente na Suframa
+        /// </summary>
+        [XmlElement("ISUFEmit")]
+        public string ISUFEmit { get; set; }
+
         #region ShouldSerialize
 
         public bool ShouldSerializeCNPJ() => !string.IsNullOrWhiteSpace(CNPJ);
@@ -1371,6 +1414,8 @@ namespace Unimake.Business.DFe.Xml.NFe
         public bool ShouldSerializeIM() => !string.IsNullOrWhiteSpace(IM);
 
         public bool ShouldSerializeCNAE() => !string.IsNullOrWhiteSpace(CNAE) && !string.IsNullOrWhiteSpace(IM);
+
+        public bool ShouldSerializeISUFEmit() => !string.IsNullOrWhiteSpace(ISUFEmit);
 
         #endregion
     }
@@ -6028,12 +6073,6 @@ namespace Unimake.Business.DFe.Xml.NFe
             get => VICMSMonoRet.ToString("F2", CultureInfo.InvariantCulture);
             set => VICMSMonoRet = Converter.ToDouble(value);
         }
-
-        #region ShouldSerialize
-
-        public bool ShouldSerializeQBCMonoRet() => QBCMonoRet > 0;
-
-        #endregion
     }
 
     /// <summary>
@@ -7632,13 +7671,13 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Origem da mercadoria
         /// </summary>
-        [XmlElement("orig")]
+        [XmlElement("orig", Order = 1)]
         public OrigemMercadoria Orig { get; set; }
 
         /// <summary>
         /// 500 – ICMS cobrado anterirmente por substituição tributária (substituído) ou por antecipação
         /// </summary>
-        [XmlElement("CSOSN")]
+        [XmlElement("CSOSN", Order = 2)]
         public string CSOSN { get; set; } = "500";
 
         /// <summary>
@@ -7650,7 +7689,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VBCSTRet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vBCSTRet")]
+        [XmlElement("vBCSTRet", Order = 3)]
         public string VBCSTRetField
         {
             get => VBCSTRet?.ToString("F2", CultureInfo.InvariantCulture);
@@ -7666,7 +7705,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade PST para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("pST")]
+        [XmlElement("pST", Order = 4)]
         public string PSTField
         {
             get => PST?.ToString("F4", CultureInfo.InvariantCulture);
@@ -7682,7 +7721,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VICMSSubstituto para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vICMSSubstituto")]
+        [XmlElement("vICMSSubstituto", Order = 5)]
         public string VICMSSubstitutoField
         {
             get => VICMSSubstituto?.ToString("F2", CultureInfo.InvariantCulture);
@@ -7698,7 +7737,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VICMSSTRet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vICMSSTRet")]
+        [XmlElement("vICMSSTRet", Order = 6)]
         public string VICMSSTRetField
         {
             get => VICMSSTRet?.ToString("F2", CultureInfo.InvariantCulture);
@@ -7714,7 +7753,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VBCFCPSTRet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vBCFCPSTRet")]
+        [XmlElement("vBCFCPSTRet", Order = 7)]
         public string VBCFCPSTRetField
         {
             get => VBCFCPSTRet.ToString("F2", CultureInfo.InvariantCulture);
@@ -7730,7 +7769,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade PFCPSTRet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("pFCPSTRet")]
+        [XmlElement("pFCPSTRet", Order = 8)]
         public string PFCPSTRetField
         {
             get => PFCPSTRet.ToString("F4", CultureInfo.InvariantCulture);
@@ -7746,7 +7785,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VFCPSTRet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vFCPSTRet")]
+        [XmlElement("vFCPSTRet", Order = 9)]
         public string VFCPSTRetField
         {
             get => VFCPSTRet.ToString("F2", CultureInfo.InvariantCulture);
@@ -7762,7 +7801,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade PRedBCEfet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("pRedBCEfet")]
+        [XmlElement("pRedBCEfet", Order = 10)]
         public string PRedBCEfetField
         {
             get => PRedBCEfet.ToString("F4", CultureInfo.InvariantCulture);
@@ -7778,7 +7817,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VBCEfet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vBCEfet")]
+        [XmlElement("vBCEfet", Order = 11)]
         public string VBCEfetField
         {
             get => VBCEfet.ToString("F2", CultureInfo.InvariantCulture);
@@ -7794,7 +7833,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade PICMSEfet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("pICMSEfet")]
+        [XmlElement("pICMSEfet", Order = 12)]
         public string PICMSEfetField
         {
             get => PICMSEfet.ToString("F4", CultureInfo.InvariantCulture);
@@ -7810,7 +7849,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade VICMSEfet para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vICMSEfet")]
+        [XmlElement("vICMSEfet", Order = 13)]
         public string VICMSEfetField
         {
             get => VICMSEfet.ToString("F2", CultureInfo.InvariantCulture);
@@ -12856,6 +12895,81 @@ namespace Unimake.Business.DFe.Xml.NFe
     }
 
     /// <summary>
+    /// Grupo de Informação do Provedor de Assinatura e Autorização
+    /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.InfPAA")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public class InfPAA
+    {
+        /// <summary>
+        /// CNPJ do Provedor de Assinatura e Autorização
+        /// </summary>
+        [XmlElement("CNPJPAA")]
+        public string CNPJPAA { get; set; }
+
+        /// <summary>
+        /// Assinatura RSA do Emitente para DFe gerados por PAA
+        /// </summary>
+        [XmlElement("PAASignature")]
+        public PAASignature PAASignature { get; set; }
+    }
+
+    /// <summary>
+    /// Assinatura RSA do Emitente para DFe gerados por PAA
+    /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.PAASignature")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public class PAASignature
+    {
+        /// <summary>
+        /// Assinatura digital padrão RSA
+        /// </summary>
+        [XmlElement("SignatureValue", DataType = "base64Binary")]
+        public byte[] SignatureValue { get; set; }
+
+        /// <summary>
+        /// Chave Publica no padrão XML RSA Key
+        /// </summary>
+        [XmlElement("RSAKeyValue")]
+        public RSAKeyValue RSAKeyValue { get; set; }
+    }
+
+    /// <summary>
+    /// Chave Publica no padrão XML RSA Key
+    /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.RSAKeyValue")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public class RSAKeyValue
+    {
+        /// <summary>
+        /// Modulus
+        /// </summary>
+        [XmlElement("Modulus", DataType = "base64Binary")]
+        public byte[] Modulus { get; set; }
+
+        /// <summary>
+        /// Exponent
+        /// </summary>
+        [XmlElement("Exponent", DataType = "base64Binary")]
+        public byte[] Exponent { get; set; }
+    }
+
+    /// <summary>
     /// Grupo de Compra Governamental
     /// </summary>
 #if INTEROP
@@ -12891,6 +13005,50 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// </summary>
         [XmlElement("tpOperGov")]
         public TipoOperacaoEnteGovernamental TpOperGov { get; set; }
+
+        /// <summary>
+        /// Chave de acesso do documento fiscal anterior
+        /// </summary>
+        [XmlElement("refDFeAnt")]
+        public List<string> RefDFeAnt { get; set; }
+
+#if INTEROP
+
+        /// <summary>
+        /// Adicionar novo elemento a lista
+        /// </summary>
+        /// <param name="item">Elemento</param>
+        public void AddRefDFeAnt(string item)
+        {
+            if (RefDFeAnt == null)
+            {
+                RefDFeAnt = new List<string>();
+            }
+
+            RefDFeAnt.Add(item);
+        }
+
+        /// <summary>
+        /// Retorna o elemento da lista RefDFeAnt (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// </summary>
+        /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
+        /// <returns>Conteúdo do index passado por parâmetro da RefDFeAnt</returns>
+        public string GetRefDFeAnt(int index)
+        {
+            if ((RefDFeAnt?.Count ?? 0) == 0)
+            {
+                return default;
+            }
+
+            return RefDFeAnt[index];
+        }
+
+        /// <summary>
+        /// Retorna a quantidade de elementos existentes na lista RefDFeAnt
+        /// </summary>
+        public int GetRefDFeAntCount => (RefDFeAnt != null ? RefDFeAnt.Count : 0);
+
+#endif
     }
 
     /// <summary>
@@ -12953,16 +13111,16 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// Alíquota específica por unidade de medida apropriada
         /// </summary>
         [XmlIgnore]
-        public double PISEspec { get; set; }
+        public double AdRemIS { get; set; }
 
         /// <summary>
-        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade PICMS para atribuir ou resgatar o valor)
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade adRemIS para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("pISEspec")]
-        public string PISEspecField
+        [XmlElement("adRemIS")]
+        public string AdRemISField
         {
-            get => PISEspec.ToString("F4", CultureInfo.InvariantCulture);
-            set => PISEspec = Converter.ToDouble(value);
+            get => AdRemIS.ToString("F4", CultureInfo.InvariantCulture);
+            set => AdRemIS = Converter.ToDouble(value);
         }
 
         /// <summary>
@@ -12997,7 +13155,7 @@ namespace Unimake.Business.DFe.Xml.NFe
 
         public bool ShouldSerializeVBCISField() => VBCIS > 0;
         public bool ShouldSerializePISField() => VBCIS > 0;
-        public bool ShouldSerializePISEspecField() => VBCIS > 0 && PISEspec > 0;
+        public bool ShouldSerializeAdRemISField() => VBCIS > 0 && AdRemIS > 0;
 
         public bool ShouldSerializeUTrib() => !string.IsNullOrWhiteSpace(UTrib);
         public bool ShouldSerializeQTrib() => !string.IsNullOrWhiteSpace(UTrib);
@@ -13325,6 +13483,22 @@ namespace Unimake.Business.DFe.Xml.NFe
     public class GDevTrib
     {
         /// <summary>
+        /// Percentual de devolução do tributo
+        /// </summary>
+        [XmlIgnore]
+        public double PDevTrib { get; set; }
+
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade pDevTrib para atribuir ou resgatar o valor)
+        /// </summary>
+        [XmlElement("pDevTrib")]
+        public string PDevTribField
+        {
+            get => PDevTrib.ToString("F4", CultureInfo.InvariantCulture);
+            set => PDevTrib = Converter.ToDouble(value);
+        }
+
+        /// <summary>
         /// Valor do tributo devolvido
         /// </summary>
         [XmlIgnore]
@@ -13339,6 +13513,12 @@ namespace Unimake.Business.DFe.Xml.NFe
             get => VDevTrib.ToString("F2", CultureInfo.InvariantCulture);
             set => VDevTrib = Converter.ToDouble(value);
         }
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializePDevTribField() => PDevTrib > 0;
+
+        #endregion
     }
 
     /// <summary>
@@ -13496,6 +13676,12 @@ namespace Unimake.Business.DFe.Xml.NFe
         public GRed GRed { get; set; }
 
         /// <summary>
+        /// Grupo de operações em áreas incentivadas (ALC/ZFM) - CBS (alíquota zero)
+        /// </summary>
+        [XmlElement("gALCZFMCBS")]
+        public GALCZFMCBS GALCZFMCBS { get; set; }
+
+        /// <summary>
         /// Valor da CBS 
         /// </summary>
         [XmlIgnore]
@@ -13510,6 +13696,69 @@ namespace Unimake.Business.DFe.Xml.NFe
             get => VCBS.ToString("F2", CultureInfo.InvariantCulture);
             set => VCBS = Converter.ToDouble(value);
         }
+    }
+
+    /// <summary>
+    /// Grupo de operações em áreas incentivadas (ALC/ZFM) - CBS (alíquota zero)
+    /// </summary>
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFe.GALCZFMCBS")]
+    [ComVisible(true)]
+#endif
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public class GALCZFMCBS
+    {
+        /// <summary>
+        /// Tipo de aplicação da alíquota zero da CBS
+        /// </summary>
+        [XmlElement("tpALCZFMCBS")]
+        public TipoAplicacaoAliquotaZeroCBS TpALCZFMCBS { get; set; }
+
+        /// <summary>
+        /// Número do processo na Suframa para o item comercializado
+        /// </summary>
+        [XmlElement("nProcSuframa")]
+        public string NProcSuframa { get; set; }
+
+        /// <summary>
+        /// Percentual efetivo sem a redução
+        /// </summary>
+        [XmlIgnore]
+        public double PAliqEfetRegCBS { get; set; }
+
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade pAliqEfetRegCBS para atribuir ou resgatar o valor)
+        /// </summary>
+        [XmlElement("pAliqEfetRegCBS")]
+        public string PAliqEfetRegCBSField
+        {
+            get => PAliqEfetRegCBS.ToString("F4", CultureInfo.InvariantCulture);
+            set => PAliqEfetRegCBS = Converter.ToDouble(value);
+        }
+
+        /// <summary>
+        /// Valor efetivo sem a redução
+        /// </summary>
+        [XmlIgnore]
+        public double VTribRegCBS { get; set; }
+
+        /// <summary>
+        /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade vTribRegCBS para atribuir ou resgatar o valor)
+        /// </summary>
+        [XmlElement("vTribRegCBS")]
+        public string VTribRegCBSField
+        {
+            get => VTribRegCBS.ToString("F2", CultureInfo.InvariantCulture);
+            set => VTribRegCBS = Converter.ToDouble(value);
+        }
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeNProcSuframa() => !string.IsNullOrWhiteSpace(NProcSuframa);
+
+        #endregion
     }
 
     /// <summary>
@@ -14720,10 +14969,10 @@ namespace Unimake.Business.DFe.Xml.NFe
     public class GPagAntecipado
     {
         /// <summary>
-        /// Chave de acesso da NF-e de antecipação de pagamento
+        /// Chave de acesso do documento fiscal de antecipação de pagamento
         /// </summary>
-        [XmlElement("refNFe")]
-        public List<string> RefNFe { get; set; }
+        [XmlElement("refDFe")]
+        public List<string> RefDFe { get; set; }
 
 #if INTEROP
 
@@ -14731,35 +14980,40 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddRefNFe(string item)
+        public void AddRefDFe(string item)
         {
-            if (RefNFe == null)
+            if (RefDFe == null)
             {
-                RefNFe = new List<string>();
+                RefDFe = new List<string>();
             }
 
-            RefNFe.Add(item);
+            RefDFe.Add(item);
         }
 
         /// <summary>
-        /// Retorna o elemento da lista RefNFe (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// Retorna o elemento da lista RefDFe (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
-        /// <returns>Conteúdo do index passado por parâmetro da RefNFe</returns>
-        public string GetRefNFe(int index)
+        /// <returns>Conteúdo do index passado por parâmetro da RefDFe</returns>
+        public string GetRefDFe(int index)
         {
-            if ((RefNFe?.Count ?? 0) == 0)
+            if ((RefDFe?.Count ?? 0) == 0)
             {
                 return default;
             }
 
-            return RefNFe[index];
+            return RefDFe[index];
         }
 
         /// <summary>
         /// Retorna a quantidade de elementos existentes na lista RefNFe
         /// </summary>
-        public int GetRefNFeCount => (RefNFe != null ? RefNFe.Count : 0);
+        public int GetRefNFeCount => GetRefDFeCount;
+
+        /// <summary>
+        /// Retorna a quantidade de elementos existentes na lista RefDFe
+        /// </summary>
+        public int GetRefDFeCount => (RefDFe != null ? RefDFe.Count : 0);
 
 #endif
     }

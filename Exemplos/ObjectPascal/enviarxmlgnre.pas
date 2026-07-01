@@ -1,4 +1,3 @@
-
 unit EnviarXmlGNRe; // Nome da unit mantido do template
 
 {$mode ObjFPC}{$H+}
@@ -21,19 +20,18 @@ implementation
 procedure TEnviarXmlGNRe.Executar;
 var
   oConfiguracao: OleVariant;
-    oExceptionInterop: OleVariant;
-    oXml: OleVariant;
-    oDadosGNRE: OleVariant;
-    oItem: OleVariant;
-    oValor: OleVariant;
-    oServicoEnvio: OleVariant;
-    oServicoConsulta: OleVariant;
-    oXmlConsulta: OleVariant;
-    sSituacaoRecepcao: string;
-    sNumeroRecibo: string;
-    sSituacaoProcessamento: string;
-
-
+  oExceptionInterop: OleVariant;
+  oTLoteGNRE: OleVariant;
+  oTDadosGNRE: OleVariant;
+  oItem: OleVariant;
+  oValor: OleVariant;
+  oLoteRecepcao: OleVariant;
+  oConsultaResultadoLote: OleVariant;
+  oTConsLoteGNRE: OleVariant;
+  situacaoRecepcao: string;
+  numeroRecibo: string;
+  situacaoProcessamento: string;
+  oConfiguracaoConsulta: OleVariant;
 begin
   // Criar objeto de configuração mínima
   oConfiguracao := CreateOleObject('Unimake.Business.DFe.Servicos.Configuracao');
@@ -42,34 +40,33 @@ begin
   oConfiguracao.CertificadoSenha := '12345678';
   oConfiguracao.TipoAmbiente := 2;
   oConfiguracao.CodigoUF := 41;
+  oConfiguracao.Servico := 23; //Servico.GNRELoteRecepcao
 
   //Criar objeto para pegar exceção do lado do CSHARP
   oExceptionInterop := CreateOleObject('Unimake.Exceptions.ThrowHelper');
 
   try
-    // 1. Criar o objeto XML principal (CTeOS)
-    oXml := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.TLoteGNRE');
-    oXml.Guias := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.Guias');
+    // 1. Criar o objeto do XML
+    oTLoteGNRE := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.TLoteGNRE');
+    oTLoteGNRE.Guias := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.Guias');
 
-    oDadosGNRe := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.TDadosGNRE');
+    oTDadosGNRE := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.TDadosGNRE');
+    oTDadosGNRE.Versao := '2.00';
+    oTDadosGNRE.UfFavorecida := 41; // PR (Paraná)
+    oTDadosGNRE.TipoGNRE := 0;
 
-    oDadosGNRE.Versao := '2.00';
-    oDadosGNRE.UfFavorecida := 41; // PR (Paraná)
-    oDadosGNRE.TipoGNRE := 0;
+    oTDadosGNRE.ContribuinteEmitente := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.ContribuinteEmitente');
+    oTDadosGNRE.ContribuinteEmitente.Identificacao := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.Identificacao');
+    oTDadosGNRE.ContribuinteEmitente.Identificacao.CNPJ := '07666666000166';
+    oTDadosGNRE.ContribuinteEmitente.Identificacao.IE := '9335665656';
+    oTDadosGNRE.ContribuinteEmitente.RazaoSocial := 'TESTE EMPRESA PARA ENVIO DA GNRE';
+    oTDadosGNRE.ContribuinteEmitente.Endereco := 'XXX XXXXXXX XXXXX';
+    oTDadosGNRE.ContribuinteEmitente.Municipio := '04808'; // Código IBGE do Município
+    oTDadosGNRE.ContribuinteEmitente.UF := 41; // PR
+    oTDadosGNRE.ContribuinteEmitente.CEP := '90399899';
+    oTDadosGNRE.ContribuinteEmitente.Telefone := '04456566566';
 
-    oDadosGNRE.ContribuinteEmitente := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.ContribuinteEmitente');
-    oDadosGNRE.ContribuinteEmitente.Identificacao := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.Identificacao');
-    oDadosGNRE.ContribuinteEmitente.Identificacao.CNPJ := '07666666000166';
-    oDadosGNRE.ContribuinteEmitente.Identificacao.IE := '9335665656';
-    oDadosGNRE.ContribuinteEmitente.RazaoSocial := 'TESTE EMPRESA PARA ENVIO DA GNRE';
-    oDadosGNRE.ContribuinteEmitente.Endereco := 'XXX XXXXXXX XXXXX';
-    oDadosGNRE.ContribuinteEmitente.Municipio := '04808'; // Código IBGE do Município
-    oDadosGNRE.ContribuinteEmitente.UF := 41; // PR
-    oDadosGNRE.ContribuinteEmitente.CEP := '90399899';
-    oDadosGNRE.ContribuinteEmitente.Telefone := '04456566566';
-
-
-    oDadosGNRE.ItensGNRE := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.ItensGNRE');
+    oTDadosGNRE.ItensGNRE := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.ItensGNRE');
 
     oItem := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.Item');
     oItem.Receita := '100099';
@@ -87,88 +84,96 @@ begin
     oItem.ContribuinteDestinatario.Identificacao := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.Identificacao');
     oItem.ContribuinteDestinatario.Identificacao.IE := '1236566556';
 
-    oDadosGNRE.ItensGNRE.AddItem(IUnknown(oItem));
+    oTDadosGNRE.ItensGNRE.AddItem(IUnknown(oItem));
 
-    oDadosGNRE.ValorGNRE := 30.00;
-    oDadosGNRE.DataPagamento := Now;
-    oXml.Guias.AddTDadosGNRE(IUnknown(oDadosGNRE));
-    oServicoEnvio := CreateOleObject('Unimake.Business.DFe.Servicos.GNRE.LoteRecepcao');
+    oTDadosGNRE.ValorGNRE := 30.00;
+    oTDadosGNRE.DataPagamento := Now;
+    oTLoteGNRE.Guias.AddTDadosGNRE(IUnknown(oTDadosGNRE));
 
-    oServicoEnvio.Executar(IUnknown(oXml), IUnknown(oConfiguracao));
-    //sSituacaoRecepcao := oServicoEnvio.Result.SituacaoRecepcao.Codigo;
-    sSituacaoRecepcao := '100';
-    ShowMessage('Situação Recepção: ' + sSituacaoRecepcao);
+    //Consumir o serviço
+    oLoteRecepcao := CreateOleObject('Unimake.Business.DFe.Servicos.GNRE.LoteRecepcao');
+    oLoteRecepcao.Executar(IUnknown(oTLoteGNRE), IUnknown(oConfiguracao));
 
-        if (sSituacaoRecepcao = '100') then
-        begin
+    situacaoRecepcao := '100'; //oLoteRecepcao.Result.SituacaoRecepcao.Codigo;
+    ShowMessage('Situação Recepção: ' + situacaoRecepcao);
 
+    if (situacaoRecepcao = '100') then
+    begin
+      numeroRecibo := '4112345123'; //oLoteRecepcao.Result.Recibo.Numero;
 
-          sNumeroRecibo := oServicoEnvio.Result.Recibo.Numero;
+      ShowMessage('Recibo: ' + numeroRecibo);
 
-          ShowMessage('Recibo: ' + sNumeroRecibo);
+      // Criar a configuração mínima para consulta do lote de GNRE
+      oConfiguracaoConsulta := CreateOleObject('Unimake.Business.DFe.Servicos.Configuracao');
+      oConfiguracaoConsulta.TipoDFe := 8;
+      oConfiguracaoConsulta.CertificadoArquivo := 'C:\Projetos\certificados\UnimakePV.pfx';
+      oConfiguracaoConsulta.CertificadoSenha := '12345678';
+      oConfiguracaoConsulta.TipoAmbiente := 2;
+      oConfiguracaoConsulta.CodigoUF := 41;
+      oConfiguracaoConsulta.Servico := 22; //Servico.GNREConsultaResultadoLote
 
-          // Criar o XML de consulta
-          oXmlConsulta := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.TConsLoteGNRE');
-          oXmlConsulta.Ambiente := 2; // 2 = Homologação
-          oXmlConsulta.NumeroRecibo := sNumeroRecibo;
-          oXmlConsulta.IncluirPDFGuias := 1; // SimNaoLetra.Sim
-          oXmlConsulta.IncluirArquivoPagamento := 0; // SimNaoLetra.Nao
+      // Criar o XML de consulta
+      oTConsLoteGNRE := CreateOleObject('Unimake.Business.DFe.Xml.GNRE.TConsLoteGNRE');
+      oTConsLoteGNRE.Ambiente := 2; // 2 = Homologação
+      oTConsLoteGNRE.NumeroRecibo := numeroRecibo;
+      oTConsLoteGNRE.IncluirPDFGuias := 1; // SimNaoLetra.Sim
+      oTConsLoteGNRE.IncluirArquivoPagamento := 0; // SimNaoLetra.Nao
+      oTConsLoteGNRE.IncluirNoticias := 0; // SimNaoLetra.Nao
 
-          // Executar o serviço de Consulta
-          oServicoConsulta := CreateOleObject('Unimake.Business.DFe.Servicos.GNRE.ConsultaResultadoLote');
-          oServicoConsulta.Executar(IUnknown(oXmlConsulta), IUnknown(oConfiguracao)); // Reutiliza a mesma configuração
+      // Executar o serviço de Consulta
+      oConsultaResultadoLote := CreateOleObject('Unimake.Business.DFe.Servicos.GNRE.ConsultaResultadoLote');
+      oConsultaResultadoLote.Executar(IUnknown(oTConsLoteGNRE), IUnknown(oConfiguracaoConsulta)); // Reutiliza a mesma configuração
 
-          sSituacaoProcessamento := oServicoConsulta.Result.SituacaoProcess.Codigo;
-          ShowMessage('Situação Processamento: ' + sSituacaoProcessamento);
+      situacaoProcessamento := oConsultaResultadoLote.Result.SituacaoProcess.Codigo;
+      ShowMessage('Situação Processamento: ' + situacaoProcessamento);
 
-          // Tratar o resultado da consulta
-          if (sSituacaoProcessamento = '400') or (sSituacaoProcessamento = '401') then
-          begin
-            // 400: Lote recebido, aguardando processamento
-            // 401: Lote em processamento
-            ShowMessage('Lote em processamento, tente consultar mais tarde.');
-          end
-          else if (sSituacaoProcessamento = '402') then
-          begin
-            // 402: Lote processado com sucesso
-            try
-              oServicoConsulta.GravarXmlRetorno('D:\testenfe', sNumeroRecibo + '-ret-gnre.xml');
-              oServicoConsulta.GravarPDFGuia('D:\testenfe', 'GuiaGNRE.pdf');
-              ShowMessage('Sucesso! XML de retorno e PDF da guia salvos em D:\testenfe');
-            except
-              on E: Exception do
-                ShowMessage('Erro ao salvar arquivos: ' + E.Message);
-            end;
-          end
-          else if (sSituacaoProcessamento = '403') then
-          begin
-            // 403: Lote processado com pendências
-            ShowMessage('Lote processado com pendências. Verifique o XML de retorno.');
-            oServicoConsulta.GravarXmlRetorno('D:\testenfe', sNumeroRecibo + '-ret-gnre.xml');
-          end
-          else if (sSituacaoProcessamento = '404') then
-          begin
-            // 404: Erro no processamento do lote
-            ShowMessage('Erro no processamento do lote. Verifique o XML de retorno e tente enviar novamente.');
-            oServicoConsulta.GravarXmlRetorno('D:\testenfe', sNumeroRecibo + '-ret-gnre.xml');
-          end
-          else
-          begin
-             ShowMessage('Situação desconhecida: ' + sSituacaoProcessamento);
-          end;
-        end
-        else
-        begin
-          // Lote não foi recebido (código != 100)
-          ShowMessage('Lote não foi recebido. Motivo: ' + oServicoEnvio.Result.SituacaoRecepcao.Descricao);
+      // Tratar o resultado da consulta
+      if (situacaoProcessamento = '400') or (situacaoProcessamento = '401') then
+      begin
+        // 400: Lote recebido, aguardando processamento
+        // 401: Lote em processamento
+        ShowMessage('Lote em processamento, tente consultar mais tarde.');
+      end
+      else if (situacaoProcessamento = '402') then
+      begin
+        // 402: Lote processado com sucesso
+        try
+          oConsultaResultadoLote.GravarXmlRetorno('D:\testenfe', numeroRecibo + '-ret-gnre.xml');
+          oConsultaResultadoLote.GravarPDFGuia('D:\testenfe', 'GuiaGNRE.pdf');
+          ShowMessage('Sucesso! XML de retorno e PDF da guia salvos em D:\testenfe');
+        except
+          on E: Exception do
+            ShowMessage('Erro ao salvar arquivos: ' + E.Message);
         end;
-
-      except
-        on E: Exception do
-          // O oExceptionInterop captura detalhes da exceção interna da DLL .NET
-          ShowMessage('Erro na execução: ' + E.Message + #13#10 +
-                      'Detalhes Interop: ' + oExceptionInterop.Message);
+      end
+      else if (situacaoProcessamento = '403') then
+      begin
+        // 403: Lote processado com pendências
+        ShowMessage('Lote processado com pendências. Verifique o XML de retorno.');
+        oConsultaResultadoLote.GravarXmlRetorno('D:\testenfe', numeroRecibo + '-ret-gnre.xml');
+      end
+      else if (situacaoProcessamento = '404') then
+      begin
+        // 404: Erro no processamento do lote
+        ShowMessage('Erro no processamento do lote. Verifique o XML de retorno e tente enviar novamente.');
+        oConsultaResultadoLote.GravarXmlRetorno('D:\testenfe', numeroRecibo + '-ret-gnre.xml');
+      end
+      else
+      begin
+        ShowMessage('Situação desconhecida: ' + situacaoProcessamento);
       end;
+    end
+    else
+    begin
+      // Lote não foi recebido (código != 100)
+      ShowMessage('Lote não foi recebido. Motivo: ' + oLoteRecepcao.Result.SituacaoRecepcao.Descricao);
     end;
 
-    end.
+  except
+    on E: Exception do
+      // O oExceptionInterop captura detalhes da exceção interna da DLL .NET
+      ShowMessage('Erro na execução: ' + E.Message + #13#10 +
+                  'Detalhes Interop: ' + oExceptionInterop.Message);
+  end;
+end;
+end.

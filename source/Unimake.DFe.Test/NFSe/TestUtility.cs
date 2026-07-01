@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Xml;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Unimake.Business.DFe.Servicos;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Unimake.DFe.Test.NFSe
 {
@@ -273,7 +269,7 @@ namespace Unimake.DFe.Test.NFSe
                     break;
 
                 default:
-                    
+
                     if (padraoNFSe == PadraoNFSe.SONNER && tipoAmbiente == TipoAmbiente.Producao && mensagemExcecao.Contains("vazio"))
                     {
                         comunicacaoFuncionou = true;
@@ -292,13 +288,9 @@ namespace Unimake.DFe.Test.NFSe
             switch (servicoBase.Configuracoes.PadraoNFSe, servicoBase.Configuracoes.TipoAmbiente)
             {
                 case (PadraoNFSe.FIORILLI, TipoAmbiente.Producao):
-                case (PadraoNFSe.SYSTEMPRO, TipoAmbiente.Homologacao):
-                case (PadraoNFSe.SYSTEMPRO, TipoAmbiente.Producao):
                     message += "Este contexto necessita de um certificado digital autorizado para consumir o Webservice\n";
                     break;
 
-                case (PadraoNFSe.BAUHAUS, TipoAmbiente.Homologacao):
-                case (PadraoNFSe.BAUHAUS, TipoAmbiente.Producao):
                 case (PadraoNFSe.ADM_SISTEMAS, TipoAmbiente.Homologacao):
                 case (PadraoNFSe.AVMB, TipoAmbiente.Producao):
                     message += "Este contexto necessita de uma autenticação válida\n";

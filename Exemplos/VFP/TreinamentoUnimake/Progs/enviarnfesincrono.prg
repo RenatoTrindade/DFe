@@ -302,6 +302,34 @@ Function EnviarNfeSincrono()
 	   
      * adicionar a tag ICMS dentro da tag Imposto
        oImposto.Icms = oICMS
+       
+     * adicionar o grupod e tag de IPI
+       oIPI = CREATEOBJECT("Unimake.Business.DFe.Xml.NFe.IPI") 
+       oIPI.CNPJProd
+       oIPI.CSelo = ""
+       oIPI.QSelo = 0
+       oIPI.CEnq = ""
+       
+       && Se for IPI não tributado, crie o grupo IPINT, caso contrário crie o IPITrib, demonstrado mais adiante no código.
+       oIPI.IPINT = CREATEOBJECT("Unimake.Business.DFe.Xml.NFe.IPINT")
+       oIPI.IPINT.CST = "52" && 01, 02, 03, 04, 51, 52, 53
+       
+       && Se for IPI tributado crie o grupo a seguir, caso contrário crie o grupo acima que é o IPINT
+       oIPI.IPITrib = CREATEOBJECT("Unimake.Business.DFe.Xml.NFe.IPITrib")
+       oIPI.IPITrib.CST = "50" && 00, 49, 50 e 99
+
+       && Ou gera as duas tags VBC e PIPI, ou gera a QUnid e VUnid. Não pode gerar os 2 subgrupos ao mesmo tempo.
+       oIPI.IPITrib.VBC = 0.00
+       oIPI.IPITrib.PIPI = 0.0000
+       
+       && Se gerar a QUnid e VUnid não gere a VBC e PIPI, é a regra da SEFAZ.
+       oIPI.IPITrib.QUnid = 0.0000
+       oIPI.IPITrib.VUnid = 0.0000
+       
+       && Valor do IPI, obrigatório.
+       oIPI.IPITrib.VIPI = 0.00
+       
+       oImposto.IPI = oIPI
 	   
      * criar tag PIS
        oPIS           = CreateObject("Unimake.Business.DFe.Xml.NFe.PIS")
@@ -334,6 +362,21 @@ Function EnviarNfeSincrono()
 
      * adicionar a tag COFINS dentro da tag Imposto
        oImposto.COFINS = oCOFINS
+		 
+     * criar tag ICMSUFDest
+       oICMSUFDest         = CreateObject("Unimake.Business.DFe.Xml.NFe.ICMSUFDest")
+		 oICMSUFDest.vBCUFDest = 1.00
+		 oICMSUFDest.vBCFCPUFDest = 1.00
+		 oICMSUFDest.pFCPUFDest = 1.0000
+		 oICMSUFDest.pICMSUFDest = 1.0000
+		 oICMSUFDest.pICMSInter = 4.00
+		 oICMSUFDest.pICMSInterPart = 1.0000
+		 oICMSUFDest.vFCPUFDest = 1.00
+		 oICMSUFDest.vICMSUFDest = 1.00
+		 oICMSUFDest.vICMSUFRemet = 1.00
+
+     * adicionar a tag COFINS dentro da tag Imposto
+       oImposto.ICMSUFDest = oICMSUFDest
 	   
      * adicionar a tag Imposto dentro da tag Det
        oDet.Imposto = oImposto
@@ -391,6 +434,11 @@ Function EnviarNfeSincrono()
  * Criar a tag Transp  
    oTransp = CreateObject("Unimake.Business.DFe.Xml.NFe.Transp")
    oTransp.ModFrete = 0 && ModalidadeFrete.ContratacaoFretePorContaRemetente_CIF
+   
+   oTransp.VeicTransp = CreateObject("Unimake.Business.DFe.Xml.NFe.VeicTransp")
+   oTransp.VeicTransp.Placa = ""
+   oTransp.VeicTransp.UF = 41 && 41 = Paraná
+   oTransp.VeicTransp.RTNC = ""
    
    FOR I = 1 TO 3
     * Criar a tag Vol

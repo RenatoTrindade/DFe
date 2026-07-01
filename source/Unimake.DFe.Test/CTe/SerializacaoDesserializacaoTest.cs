@@ -72,6 +72,27 @@ namespace Unimake.DFe.Test.CTe
             Assert.True(doc.InnerText == xml.GerarXML().InnerText, "XML gerado pela DLL está diferente do conteúdo do arquivo serializado.");
         }
 
+        /// <summary>
+        /// Testar a serialização e desserialização do XML CTe com emissão pelo PAA.
+        /// </summary>
+        [Fact]
+        [Trait("DFe", "CTe")]
+        public void SerializacaoDesserializacaoCTeProcEmiPAA()
+        {
+            const string arqXML = @"..\..\..\CTe\Resources\4_00_CTe_ModalRodoviario.xml";
+            Assert.True(File.Exists(arqXML), "Arquivo " + arqXML + " não foi localizado para a realização da serialização/desserialização.");
+
+            var doc = new XmlDocument();
+            doc.Load(arqXML);
+            doc.GetElementsByTagName("procEmi")[0].InnerText = "4";
+
+            var xml = new Unimake.Business.DFe.Xml.CTe.CTe();
+            xml = xml.LerXML<Unimake.Business.DFe.Xml.CTe.CTe>(doc);
+
+            Assert.Equal(ProcessoEmissao.ProvedorAutorizacaoAssinatura, xml.InfCTe.Ide.ProcEmi);
+            Assert.True(doc.InnerText == xml.GerarXML().InnerText, "XML gerado pela DLL está diferente do conteúdo do arquivo serializado.");
+        }
+
 
         /// <summary>
         /// Testar a serialização e desserialização do XML CTeOS
@@ -156,6 +177,8 @@ namespace Unimake.DFe.Test.CTe
         [InlineData(@"..\..\..\CTe\Resources\eventoCTe_110180.xml")]
         [InlineData(@"..\..\..\CTe\Resources\eventoCTe_110190.xml")]
         [InlineData(@"..\..\..\CTe\Resources\eventoCTe_110191.xml")]
+        [InlineData(@"..\..\..\CTe\Resources\eventoCTe_110300.xml")]
+        [InlineData(@"..\..\..\CTe\Resources\eventoCTe_110301.xml")]
         [InlineData(@"..\..\..\CTe\Resources\eventoCTe_610111.xml")]
         public void SerializacaoDesserializacaoEventoCTe(string arqXML)
         {

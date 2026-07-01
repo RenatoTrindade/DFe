@@ -53,10 +53,10 @@ namespace Unimake.Business.DFe.Servicos.NFe
                                 if (int.TryParse(nItemString, out var nItem) && nItem > 0)
                                 {
                                     if (EnviNFe.NFe.Count > 0 &&
-                                        EnviNFe.NFe[0].InfNFe.Count > 0 &&
-                                        (nItem - 1) < EnviNFe.NFe[0].InfNFe[0].Det.Count)
+                                        EnviNFe.NFe[0].InfNFeField != null &&
+                                        (nItem - 1) < EnviNFe.NFe[0].InfNFeField.Det.Count)
                                     {
-                                        var det = EnviNFe.NFe[0].InfNFe[0].Det[nItem - 1];
+                                        var det = EnviNFe.NFe[0].InfNFeField.Det[nItem - 1];
                                         if (det?.Prod != null)
                                         {
                                             var cProd = det.Prod.CProd;
@@ -212,7 +212,7 @@ namespace Unimake.Business.DFe.Servicos.NFe
                         if (Result.ProtNFe != null)
                         {
                             var autorizado = false;
-                            switch (Result.ProtNFe.InfProt.CStat)                                                                  
+                            switch (Result.ProtNFe.InfProt.CStat)
                             {
                                 case 100: //Autorizado o uso da NF-e
                                 case 110: //Uso Denegado
@@ -221,13 +221,13 @@ namespace Unimake.Business.DFe.Servicos.NFe
                                 case 301: //Uso Denegado: Irregularidade fiscal do emitente
                                 case 302: //Uso Denegado: Irregularidade fiscal do destinatário
                                 case 303: //Uso Denegado: Destinatário não habilitado a operar na UF
-                                    if (NfeProcs.ContainsKey(EnviNFe.NFe[0].InfNFe[0].Chave))
+                                    if (NfeProcs.ContainsKey(EnviNFe.NFe[0].InfNFeField.Chave))
                                     {
-                                        NfeProcs[EnviNFe.NFe[0].InfNFe[0].Chave].ProtNFe = Result.ProtNFe;
+                                        NfeProcs[EnviNFe.NFe[0].InfNFeField.Chave].ProtNFe = Result.ProtNFe;
                                     }
                                     else
                                     {
-                                        NfeProcs.Add(EnviNFe.NFe[0].InfNFe[0].Chave,
+                                        NfeProcs.Add(EnviNFe.NFe[0].InfNFeField.Chave,
                                             new NfeProc
                                             {
                                                 Versao = EnviNFe.Versao,
@@ -278,7 +278,7 @@ namespace Unimake.Business.DFe.Servicos.NFe
                                 {
                                     foreach (var item in RetConsReciNFe.ProtNFe)
                                     {
-                                        if (item.InfProt.ChNFe == EnviNFe.NFe[i].InfNFe[0].Chave)
+                                        if (item.InfProt.ChNFe == EnviNFe.NFe[i].InfNFeField.Chave)
                                         {
                                             switch (item.InfProt.CStat)
                                             {
@@ -307,7 +307,7 @@ namespace Unimake.Business.DFe.Servicos.NFe
                                 {
                                     if (item != null && item.ProtNFe != null)
                                     {
-                                        if (item.ProtNFe.InfProt.ChNFe == EnviNFe.NFe[i].InfNFe[0].Chave)
+                                        if (item.ProtNFe.InfProt.ChNFe == EnviNFe.NFe[i].InfNFeField.Chave)
                                         {
                                             switch (item.ProtNFe.InfProt.CStat)
                                             {
@@ -328,20 +328,13 @@ namespace Unimake.Business.DFe.Servicos.NFe
                                 #endregion
                             }
 
-                            if (NfeProcs.ContainsKey(EnviNFe.NFe[i].InfNFe[0].Chave))
+                            if (NfeProcs.ContainsKey(EnviNFe.NFe[i].InfNFeField.Chave))
                             {
-                                NfeProcs[EnviNFe.NFe[i].InfNFe[0].Chave].ProtNFe = protNFe;
+                                NfeProcs[EnviNFe.NFe[i].InfNFeField.Chave].ProtNFe = protNFe;
                             }
                             else
                             {
-                                //Se por algum motivo não tiver assinado, só vou forçar atualizar o ConteudoXML para ficar correto na hora de gerar o arquivo de distribuição. Pode estar sem assinar no caso do desenvolvedor estar forçando gerar o XML já autorizado a partir de uma consulta situação da NFe, caso tenha perdido na tentativa do primeiro envio.
-                                if (EnviNFe.NFe[i].Signature == null)
-                                {
-                                    ConteudoXML = ConteudoXMLAssinado;
-                                    AjustarXMLAposAssinado();
-                                }
-
-                                NfeProcs.Add(EnviNFe.NFe[i].InfNFe[0].Chave,
+                                NfeProcs.Add(EnviNFe.NFe[i].InfNFeField.Chave,
                                     new NfeProc
                                     {
                                         Versao = EnviNFe.Versao,
@@ -350,7 +343,6 @@ namespace Unimake.Business.DFe.Servicos.NFe
                                     });
                             }
                         }
-
                         break;
                 }
 
@@ -470,26 +462,7 @@ namespace Unimake.Business.DFe.Servicos.NFe
 
             Inicializar(doc, configuracao);
 
-            #region Limpar a assinatura e QRCode do objeto para recriar e atualizar o ConteudoXML. Isso garante que a propriedade e o objeto tenham assinaturas iguais, evitando discrepâncias. Autor: Wandrey Data: 10/06/2024
-
-            //Remover a assinatura e QRCode para forçar criar novamente
             EnviNFe = EnviNFe.LerXML<EnviNFe>(ConteudoXML);
-            foreach (var nfe in EnviNFe.NFe)
-            {
-                nfe.Signature = null;
-                nfe.InfNFeSupl = null;
-            }
-
-            //Gerar o XML novamente com base no objeto
-            ConteudoXML = EnviNFe.GerarXML();
-
-            //Forçar assinar e criar QRCode novamente
-            _ = ConteudoXMLAssinado;
-
-            //Atualizar o objeto novamente com o XML já assinado e com QRCode
-            EnviNFe = EnviNFe.LerXML<EnviNFe>(ConteudoXML);
-
-            #endregion
         }
 
         #endregion Public Constructors
@@ -590,6 +563,46 @@ namespace Unimake.Business.DFe.Servicos.NFe
                 Exceptions.ThrowHelper.Instance.Throw(ex);
             }
         }
+
+#if INTEROP
+
+        /// <summary>
+        /// Gravar o XML de distribuição em uma pasta no HD com o nome de arquivo definido pelo usuário.
+        /// </summary>
+        /// <param name="pasta">Pasta onde deve ser gravado o XML</param>
+        /// <param name="nomeArquivo">Nome do arquivo para gravação do XML de distribuição</param>
+        [ComVisible(true)]
+        public void GravarXmlDistribuicaoComNomeArquivo(string pasta, string nomeArquivo)
+        {
+            try
+            {
+                if (EnviNFe.IndSinc == SimNao.Sim)
+                {
+                    GravarXmlDistribuicao(pasta, nomeArquivo, NfeProcResult.GerarXML().OuterXml);
+                    return;
+                }
+
+                if (NfeProcResults.Count == 1)
+                {
+                    foreach (var item in NfeProcResults)
+                    {
+                        if (item.Value.ProtNFe != null)
+                        {
+                            GravarXmlDistribuicao(pasta, nomeArquivo, item.Value.GerarXML().OuterXml);
+                            return;
+                        }
+                    }
+                }
+
+                throw new Exception("Para envio assíncrono com múltiplas NF-e, utilize o método GravarXmlDistribuicao(string pasta) para que cada XML seja gravado com seu nome de distribuição.");
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ThrowHelper.Instance.Throw(ex);
+            }
+        }
+
+#endif
 
         /// <summary>
         /// Grava o XML de distribuição no stream

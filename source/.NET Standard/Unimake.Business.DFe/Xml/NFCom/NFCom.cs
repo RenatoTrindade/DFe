@@ -152,6 +152,9 @@ namespace Unimake.Business.DFe.Xml.NFCom
         public int GetDetCount => (Det != null ? Det.Count : 0);
 #endif
 
+        [XmlElement("pgtoVinc")]
+        public PgtoVinc PgtoVinc { get; set; }
+
         [XmlElement("total")]
         public Total Total { get; set; }
 
@@ -370,6 +373,13 @@ namespace Unimake.Business.DFe.Xml.NFCom
         [XmlElement("gCompraGov")]
         public GCompraGov GCompraGov { get; set; }
 
+        [XmlElement("tpPagAnt")]
+#if INTEROP
+        public TipoPagamentoAntecipadoNFCom TpPagAnt { get; set; } = (TipoPagamentoAntecipadoNFCom)(-1);
+#else
+        public TipoPagamentoAntecipadoNFCom? TpPagAnt { get; set; }
+#endif
+
         #region ShouldSerialize
 
 #if INTEROP
@@ -394,6 +404,12 @@ namespace Unimake.Business.DFe.Xml.NFCom
 
         public bool ShouldSerializeXJust() => TpEmis != (TipoEmissao)1;
 
+#if INTEROP
+        public bool ShouldSerializeTpPagAnt() => TpPagAnt != (TipoPagamentoAntecipadoNFCom)(-1);
+#else
+        public bool ShouldSerializeTpPagAnt() => TpPagAnt != null;
+#endif
+
         #endregion ShouldSerialize
     }
 #if INTEROP
@@ -415,6 +431,55 @@ namespace Unimake.Business.DFe.Xml.NFCom
             get => PRedutor.ToString("F4", CultureInfo.InvariantCulture);
             set => PRedutor = Converter.ToDouble(value);
         }
+
+        [XmlElement("tpOperGov")]
+        public TipoOperacaoEnteGovernamental TpOperGov { get; set; } = TipoOperacaoEnteGovernamental.FornecimentoPagamentoPosterior;
+
+        [XmlElement("refDFeAnt")]
+        public List<string> RefDFeAnt { get; set; }
+
+#if INTEROP
+
+        /// <summary>
+        /// Adicionar novo elemento a lista
+        /// </summary>
+        /// <param name="item">Elemento</param>
+        public void AddRefDFeAnt(string item)
+        {
+            if (RefDFeAnt == null)
+            {
+                RefDFeAnt = new List<string>();
+            }
+
+            RefDFeAnt.Add(item);
+        }
+
+        /// <summary>
+        /// Retorna o elemento da lista RefDFeAnt (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// </summary>
+        /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
+        /// <returns>Conteúdo do index passado por parâmetro da RefDFeAnt</returns>
+        public string GetRefDFeAnt(int index)
+        {
+            if ((RefDFeAnt?.Count ?? 0) == 0)
+            {
+                return default;
+            }
+
+            return RefDFeAnt[index];
+        }
+
+        /// <summary>
+        /// Retorna a quantidade de elementos existentes na lista RefDFeAnt
+        /// </summary>
+        public int GetRefDFeAntCount => (RefDFeAnt != null ? RefDFeAnt.Count : 0);
+#endif
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeRefDFeAnt() => RefDFeAnt?.Count > 0;
+
+        #endregion ShouldSerialize
     }
 
 
@@ -446,9 +511,14 @@ namespace Unimake.Business.DFe.Xml.NFCom
         [XmlElement("enderEmit")]
         public EnderEmit EnderEmit { get; set; }
 
+        [XmlElement("ISUFEmit")]
+        public string ISUFEmit { get; set; }
+
         #region ShouldSerialize
 
         public bool ShouldSerializeIEUFDest() => !string.IsNullOrEmpty(IEUFDest);
+
+        public bool ShouldSerializeISUFEmit() => !string.IsNullOrEmpty(ISUFEmit);
 
         #endregion ShouldSerialize
     }
@@ -801,7 +871,7 @@ namespace Unimake.Business.DFe.Xml.NFCom
         [XmlElement("nNF")]
         public string NNF { get; set; }
 
-        [XmlElement("competEmis")]
+        [XmlElement("CompetEmis")]
         public string CompetEmis { get; set; }
 
         [XmlElement("hash115")]
@@ -869,6 +939,83 @@ namespace Unimake.Business.DFe.Xml.NFCom
         public bool ShouldSerializeNItemAnt() => !string.IsNullOrEmpty(NItemAnt);
 
         public bool ShouldSerializeIndNFComAntPapelFatCentral() => !string.IsNullOrEmpty(IndNFComAntPapelFatCentral);
+
+        #endregion ShouldSerialize
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFCom.Pgto")]
+    [ComVisible(true)]
+#endif
+    public class Pgto
+    {
+        [XmlAttribute(AttributeName = "nPag", DataType = "token")]
+        public string NPag { get; set; }
+
+        [XmlAttribute(AttributeName = "idTransacao", DataType = "token")]
+        public string IdTransacao { get; set; }
+
+        [XmlElement("tpMeioPgto")]
+        public MeioPagamento TpMeioPgto { get; set; }
+
+        [XmlElement("CNPJReceb")]
+        public string CNPJReceb { get; set; }
+
+        [XmlElement("CNPJBasePSP")]
+        public string CNPJBasePSP { get; set; }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFCom.PgtoVinc")]
+    [ComVisible(true)]
+#endif
+    public class PgtoVinc
+    {
+        [XmlElement("pgto")]
+        public List<Pgto> Pgto { get; set; }
+
+#if INTEROP
+
+        /// <summary>
+        /// Adicionar novo elemento a lista
+        /// </summary>
+        /// <param name="item">Elemento</param>
+        public void AddPgto(Pgto item)
+        {
+            if (Pgto == null)
+            {
+                Pgto = new List<Pgto>();
+            }
+
+            Pgto.Add(item);
+        }
+
+        /// <summary>
+        /// Retorna o elemento da lista Pgto (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// </summary>
+        /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
+        /// <returns>Conteúdo do index passado por parâmetro da Pgto</returns>
+        public Pgto GetPgto(int index)
+        {
+            if ((Pgto?.Count ?? 0) == 0)
+            {
+                return default;
+            }
+
+            return Pgto[index];
+        }
+
+        /// <summary>
+        /// Retorna a quantidade de elementos existentes na lista Pgto
+        /// </summary>
+        public int GetPgtoCount => (Pgto != null ? Pgto.Count : 0);
+#endif
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializePgto() => Pgto?.Count > 0;
 
         #endregion ShouldSerialize
     }
@@ -976,11 +1123,19 @@ namespace Unimake.Business.DFe.Xml.NFCom
 
 #endif
 
+        [XmlElement("CNPJCobrTerc")]
+        public string CNPJCobrTerc { get; set; }
+
+        [XmlElement("gPagAntecipado")]
+        public GPagAntecipado GPagAntecipado { get; set; }
+
         #region ShouldSerialize
 
         public bool ShouldSerializeCFOP() => !string.IsNullOrEmpty(CFOP);
 
         public bool ShouldSerializeCNPJLD() => !string.IsNullOrEmpty(CNPJLD);
+
+        public bool ShouldSerializeCNPJCobrTerc() => !string.IsNullOrEmpty(CNPJCobrTerc);
 
         public bool ShouldSerializeVDescField() => VDesc > 0;
 
@@ -993,6 +1148,26 @@ namespace Unimake.Business.DFe.Xml.NFCom
 #else
         public bool ShouldSerializeIndDevolucao() => IndDevolucao != null;
 #endif
+
+        #endregion ShouldSerialize
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFCom.GPagAntecipado")]
+    [ComVisible(true)]
+#endif
+    public class GPagAntecipado
+    {
+        [XmlElement("chDFePagAnt")]
+        public string ChDFePagAnt { get; set; }
+
+        [XmlElement("nItemPagAnt")]
+        public string NItemPagAnt { get; set; }
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializeNItemPagAnt() => !string.IsNullOrEmpty(NItemPagAnt);
 
         #endregion ShouldSerialize
     }
@@ -1922,6 +2097,16 @@ namespace Unimake.Business.DFe.Xml.NFCom
     public class GDevTrib
     {
         [XmlIgnore]
+        public double? PDevTrib { get; set; }
+
+        [XmlElement("pDevTrib")]
+        public string PDevTribField
+        {
+            get => PDevTrib?.ToString("F4", CultureInfo.InvariantCulture);
+            set => PDevTrib = Converter.ToDouble(value);
+        }
+
+        [XmlIgnore]
         public double VDevTrib { get; set; }
 
         [XmlElement("vDevTrib")]
@@ -1930,6 +2115,12 @@ namespace Unimake.Business.DFe.Xml.NFCom
             get => VDevTrib.ToString("F2", CultureInfo.InvariantCulture);
             set => VDevTrib = Converter.ToDouble(value);
         }
+
+        #region ShouldSerialize
+
+        public bool ShouldSerializePDevTribField() => PDevTrib != null;
+
+        #endregion ShouldSerialize
     }
 
 #if INTEROP
@@ -2023,6 +2214,9 @@ namespace Unimake.Business.DFe.Xml.NFCom
         [XmlElement("gRed")]
         public GRed GRed { get; set; }
 
+        [XmlElement("gALCZFMCBS")]
+        public GALCZFMCBS GALCZFMCBS { get; set; }
+
         [XmlIgnore]
         public double VCBS { get; set; }
 
@@ -2031,6 +2225,34 @@ namespace Unimake.Business.DFe.Xml.NFCom
         {
             get => VCBS.ToString("F2", CultureInfo.InvariantCulture);
             set => VCBS = Converter.ToDouble(value);
+        }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.NFCom.GALCZFMCBS")]
+    [ComVisible(true)]
+#endif
+    public class GALCZFMCBS
+    {
+        [XmlIgnore]
+        public double PAliqEfetRegCBS { get; set; }
+
+        [XmlElement("pAliqEfetRegCBS")]
+        public string PAliqEfetRegCBSField
+        {
+            get => PAliqEfetRegCBS.ToString("F4", CultureInfo.InvariantCulture);
+            set => PAliqEfetRegCBS = Converter.ToDouble(value);
+        }
+
+        [XmlIgnore]
+        public double VTribRegCBS { get; set; }
+
+        [XmlElement("vTribRegCBS")]
+        public string VTribRegCBSField
+        {
+            get => VTribRegCBS.ToString("F2", CultureInfo.InvariantCulture);
+            set => VTribRegCBS = Converter.ToDouble(value);
         }
     }
 

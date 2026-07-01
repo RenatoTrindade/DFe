@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Servicos;
@@ -62,6 +63,132 @@ namespace Unimake.Business.DFe.Xml.CTe
         }
 
         #endregion Public Methods
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.CTe.DetEventoVincPgto")]
+    [ComVisible(true)]
+#endif
+    [Serializable]
+    [XmlRoot(ElementName = "detEvento")]
+    public class DetEventoVincPgto : EventoDetalhe
+    {
+        [XmlElement("descEvento", Order = 0)]
+        public override string DescEvento { get; set; } = "Vinculacao do Pagamento";
+
+        [XmlElement("nProt", Order = 1)]
+        public string NProt { get; set; }
+
+        [XmlElement("pgto", Order = 2)]
+        public Pgto Pgto { get; set; }
+
+        internal override void ProcessReader()
+        {
+            if (XmlReader == null)
+            {
+                return;
+            }
+
+            if (XmlReader.HasAttributes && XmlReader.GetAttribute("versaoEvento") != "")
+            {
+                VersaoEvento = XmlReader.GetAttribute("versaoEvento");
+            }
+
+            while (XmlReader.Read())
+            {
+                if (XmlReader.NodeType != XmlNodeType.Element)
+                {
+                    continue;
+                }
+
+                switch (XmlReader.Name)
+                {
+                    case "descEvento":
+                        DescEvento = XmlReader.GetValue<string>(XmlReader.Name);
+                        break;
+
+                    case "nProt":
+                        NProt = XmlReader.GetValue<string>(XmlReader.Name);
+                        break;
+
+                    case "pgto":
+                        var pgtoElement = XElement.Parse(XmlReader.ReadOuterXml());
+
+                        Pgto = new Pgto
+                        {
+                            NPag = pgtoElement.Attribute("nPag")?.Value,
+                            IdTransacao = pgtoElement.Attribute("idTransacao")?.Value
+                        };
+
+                        foreach (var child in pgtoElement.Elements())
+                        {
+                            switch (child.Name.LocalName)
+                            {
+                                case "tpMeioPgto":
+                                    Pgto.TpMeioPgto = (MeioPagamento)int.Parse(child.Value);
+                                    break;
+
+                                case "CNPJReceb":
+                                    Pgto.CNPJReceb = child.Value;
+                                    break;
+
+                                case "CNPJBasePSP":
+                                    Pgto.CNPJBasePSP = child.Value;
+                                    break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+
+            writer.WriteRaw($@"
+            <evVincPgto>
+            <descEvento>{DescEvento}</descEvento>
+            <nProt>{NProt}</nProt>
+            <pgto nPag=""{Pgto?.NPag}"" idTransacao=""{Pgto?.IdTransacao}"">
+            <tpMeioPgto>{(Pgto != null ? ((int)Pgto.TpMeioPgto).ToString("00") : "")}</tpMeioPgto>
+            <CNPJReceb>{Pgto?.CNPJReceb}</CNPJReceb>
+            <CNPJBasePSP>{Pgto?.CNPJBasePSP}</CNPJBasePSP>
+            </pgto>
+            </evVincPgto>");
+        }
+    }
+
+#if INTEROP
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ProgId("Unimake.Business.DFe.Xml.CTe.DetEventoCancVincPgto")]
+    [ComVisible(true)]
+#endif
+    [Serializable]
+    [XmlRoot(ElementName = "detEvento")]
+    public class DetEventoCancVincPgto : EventoDetalhe
+    {
+        [XmlElement("descEvento", Order = 0)]
+        public override string DescEvento { get; set; } = "Cancelamento da vinculacao do pagamento";
+
+        [XmlElement("nProt", Order = 1)]
+        public string NProt { get; set; }
+
+        [XmlElement("nProtVincPgto", Order = 2)]
+        public string NProtVincPgto { get; set; }
+
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+
+            writer.WriteRaw($@"
+            <evCancVincPgto>
+            <descEvento>{DescEvento}</descEvento>
+            <nProt>{NProt}</nProt>
+            <nProtVincPgto>{NProtVincPgto}</nProtVincPgto>
+            </evCancVincPgto>");
+        }
     }
 
 
@@ -1483,6 +1610,8 @@ namespace Unimake.Business.DFe.Xml.CTe
     [ComVisible(true)]
 #endif
     [XmlInclude(typeof(DetEventoCanc))]
+    [XmlInclude(typeof(DetEventoVincPgto))]
+    [XmlInclude(typeof(DetEventoCancVincPgto))]
     [XmlInclude(typeof(DetEventoCCE))]
     [XmlInclude(typeof(DetEventoCancCompEntrega))]
     [XmlInclude(typeof(DetEventoCompEntrega))]
@@ -1713,7 +1842,7 @@ namespace Unimake.Business.DFe.Xml.CTe
             {
                 if (value.Length != 44)
                 {
-                    throw new Exception("Conteúdo da tag <chNFe> filha da tag <infEntrega> inválido! O conteúdo da tag deve ter 44 dígitos.");
+                    throw new Exception("Conteúdo da tag <chNFe> filha da tag <infEntrega> inválido! O conteúdo da tag deve ter 44 caracteres.");
                 }
 
                 ChNFeField = value;
@@ -1871,6 +2000,14 @@ namespace Unimake.Business.DFe.Xml.CTe
 
                     case TipoEventoCTe.CancelamentoInsucessoEntrega:
                         _detEvento = new DetEventoCancelamentoInsucessoEntrega();
+                        break;
+
+                    case TipoEventoCTe.VinculacaoPagamento:
+                        _detEvento = new DetEventoVincPgto();
+                        break;
+
+                    case TipoEventoCTe.CancelamentoVinculacaoPagamento:
+                        _detEvento = new DetEventoCancVincPgto();
                         break;
 
                     case TipoEventoCTe.RegistroPassagem:

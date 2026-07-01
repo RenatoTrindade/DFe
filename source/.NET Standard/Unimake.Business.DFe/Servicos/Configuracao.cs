@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
+using Unimake.Business.DFe.Security;
 using Unimake.Business.DFe.Utility;
 using Unimake.Business.Security;
 using Unimake.Exceptions;
@@ -63,7 +64,10 @@ namespace Unimake.Business.DFe.Servicos
 
             if (!string.IsNullOrWhiteSpace(CertificadoArquivo) && !string.IsNullOrWhiteSpace(CertificadoSenha))
             {
-                _certificadoDigital = new CertificadoDigital().CarregarCertificadoDigitalA1(CertificadoArquivo, CertificadoSenha);
+                _certificadoDigital = new CertificadoDigital().CarregarCertificadoDigitalA1(
+                    CertificadoArquivo,
+                    CertificadoSenha,
+                    CertificadoKeyStorageFlags);
             }
 
             #endregion
@@ -74,7 +78,10 @@ namespace Unimake.Business.DFe.Servicos
             {
                 var buffer = Convert.FromBase64String(CertificadoBase64);
 
-                _certificadoDigital = new X509Certificate2(buffer, CertificadoSenha);
+                _certificadoDigital = new X509Certificate2(
+                    buffer,
+                    CertificadoSenha,
+                    CertificadoKeyStorageFlags);
             }
 
             #endregion
@@ -344,6 +351,11 @@ namespace Unimake.Business.DFe.Servicos
                                 CodigoTom = XMLUtility.TagRead(elementPropriedades, "CodigoTom");
                             }
 
+                            if (XMLUtility.TagExist(elementPropriedades, "AssinaCanonicalizacaoExclusiva"))
+                            {
+                                AssinaCanonicalizacaoExclusiva = XMLUtility.TagRead(elementPropriedades, "AssinaCanonicalizacaoExclusiva").ToLower() == "true";
+                            }
+
                             if (XMLUtility.TagExist(elementPropriedades, "UsaCertificadoDigital"))
                             {
                                 UsaCertificadoDigital = XMLUtility.TagRead(elementPropriedades, "UsaCertificadoDigital").ToLower() == "true" ? true : false;
@@ -356,7 +368,16 @@ namespace Unimake.Business.DFe.Servicos
 
                             if (XMLUtility.TagExist(elementPropriedades, "NaoAssina"))
                             {
-                                NaoAssina = XMLUtility.TagRead(elementPropriedades, "NaoAssina").ToLower() == "homologação" ? TipoAmbiente.Homologacao : TipoAmbiente.Producao;
+                                var naoAssina = XMLUtility.TagRead(elementPropriedades, "NaoAssina").ToLower();
+                                if (!string.IsNullOrWhiteSpace(naoAssina))
+                                {
+                                    NaoAssina = naoAssina == "homologação" ? TipoAmbiente.Homologacao : TipoAmbiente.Producao;
+                                }
+                            }
+
+                            if (XMLUtility.TagExist(elementPropriedades, "SignatureAlgorithmType"))
+                            {
+                                SignatureAlgorithmType = XMLUtility.TagRead(elementPropriedades, "SignatureAlgorithmType").ToLower() == "sha256" ? AlgorithmType.Sha256 : AlgorithmType.Sha1;
                             }
 
                             if (XMLUtility.TagExist(elementPropriedades, "EncriptaTagAssinatura"))
@@ -966,6 +987,21 @@ namespace Unimake.Business.DFe.Servicos
         public string CertificadoSenha { get; set; }
 
         /// <summary>
+        /// Define os sinalizadores de armazenamento utilizados ao importar certificados A1 a partir de arquivo PFX ou Base64,
+        /// controlando onde a chave privada será persistida e como ela poderá ser reutilizada durante a comunicação TLS.
+        /// O valor padrão preserva o comportamento anterior, deixando o runtime definir o armazenamento da chave.
+        /// Pode ser alterado pelo desenvolvedor para atender restrições de ambiente, permissões ou estratégia de segurança.
+        /// </summary>
+        public X509KeyStorageFlags CertificadoKeyStorageFlags { get; set; } =
+            X509KeyStorageFlags.DefaultKeySet;
+
+        /// <summary>
+        /// Prepara a conexão TLS com o certificado digital antes do envio SOAP real, sem transmitir o XML fiscal.
+        /// Útil para ambientes em que o primeiro handshake TLS do processo falha ao utilizar certificados específicos.
+        /// </summary>
+        public bool PrepararConexaoTLSAntesDoEnvio { get; set; } = false;
+
+        /// <summary>
         /// Certificado digital
         /// </summary>
         public X509Certificate2 CertificadoDigital
@@ -1040,6 +1076,21 @@ namespace Unimake.Business.DFe.Servicos
         /// ApiKey - Header API
         /// </summary>
         public string ApiKey { get; set; }
+
+        /// <summary>
+        /// AppId para autenticação via Bearer token (uMessenger, eBank, etc.)
+        /// </summary>
+        public string AppId { get; set; }
+
+        /// <summary>
+        /// Secret para autenticação via Bearer token (uMessenger, eBank, etc.)
+        /// </summary>
+        public string Secret { get; set; }
+
+        /// <summary>
+        /// Nome da instância do uMessenger a ser utilizada no envio
+        /// </summary>
+        public string UMessengerInstanceName { get; set; }
 
         /// <summary>
         /// Modelo do documento fiscal que é para consultar o status do serviço
@@ -1263,6 +1314,11 @@ namespace Unimake.Business.DFe.Servicos
         public bool LoginConexao { get; set; }
 
         /// <summary>
+        /// Utilizar canonicalização exclusiva (Exclusive C14N) na assinatura digital. Use true para web services que trafegam o XML dentro de um envelope SOAP, como o IssWebWSNacional (Fiorilli). (default == False)
+        /// </summary>
+        public bool AssinaCanonicalizacaoExclusiva { get; set; } = false;
+
+        /// <summary>
         /// Propriedade para habilitar o uso de certificado digital (default == True)
         /// </summary>
         public bool UsaCertificadoDigital { get; set; } = true;
@@ -1271,6 +1327,11 @@ namespace Unimake.Business.DFe.Servicos
         /// Propriedade para habilitar a conversao de alguma configuração para Base64 antes do envio (default == True)
         /// </summary>
         public bool ConverteSenhaBase64 { get; set; } = false;
+
+        /// <summary>
+        /// Tipo de Algorítimo que deve ser utilizado na assinatura do XML. O padrão é SHA1, mas tem web-services que exigem SHA256.
+        /// </summary>
+        public AlgorithmType SignatureAlgorithmType { get; set; } = AlgorithmType.Sha1;
 
         /// <summary>
         /// Método de solicitação da API
@@ -1496,7 +1557,7 @@ namespace Unimake.Business.DFe.Servicos
         /// 2 = Versão 2 do QRCode NFCe (Padrão Nacional)
         /// 3 = Versão 3 do QRCode NFCe (Padrão Nacional)
         /// </summary>
-        public int VersaoQRCodeNFCe { get; set; } = 2;
+        public int VersaoQRCodeNFCe { get; set; } = 3;
 
         /// <summary>
         /// Cookie (caso exista)

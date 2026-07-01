@@ -105,7 +105,7 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         /// Número da NFS-e.
         /// </summary>
         [XmlElement("nNFSe")]
-        public long NNFSe { get; set; }
+        public string NNFSe { get; set; }
 
         /// <summary>
         /// Código IBGE do município de incidência do ISSQN (quando aplicável).
@@ -153,13 +153,13 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         /// Tipo de emissão da NFS-e.
         /// </summary>
         [XmlElement("tpEmis")]
-        public int TpEmis { get; set; }
+        public TipoEmissaoNFSe TpEmis { get; set; }
 
         /// <summary>
         /// Processo de emissão: 1=Aplicativo do contribuinte.
         /// </summary>
         [XmlElement("procEmi")]
-        public int ProcEmi { get; set; }
+        public ProcessoEmissaoNFSe ProcEmi { get; set; }
 
         /// <summary>
         /// Situação (status) da NFS-e.
@@ -207,6 +207,12 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         public ValoresInfNFSe Valores { get; set; }
 
         /// <summary>
+        /// Outras informações (uso da Administração Tributária Municipal).
+        /// </summary>
+        [XmlElement("xOutInf")]
+        public string XOutInf { get; set; }
+
+        /// <summary>
         /// Informações IBS/CBS (quando aplicável).
         /// </summary>
         [XmlElement("IBSCBS", Type = typeof(IBSCBSNFSe))]
@@ -242,7 +248,7 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
                 throw new Exception("Informe o CNPJ ou CPF do emitente (emit.CNPJ/emit.CPF) antes de gerar o Id da NFS-e.");
             }
 
-            if (NNFSe == 0)
+            if (string.IsNullOrWhiteSpace(NNFSe))
             {
                 throw new Exception("Informe o número da NFS-e (nNFSe) antes de gerar o Id da NFS-e.");
             }
@@ -274,7 +280,7 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
                 NumeroDoctoFiscal = NNFSe,
                 AnoEmissao = (DhProc.Year % 100).ToString("D2"),
                 MesEmissao = DhProc.Month.ToString("00"),
-                CodigoNumerico = XMLUtility.GerarCodigoNumerico((int)NNFSe, 9).ToString("000000000")
+                CodigoNumerico = XMLUtility.GerarCodigoNumerico(Convert.ToInt32(NNFSe), 9).ToString("000000000")
             };
 
             var chaveNFSe = MontarChaveNFSe(ref conteudoChaveNFSe);
@@ -333,7 +339,8 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         public bool ShouldSerializeXLocIncid() => !string.IsNullOrWhiteSpace(XLocIncid);
         public bool ShouldSerializeXTribMun() => !string.IsNullOrWhiteSpace(XTribMun);
         public bool ShouldSerializeXNBS() => !string.IsNullOrWhiteSpace(XNBS);
-        public bool ShouldSerializeProcEmi() => ProcEmi > 0;
+        public bool ShouldSerializeProcEmi() => (int)ProcEmi > 0;
+        public bool ShouldSerializeXOutInf() => !string.IsNullOrWhiteSpace(XOutInf);
         #endregion
     }
 
@@ -461,7 +468,11 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         /// Código do município (IBGE).
         /// </summary>
         [XmlElement("cMun")]
+#if INTEROP
+        public int CMun { get; set; }
+#else
         public long CMun { get; set; }
+#endif
 
         /// <summary>
         /// Sigla da UF.
@@ -506,7 +517,7 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         /// Tipo Benefício Municipal.
         /// </summary>
         [XmlElement("tpBM")]
-        public int TpBM { get; set; }
+        public TipoBeneficioMunicipalNFSe TpBM { get; set; }
 
         [XmlIgnore]
         public double VCalcBM { get; set; }
@@ -586,17 +597,10 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
             set => VLiq = Converter.ToDouble(value);
         }
 
-        /// <summary>
-        /// Outras informações (uso da Administração Tributária Municipal).
-        /// </summary>
-        [XmlElement("xOutInf")]
-        public string XOutInf { get; set; }
-
         #region Should Serialize
-        public bool ShouldSerializeTpBM() => TpBM > 0;
+        public bool ShouldSerializeTpBM() => (int)TpBM > 0;
         public bool ShouldSerializeVCalcBMField() => VCalcBM > 0;
         public bool ShouldSerializePAliqAplicField() => PAliqAplic > 0;
-        public bool ShouldSerializeXOutInf() => !string.IsNullOrWhiteSpace(XOutInf);
         #endregion
     }
 
@@ -613,7 +617,11 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL.NFSe
         /// Código da localidade de incidência.
         /// </summary>
         [XmlElement("cLocalidadeIncid")]
+#if INTEROP
+        public int CLocalidadeIncid { get; set; }
+#else
         public long CLocalidadeIncid { get; set; }
+#endif
 
         /// <summary>
         /// Descrição da localidade de incidência.

@@ -18,6 +18,7 @@
 			<WebSoapVersion>soap11</WebSoapVersion>
 			<SchemaVersao>1.01</SchemaVersao>
 			<TargetNS>http://www.abrasf.org.br/nfse.xsd</TargetNS>
+			<AssinaCanonicalizacaoExclusiva>true</AssinaCanonicalizacaoExclusiva>
 		</GerarNfse>
 		<CancelarNfse versao="1.01">
 			<Descricao>Cancelar nota fiscal de serviço</Descricao>
@@ -36,6 +37,7 @@
 			<WebSoapVersion>soap11</WebSoapVersion>
 			<SchemaVersao>1.01</SchemaVersao>
 			<TargetNS>http://www.abrasf.org.br/nfse.xsd</TargetNS>
+			<AssinaCanonicalizacaoExclusiva>true</AssinaCanonicalizacaoExclusiva>
 		</CancelarNfse>
 		<!-- Eventos de consulta do padrão NACIONAL de versão 1.01 -->
 		<ConsultarNfse versao="1.01">
@@ -85,5 +87,21 @@
 			<LoginConexao>false</LoginConexao>
 			<UsaCertificadoDigital>true</UsaCertificadoDigital>
 		</ConsultarNfsePDF>
+		<ConsultarEvento versao="1.01">
+			<Descricao>Consultar Eventos Diversos da NFSe NACIONAL</Descricao>
+			<RequestURIProducao>https://sefin.nfse.gov.br/sefinnacional/nfse/{chNFSe}/eventos/{tipoEvento}/{numSeqEvento}</RequestURIProducao>
+			<RequestURIHomologacao>https://sefin.producaorestrita.nfse.gov.br/API/SefinNacional/nfse/{chNFSe}/eventos/{tipoEvento}/{numSeqEvento}</RequestURIHomologacao>
+			<MetodoAPI>get</MetodoAPI>
+			<WebActionProducao></WebActionProducao>
+			<TagAssinatura></TagAssinatura>
+			<TagAtributoID></TagAtributoID>
+			<WebSoapString></WebSoapString>
+			<WebContentType>application/json</WebContentType>
+			<WebTagRetorno>prop:innertext</WebTagRetorno>
+			<SchemaVersao></SchemaVersao>
+			<GZIPCompress>true</GZIPCompress>
+			<LoginConexao>false</LoginConexao>
+			<UsaCertificadoDigital>true</UsaCertificadoDigital>
+		</ConsultarEvento>
 	</Servicos>
 </Configuracoes>

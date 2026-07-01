@@ -120,8 +120,31 @@ namespace TreinamentoDLL
             this.BtnConsultaSituacaoNF3e = new System.Windows.Forms.Button();
             this.BtnEnviarNF3eSinc = new System.Windows.Forms.Button();
             this.BtnConsultaStatusNF3e = new System.Windows.Forms.Button();
+            this.BtnEnviarEventoCancelamentoDCe = new System.Windows.Forms.Button();
+            this.BtnConsultaSituacaoDCe = new System.Windows.Forms.Button();
+            this.BtnEnviarDCeSincrono = new System.Windows.Forms.Button();
+            this.BtnConsultaStatusDCe = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente = new System.Windows.Forms.Button();
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel = new System.Windows.Forms.Button();
+            this.BtnEventoImobilizacaoItem = new System.Windows.Forms.Button();
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente = new System.Windows.Forms.Button();
+            this.BtnEventoDestinacaoItemParaConsumoPessoal = new System.Windows.Forms.Button();
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido = new System.Windows.Forms.Button();
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado = new System.Windows.Forms.Button();
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor = new System.Windows.Forms.Button();
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao = new System.Windows.Forms.Button();
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao = new System.Windows.Forms.Button();
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao = new System.Windows.Forms.Button();
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao = new System.Windows.Forms.Button();
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito = new System.Windows.Forms.Button();
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega = new System.Windows.Forms.Button();
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao = new System.Windows.Forms.Button();
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral = new System.Windows.Forms.Button();
+            this.BtnEventoCancelamentoDeEvento = new System.Windows.Forms.Button();
+            this.btnImpDANFESemValorFiscal = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.BtnEnviarNFeSincronoRTC = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -135,10 +158,22 @@ namespace TreinamentoDLL
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.tabPage12 = new System.Windows.Forms.TabPage();
-            this.btnImprimirNFeCancelada = new System.Windows.Forms.Button();
             this.btnImprimirEventos = new System.Windows.Forms.Button();
+            this.btnImprimirNFeCancelada = new System.Windows.Forms.Button();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.btnRetificacaoOperacaoTransporte = new System.Windows.Forms.Button();
+            this.btnCancelamentoOperacaoTransporte = new System.Windows.Forms.Button();
+            this.btnEncerramentoOperacaoTransporte = new System.Windows.Forms.Button();
+            this.btnConsultarSituacaoTransportador = new System.Windows.Forms.Button();
+            this.btnConsultarFrotaTransportador = new System.Windows.Forms.Button();
+            this.btnConsultarExcecao = new System.Windows.Forms.Button();
+            this.btnConsultarCIOTGerado = new System.Windows.Forms.Button();
+            this.btnDeclaracaoOperacaoTransporte = new System.Windows.Forms.Button();
+            this.btnGerarIdOperacaoTransporte = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -151,6 +186,8 @@ namespace TreinamentoDLL
             this.tabPage10.SuspendLayout();
             this.tabPage11.SuspendLayout();
             this.tabPage12.SuspendLayout();
+            this.tabPage13.SuspendLayout();
+            this.tabPage14.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnConsultaStatusNFe
@@ -1188,6 +1225,50 @@ namespace TreinamentoDLL
             this.BtnConsultaStatusNF3e.UseVisualStyleBackColor = true;
             this.BtnConsultaStatusNF3e.Click += new System.EventHandler(this.BtnConsultaStatusNF3e_Click);
             // 
+            // BtnEnviarEventoCancelamentoDCe
+            // 
+            this.BtnEnviarEventoCancelamentoDCe.Location = new System.Drawing.Point(8, 142);
+            this.BtnEnviarEventoCancelamentoDCe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEnviarEventoCancelamentoDCe.Name = "BtnEnviarEventoCancelamentoDCe";
+            this.BtnEnviarEventoCancelamentoDCe.Size = new System.Drawing.Size(296, 35);
+            this.BtnEnviarEventoCancelamentoDCe.TabIndex = 3;
+            this.BtnEnviarEventoCancelamentoDCe.Text = "Enviar o Evento de Cancelamento";
+            this.BtnEnviarEventoCancelamentoDCe.UseVisualStyleBackColor = true;
+            this.BtnEnviarEventoCancelamentoDCe.Click += new System.EventHandler(this.BtnEnviarEventoCancelamentoDCe_Click);
+            // 
+            // BtnConsultaSituacaoDCe
+            // 
+            this.BtnConsultaSituacaoDCe.Location = new System.Drawing.Point(7, 98);
+            this.BtnConsultaSituacaoDCe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnConsultaSituacaoDCe.Name = "BtnConsultaSituacaoDCe";
+            this.BtnConsultaSituacaoDCe.Size = new System.Drawing.Size(296, 35);
+            this.BtnConsultaSituacaoDCe.TabIndex = 2;
+            this.BtnConsultaSituacaoDCe.Text = "Consulta Situação";
+            this.BtnConsultaSituacaoDCe.UseVisualStyleBackColor = true;
+            this.BtnConsultaSituacaoDCe.Click += new System.EventHandler(this.BtnConsultaSituacaoDCe_Click);
+            // 
+            // BtnEnviarDCeSincrono
+            // 
+            this.BtnEnviarDCeSincrono.Location = new System.Drawing.Point(8, 53);
+            this.BtnEnviarDCeSincrono.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEnviarDCeSincrono.Name = "BtnEnviarDCeSincrono";
+            this.BtnEnviarDCeSincrono.Size = new System.Drawing.Size(296, 35);
+            this.BtnEnviarDCeSincrono.TabIndex = 1;
+            this.BtnEnviarDCeSincrono.Text = "Enviar DCe Sincrono";
+            this.BtnEnviarDCeSincrono.UseVisualStyleBackColor = true;
+            this.BtnEnviarDCeSincrono.Click += new System.EventHandler(this.BtnEnviarDCeSincrono_Click);
+            // 
+            // BtnConsultaStatusDCe
+            // 
+            this.BtnConsultaStatusDCe.Location = new System.Drawing.Point(7, 8);
+            this.BtnConsultaStatusDCe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnConsultaStatusDCe.Name = "BtnConsultaStatusDCe";
+            this.BtnConsultaStatusDCe.Size = new System.Drawing.Size(296, 35);
+            this.BtnConsultaStatusDCe.TabIndex = 0;
+            this.BtnConsultaStatusDCe.Text = "Consulta Status";
+            this.BtnConsultaStatusDCe.UseVisualStyleBackColor = true;
+            this.BtnConsultaStatusDCe.Click += new System.EventHandler(this.BtnConsultaStatusDCe_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1205,6 +1286,8 @@ namespace TreinamentoDLL
             this.tabControl1.Controls.Add(this.tabPage10);
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Controls.Add(this.tabPage12);
+            this.tabControl1.Controls.Add(this.tabPage13);
+            this.tabControl1.Controls.Add(this.tabPage14);
             this.tabControl1.Location = new System.Drawing.Point(12, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -1213,6 +1296,8 @@ namespace TreinamentoDLL
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.btnImpDANFESemValorFiscal);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.BtnAbrirTeleConfigUnidanfe);
             this.tabPage1.Controls.Add(this.BtnConsultaStatusNFe);
@@ -1238,6 +1323,248 @@ namespace TreinamentoDLL
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "NFe";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente);
+            this.groupBox2.Controls.Add(this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel);
+            this.groupBox2.Controls.Add(this.BtnEventoImobilizacaoItem);
+            this.groupBox2.Controls.Add(this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente);
+            this.groupBox2.Controls.Add(this.BtnEventoDestinacaoItemParaConsumoPessoal);
+            this.groupBox2.Controls.Add(this.BtnEventoSolicitacaoApropriacaoCreditoPresumido);
+            this.groupBox2.Controls.Add(this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado);
+            this.groupBox2.Controls.Add(this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor);
+            this.groupBox2.Controls.Add(this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao);
+            this.groupBox2.Controls.Add(this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao);
+            this.groupBox2.Controls.Add(this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao);
+            this.groupBox2.Controls.Add(this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao);
+            this.groupBox2.Controls.Add(this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito);
+            this.groupBox2.Controls.Add(this.BtnEventoAtualizacaoDataPrevisaoEntrega);
+            this.groupBox2.Controls.Add(this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao);
+            this.groupBox2.Controls.Add(this.BtnEventoInformacaoEfetivoPagamentoIntegral);
+            this.groupBox2.Controls.Add(this.BtnEventoCancelamentoDeEvento);
+            this.groupBox2.Location = new System.Drawing.Point(724, 8);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(470, 955);
+            this.groupBox2.TabIndex = 39;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Exemplos de Eventos IBS/CBS";
+            // 
+            // BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente
+            // 
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.CausesValidation = false;
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.Location = new System.Drawing.Point(7, 869);
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.Name = "BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente";
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.Size = new System.Drawing.Size(448, 60);
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.TabIndex = 16;
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.Text = "Evento Solicitação Apropriação Crédito Bens e Serviços Adquirente";
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.UseVisualStyleBackColor = true;
+            this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente.Click += new System.EventHandler(this.BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente_Click);
+            // 
+            // BtnEventoSolicitacaoApropriacaoCreditoCombustivel
+            // 
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.CausesValidation = false;
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.Location = new System.Drawing.Point(7, 822);
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.Name = "BtnEventoSolicitacaoApropriacaoCreditoCombustivel";
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.Size = new System.Drawing.Size(448, 37);
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.TabIndex = 15;
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.Text = "Evento Solicitação Apropriação Crédito Combustível";
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.UseVisualStyleBackColor = true;
+            this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel.Click += new System.EventHandler(this.BtnEventoSolicitacaoApropriacaoCreditoCombustivel_Click);
+            // 
+            // BtnEventoImobilizacaoItem
+            // 
+            this.BtnEventoImobilizacaoItem.CausesValidation = false;
+            this.BtnEventoImobilizacaoItem.Location = new System.Drawing.Point(7, 776);
+            this.BtnEventoImobilizacaoItem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoImobilizacaoItem.Name = "BtnEventoImobilizacaoItem";
+            this.BtnEventoImobilizacaoItem.Size = new System.Drawing.Size(448, 36);
+            this.BtnEventoImobilizacaoItem.TabIndex = 14;
+            this.BtnEventoImobilizacaoItem.Text = "Evento Imobilização de Item";
+            this.BtnEventoImobilizacaoItem.UseVisualStyleBackColor = true;
+            this.BtnEventoImobilizacaoItem.Click += new System.EventHandler(this.BtnEventoImobilizacaoItem_Click);
+            // 
+            // BtnEventoPerecimentoDuranteTransporteContratadoAdquirente
+            // 
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.CausesValidation = false;
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.Location = new System.Drawing.Point(7, 709);
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.Name = "BtnEventoPerecimentoDuranteTransporteContratadoAdquirente";
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.Size = new System.Drawing.Size(448, 58);
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.TabIndex = 13;
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.Text = "Evento Perecimento no Transporte Contratado pelo Adquirente";
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.UseVisualStyleBackColor = true;
+            this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente.Click += new System.EventHandler(this.BtnEventoPerecimentoDuranteTransporteContratadoAdquirente_Click);
+            // 
+            // BtnEventoDestinacaoItemParaConsumoPessoal
+            // 
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.CausesValidation = false;
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.Location = new System.Drawing.Point(7, 662);
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.Name = "BtnEventoDestinacaoItemParaConsumoPessoal";
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.Size = new System.Drawing.Size(448, 37);
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.TabIndex = 12;
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.Text = "Evento Destinação de Item para Consumo Pessoal";
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.UseVisualStyleBackColor = true;
+            this.BtnEventoDestinacaoItemParaConsumoPessoal.Click += new System.EventHandler(this.BtnEventoDestinacaoItemParaConsumoPessoal_Click);
+            // 
+            // BtnEventoSolicitacaoApropriacaoCreditoPresumido
+            // 
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.CausesValidation = false;
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.Location = new System.Drawing.Point(7, 616);
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.Name = "BtnEventoSolicitacaoApropriacaoCreditoPresumido";
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.Size = new System.Drawing.Size(448, 36);
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.TabIndex = 11;
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.Text = "Evento Solicitação Apropriação Crédito Presumido";
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.UseVisualStyleBackColor = true;
+            this.BtnEventoSolicitacaoApropriacaoCreditoPresumido.Click += new System.EventHandler(this.BtnEventoSolicitacaoApropriacaoCreditoPresumido_Click);
+            // 
+            // BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado
+            // 
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.CausesValidation = false;
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.Location = new System.Drawing.Point(7, 553);
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.Name = "BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado";
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.Size = new System.Drawing.Size(448, 55);
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.TabIndex = 10;
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.Text = "Evento Fornecimento não Realizado com Pagamento Antecipado";
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.UseVisualStyleBackColor = true;
+            this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado.Click += new System.EventHandler(this.BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado_Click);
+            // 
+            // BtnEventoPerecimentoDuranteTransporteContratadoFornecedor
+            // 
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.CausesValidation = false;
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.Location = new System.Drawing.Point(7, 489);
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.Name = "BtnEventoPerecimentoDuranteTransporteContratadoFornecedor";
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.Size = new System.Drawing.Size(448, 54);
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.TabIndex = 9;
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.Text = "Evento Perecimento no Transporte Contratado pelo Fornecedor";
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.UseVisualStyleBackColor = true;
+            this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor.Click += new System.EventHandler(this.BtnEventoPerecimentoDuranteTransporteContratadoFornecedor_Click);
+            // 
+            // BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao
+            // 
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.CausesValidation = false;
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.Location = new System.Drawing.Point(7, 423);
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.Name = "BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao";
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.Size = new System.Drawing.Size(448, 56);
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.TabIndex = 8;
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.Text = "Evento Manifestação Fisco Pedido Transferência Crédito CBS";
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.UseVisualStyleBackColor = true;
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao.Click += new System.EventHandler(this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao_Click);
+            // 
+            // BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao
+            // 
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.CausesValidation = false;
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.Location = new System.Drawing.Point(7, 363);
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.Name = "BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao";
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.Size = new System.Drawing.Size(448, 51);
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.TabIndex = 7;
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.Text = "Evento Manifestação Fisco Pedido Transferência Crédito IBS";
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.UseVisualStyleBackColor = true;
+            this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao.Click += new System.EventHandler(this.BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao_Click);
+            // 
+            // BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao
+            // 
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.CausesValidation = false;
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.Location = new System.Drawing.Point(7, 313);
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.Name = "BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao";
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.Size = new System.Drawing.Size(448, 40);
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.TabIndex = 6;
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.Text = "Evento Manifestação Pedido Transferência Crédito CBS";
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.UseVisualStyleBackColor = true;
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao.Click += new System.EventHandler(this.BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao_Click);
+            // 
+            // BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao
+            // 
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.CausesValidation = false;
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.Location = new System.Drawing.Point(7, 258);
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.Name = "BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao";
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.Size = new System.Drawing.Size(448, 39);
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.TabIndex = 5;
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.Text = "Evento Manifestação Pedido Transferência Crédito IBS";
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.UseVisualStyleBackColor = true;
+            this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao.Click += new System.EventHandler(this.BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao_Click);
+            // 
+            // BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito
+            // 
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.CausesValidation = false;
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.Location = new System.Drawing.Point(7, 210);
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.Name = "BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito";
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.Size = new System.Drawing.Size(448, 38);
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.TabIndex = 4;
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.Text = "Evento Aceite Débito Apuração Emissão Nota de Crédito";
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.UseVisualStyleBackColor = true;
+            this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito.Click += new System.EventHandler(this.BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito_Click);
+            // 
+            // BtnEventoAtualizacaoDataPrevisaoEntrega
+            // 
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.CausesValidation = false;
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.Location = new System.Drawing.Point(7, 163);
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.Name = "BtnEventoAtualizacaoDataPrevisaoEntrega";
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.Size = new System.Drawing.Size(448, 37);
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.TabIndex = 3;
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.Text = "Evento Atualização Data de Previsão de Entrega";
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.UseVisualStyleBackColor = true;
+            this.BtnEventoAtualizacaoDataPrevisaoEntrega.Click += new System.EventHandler(this.BtnEventoAtualizacaoDataPrevisaoEntrega_Click);
+            // 
+            // BtnEventoImportacaoALCZFMNaoConvertidaIsencao
+            // 
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.CausesValidation = false;
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.Location = new System.Drawing.Point(7, 117);
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.Name = "BtnEventoImportacaoALCZFMNaoConvertidaIsencao";
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.Size = new System.Drawing.Size(448, 36);
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.TabIndex = 2;
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.Text = "Evento Importação ALC/ZFM não Convertida Isenção";
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.UseVisualStyleBackColor = true;
+            this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao.Click += new System.EventHandler(this.BtnEventoImportacaoALCZFMNaoConvertidaIsencao_Click);
+            // 
+            // BtnEventoInformacaoEfetivoPagamentoIntegral
+            // 
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.CausesValidation = false;
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.Location = new System.Drawing.Point(7, 72);
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.Name = "BtnEventoInformacaoEfetivoPagamentoIntegral";
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.Size = new System.Drawing.Size(448, 35);
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.TabIndex = 1;
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.Text = "Evento Informação Efetivo Pagamento Integral";
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.UseVisualStyleBackColor = true;
+            this.BtnEventoInformacaoEfetivoPagamentoIntegral.Click += new System.EventHandler(this.BtnEventoInformacaoEfetivoPagamentoIntegral_Click);
+            // 
+            // BtnEventoCancelamentoDeEvento
+            // 
+            this.BtnEventoCancelamentoDeEvento.CausesValidation = false;
+            this.BtnEventoCancelamentoDeEvento.Location = new System.Drawing.Point(7, 28);
+            this.BtnEventoCancelamentoDeEvento.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.BtnEventoCancelamentoDeEvento.Name = "BtnEventoCancelamentoDeEvento";
+            this.BtnEventoCancelamentoDeEvento.Size = new System.Drawing.Size(448, 34);
+            this.BtnEventoCancelamentoDeEvento.TabIndex = 0;
+            this.BtnEventoCancelamentoDeEvento.Text = "Evento Cancelamento de Evento";
+            this.BtnEventoCancelamentoDeEvento.UseVisualStyleBackColor = true;
+            this.BtnEventoCancelamentoDeEvento.Click += new System.EventHandler(this.BtnEventoCancelamentoDeEvento_Click);
+            // 
+            // btnImpDANFESemValorFiscal
+            // 
+            this.btnImpDANFESemValorFiscal.CausesValidation = false;
+            this.btnImpDANFESemValorFiscal.Location = new System.Drawing.Point(331, 476);
+            this.btnImpDANFESemValorFiscal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnImpDANFESemValorFiscal.Name = "btnImpDANFESemValorFiscal";
+            this.btnImpDANFESemValorFiscal.Size = new System.Drawing.Size(296, 35);
+            this.btnImpDANFESemValorFiscal.TabIndex = 38;
+            this.btnImpDANFESemValorFiscal.Text = "Imprimir DANFe sem valor fiscal";
+            this.btnImpDANFESemValorFiscal.UseVisualStyleBackColor = true;
+            this.btnImpDANFESemValorFiscal.Click += new System.EventHandler(this.btnImpDANFESemValorFiscal_Click);
             // 
             // groupBox1
             // 
@@ -1447,6 +1774,17 @@ namespace TreinamentoDLL
             this.tabPage12.Text = "Diversos";
             this.tabPage12.UseVisualStyleBackColor = true;
             // 
+            // btnImprimirEventos
+            // 
+            this.btnImprimirEventos.Location = new System.Drawing.Point(311, 53);
+            this.btnImprimirEventos.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnImprimirEventos.Name = "btnImprimirEventos";
+            this.btnImprimirEventos.Size = new System.Drawing.Size(296, 35);
+            this.btnImprimirEventos.TabIndex = 35;
+            this.btnImprimirEventos.Text = "Imprimir Eventos de NFe, NFCe, etc";
+            this.btnImprimirEventos.UseVisualStyleBackColor = true;
+            this.btnImprimirEventos.Click += new System.EventHandler(this.btnImprimirEventos_Click);
+            // 
             // btnImprimirNFeCancelada
             // 
             this.btnImprimirNFeCancelada.Location = new System.Drawing.Point(311, 8);
@@ -1458,16 +1796,137 @@ namespace TreinamentoDLL
             this.btnImprimirNFeCancelada.UseVisualStyleBackColor = true;
             this.btnImprimirNFeCancelada.Click += new System.EventHandler(this.btnImprimirNFeCancelada_Click);
             // 
-            // btnImprimirEventos
+            // tabPage13
             // 
-            this.btnImprimirEventos.Location = new System.Drawing.Point(311, 53);
-            this.btnImprimirEventos.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnImprimirEventos.Name = "btnImprimirEventos";
-            this.btnImprimirEventos.Size = new System.Drawing.Size(296, 35);
-            this.btnImprimirEventos.TabIndex = 35;
-            this.btnImprimirEventos.Text = "Imprimir Eventos de NFe, NFCe, etc";
-            this.btnImprimirEventos.UseVisualStyleBackColor = true;
-            this.btnImprimirEventos.Click += new System.EventHandler(this.btnImprimirEventos_Click);
+            this.tabPage13.Controls.Add(this.BtnEnviarEventoCancelamentoDCe);
+            this.tabPage13.Controls.Add(this.BtnConsultaStatusDCe);
+            this.tabPage13.Controls.Add(this.BtnConsultaSituacaoDCe);
+            this.tabPage13.Controls.Add(this.BtnEnviarDCeSincrono);
+            this.tabPage13.Location = new System.Drawing.Point(4, 29);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage13.Size = new System.Drawing.Size(1694, 997);
+            this.tabPage13.TabIndex = 12;
+            this.tabPage13.Text = "DCe";
+            this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // tabPage14
+            // 
+            this.tabPage14.Controls.Add(this.btnRetificacaoOperacaoTransporte);
+            this.tabPage14.Controls.Add(this.btnCancelamentoOperacaoTransporte);
+            this.tabPage14.Controls.Add(this.btnEncerramentoOperacaoTransporte);
+            this.tabPage14.Controls.Add(this.btnConsultarSituacaoTransportador);
+            this.tabPage14.Controls.Add(this.btnConsultarFrotaTransportador);
+            this.tabPage14.Controls.Add(this.btnConsultarExcecao);
+            this.tabPage14.Controls.Add(this.btnConsultarCIOTGerado);
+            this.tabPage14.Controls.Add(this.btnDeclaracaoOperacaoTransporte);
+            this.tabPage14.Controls.Add(this.btnGerarIdOperacaoTransporte);
+            this.tabPage14.Location = new System.Drawing.Point(4, 29);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage14.Size = new System.Drawing.Size(1694, 997);
+            this.tabPage14.TabIndex = 13;
+            this.tabPage14.Text = "CIOT";
+            this.tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // btnRetificacaoOperacaoTransporte
+            // 
+            this.btnRetificacaoOperacaoTransporte.Location = new System.Drawing.Point(7, 368);
+            this.btnRetificacaoOperacaoTransporte.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRetificacaoOperacaoTransporte.Name = "btnRetificacaoOperacaoTransporte";
+            this.btnRetificacaoOperacaoTransporte.Size = new System.Drawing.Size(296, 35);
+            this.btnRetificacaoOperacaoTransporte.TabIndex = 9;
+            this.btnRetificacaoOperacaoTransporte.Text = "Retificacao Operacao Transporte";
+            this.btnRetificacaoOperacaoTransporte.UseVisualStyleBackColor = true;
+            this.btnRetificacaoOperacaoTransporte.Click += new System.EventHandler(this.btnRetificacaoOperacaoTransporte_Click);
+            // 
+            // btnCancelamentoOperacaoTransporte
+            // 
+            this.btnCancelamentoOperacaoTransporte.Location = new System.Drawing.Point(7, 323);
+            this.btnCancelamentoOperacaoTransporte.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCancelamentoOperacaoTransporte.Name = "btnCancelamentoOperacaoTransporte";
+            this.btnCancelamentoOperacaoTransporte.Size = new System.Drawing.Size(296, 35);
+            this.btnCancelamentoOperacaoTransporte.TabIndex = 8;
+            this.btnCancelamentoOperacaoTransporte.Text = "Cancelamento Operacao Transporte";
+            this.btnCancelamentoOperacaoTransporte.UseVisualStyleBackColor = true;
+            this.btnCancelamentoOperacaoTransporte.Click += new System.EventHandler(this.btnCancelamentoOperacaoTransporte_Click);
+            // 
+            // btnEncerramentoOperacaoTransporte
+            // 
+            this.btnEncerramentoOperacaoTransporte.Location = new System.Drawing.Point(7, 278);
+            this.btnEncerramentoOperacaoTransporte.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnEncerramentoOperacaoTransporte.Name = "btnEncerramentoOperacaoTransporte";
+            this.btnEncerramentoOperacaoTransporte.Size = new System.Drawing.Size(296, 35);
+            this.btnEncerramentoOperacaoTransporte.TabIndex = 7;
+            this.btnEncerramentoOperacaoTransporte.Text = "Encerramento Operação Transporte";
+            this.btnEncerramentoOperacaoTransporte.UseVisualStyleBackColor = true;
+            this.btnEncerramentoOperacaoTransporte.Click += new System.EventHandler(this.btnEncerramentoOperacaoTransporte_Click);
+            // 
+            // btnConsultarSituacaoTransportador
+            // 
+            this.btnConsultarSituacaoTransportador.Location = new System.Drawing.Point(7, 233);
+            this.btnConsultarSituacaoTransportador.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnConsultarSituacaoTransportador.Name = "btnConsultarSituacaoTransportador";
+            this.btnConsultarSituacaoTransportador.Size = new System.Drawing.Size(296, 35);
+            this.btnConsultarSituacaoTransportador.TabIndex = 6;
+            this.btnConsultarSituacaoTransportador.Text = "Consultar Situacao Transportador";
+            this.btnConsultarSituacaoTransportador.UseVisualStyleBackColor = true;
+            this.btnConsultarSituacaoTransportador.Click += new System.EventHandler(this.btnConsultarSituacaoTransportador_Click);
+            // 
+            // btnConsultarFrotaTransportador
+            // 
+            this.btnConsultarFrotaTransportador.Location = new System.Drawing.Point(7, 188);
+            this.btnConsultarFrotaTransportador.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnConsultarFrotaTransportador.Name = "btnConsultarFrotaTransportador";
+            this.btnConsultarFrotaTransportador.Size = new System.Drawing.Size(296, 35);
+            this.btnConsultarFrotaTransportador.TabIndex = 5;
+            this.btnConsultarFrotaTransportador.Text = "Consultar Frota Transportador";
+            this.btnConsultarFrotaTransportador.UseVisualStyleBackColor = true;
+            this.btnConsultarFrotaTransportador.Click += new System.EventHandler(this.btnConsultarFrotaTransportador_Click);
+            // 
+            // btnConsultarExcecao
+            // 
+            this.btnConsultarExcecao.Location = new System.Drawing.Point(7, 143);
+            this.btnConsultarExcecao.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnConsultarExcecao.Name = "btnConsultarExcecao";
+            this.btnConsultarExcecao.Size = new System.Drawing.Size(296, 35);
+            this.btnConsultarExcecao.TabIndex = 4;
+            this.btnConsultarExcecao.Text = "Consultar Excecao";
+            this.btnConsultarExcecao.UseVisualStyleBackColor = true;
+            this.btnConsultarExcecao.Click += new System.EventHandler(this.btnConsultarExcecao_Click);
+            // 
+            // btnConsultarCIOTGerado
+            // 
+            this.btnConsultarCIOTGerado.Location = new System.Drawing.Point(7, 98);
+            this.btnConsultarCIOTGerado.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnConsultarCIOTGerado.Name = "btnConsultarCIOTGerado";
+            this.btnConsultarCIOTGerado.Size = new System.Drawing.Size(296, 35);
+            this.btnConsultarCIOTGerado.TabIndex = 3;
+            this.btnConsultarCIOTGerado.Text = "Consultar CIOT Gerado";
+            this.btnConsultarCIOTGerado.UseVisualStyleBackColor = true;
+            this.btnConsultarCIOTGerado.Click += new System.EventHandler(this.btnConsultarCIOTGerado_Click);
+            // 
+            // btnDeclaracaoOperacaoTransporte
+            // 
+            this.btnDeclaracaoOperacaoTransporte.Location = new System.Drawing.Point(7, 53);
+            this.btnDeclaracaoOperacaoTransporte.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnDeclaracaoOperacaoTransporte.Name = "btnDeclaracaoOperacaoTransporte";
+            this.btnDeclaracaoOperacaoTransporte.Size = new System.Drawing.Size(296, 35);
+            this.btnDeclaracaoOperacaoTransporte.TabIndex = 2;
+            this.btnDeclaracaoOperacaoTransporte.Text = "Declaracao Operação Transporte";
+            this.btnDeclaracaoOperacaoTransporte.UseVisualStyleBackColor = true;
+            this.btnDeclaracaoOperacaoTransporte.Click += new System.EventHandler(this.btnDeclaracaoOperacaoTransporte_Click);
+            // 
+            // btnGerarIdOperacaoTransporte
+            // 
+            this.btnGerarIdOperacaoTransporte.Location = new System.Drawing.Point(7, 8);
+            this.btnGerarIdOperacaoTransporte.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnGerarIdOperacaoTransporte.Name = "btnGerarIdOperacaoTransporte";
+            this.btnGerarIdOperacaoTransporte.Size = new System.Drawing.Size(296, 35);
+            this.btnGerarIdOperacaoTransporte.TabIndex = 1;
+            this.btnGerarIdOperacaoTransporte.Text = "Gerar ID Operacao Transporte";
+            this.btnGerarIdOperacaoTransporte.UseVisualStyleBackColor = true;
+            this.btnGerarIdOperacaoTransporte.Click += new System.EventHandler(this.btnGerarIdOperacaoTransporte_Click);
             // 
             // FormTestes
             // 
@@ -1481,6 +1940,7 @@ namespace TreinamentoDLL
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
@@ -1493,6 +1953,8 @@ namespace TreinamentoDLL
             this.tabPage10.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
             this.tabPage12.ResumeLayout(false);
+            this.tabPage13.ResumeLayout(false);
+            this.tabPage14.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1586,12 +2048,34 @@ namespace TreinamentoDLL
         private System.Windows.Forms.Button BtnEnviarNFComSincrono;
         private System.Windows.Forms.Button BtnEnviarEventoCancelamentoNFCom;
         private System.Windows.Forms.Button BtnConsultaSituacaoNFCom;
+        private System.Windows.Forms.Button BtnEnviarEventoCancelamentoDCe;
+        private System.Windows.Forms.Button BtnConsultaSituacaoDCe;
+        private System.Windows.Forms.Button BtnEnviarDCeSincrono;
+        private System.Windows.Forms.Button BtnConsultaStatusDCe;
         private System.Windows.Forms.Button BtnEnviarEventoCancelamentoNF3e;
         private System.Windows.Forms.Button BtnConsultaSituacaoNF3e;
         private System.Windows.Forms.Button BtnEnviarNF3eSinc;
         private System.Windows.Forms.Button BtnConsultaStatusNF3e;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button BtnEventoSolicitacaoApropriacaoCreditoBensServicosAdquirente;
+        private System.Windows.Forms.Button BtnEventoSolicitacaoApropriacaoCreditoCombustivel;
+        private System.Windows.Forms.Button BtnEventoImobilizacaoItem;
+        private System.Windows.Forms.Button BtnEventoPerecimentoDuranteTransporteContratadoAdquirente;
+        private System.Windows.Forms.Button BtnEventoDestinacaoItemParaConsumoPessoal;
+        private System.Windows.Forms.Button BtnEventoSolicitacaoApropriacaoCreditoPresumido;
+        private System.Windows.Forms.Button BtnEventoFornecimentoNaoRealizadoComPagamentoAntecipado;
+        private System.Windows.Forms.Button BtnEventoPerecimentoDuranteTransporteContratadoFornecedor;
+        private System.Windows.Forms.Button BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoCBSOperacaoSucessao;
+        private System.Windows.Forms.Button BtnEventoManifestacaoFiscoPedidoTransferenciaCreditoIBSOperacaoSucessao;
+        private System.Windows.Forms.Button BtnEventoManifestacaoPedidoTransferenciaCreditoCBSOperacaoSucessao;
+        private System.Windows.Forms.Button BtnEventoManifestacaoPedidoTransferenciaCreditoIBSOperacaoSucessao;
+        private System.Windows.Forms.Button BtnEventoAceiteDebitoApuracaoEmissaoNotaCredito;
+        private System.Windows.Forms.Button BtnEventoAtualizacaoDataPrevisaoEntrega;
+        private System.Windows.Forms.Button BtnEventoImportacaoALCZFMNaoConvertidaIsencao;
+        private System.Windows.Forms.Button BtnEventoInformacaoEfetivoPagamentoIntegral;
+        private System.Windows.Forms.Button BtnEventoCancelamentoDeEvento;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
@@ -1603,10 +2087,22 @@ namespace TreinamentoDLL
         private System.Windows.Forms.TabPage tabPage10;
         private System.Windows.Forms.TabPage tabPage11;
         private System.Windows.Forms.TabPage tabPage12;
+        private System.Windows.Forms.TabPage tabPage13;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button BtnEnviarNFeSincronoRTC;
         private System.Windows.Forms.Button btnImprimirNFeCancelada;
         private System.Windows.Forms.Button btnImprimirEventos;
+        private System.Windows.Forms.Button btnImpDANFESemValorFiscal;
+        private System.Windows.Forms.TabPage tabPage14;
+        private System.Windows.Forms.Button btnDeclaracaoOperacaoTransporte;
+        private System.Windows.Forms.Button btnGerarIdOperacaoTransporte;
+        private System.Windows.Forms.Button btnRetificacaoOperacaoTransporte;
+        private System.Windows.Forms.Button btnCancelamentoOperacaoTransporte;
+        private System.Windows.Forms.Button btnEncerramentoOperacaoTransporte;
+        private System.Windows.Forms.Button btnConsultarSituacaoTransportador;
+        private System.Windows.Forms.Button btnConsultarFrotaTransportador;
+        private System.Windows.Forms.Button btnConsultarExcecao;
+        private System.Windows.Forms.Button btnConsultarCIOTGerado;
     }
 }
 

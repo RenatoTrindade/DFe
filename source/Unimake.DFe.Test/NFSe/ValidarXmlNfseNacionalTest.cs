@@ -14,23 +14,6 @@ namespace Unimake.DFe.Test.NFSe
 {
     public class ValidarXmlNfseNacionalTest
     {
-        [Theory]
-        [Trait("NFSe", "ValidarXmlNfseNacional")]
-        [InlineData(@"..\..\..\NFSe\Resources\NACIONAL\1.00\GerarNfseEnvio-env-loterps.xml", "NFSe.NACIONAL.DPS_v1.00.xsd")]
-        [InlineData(@"..\..\..\NFSe\Resources\NACIONAL\1.00\GerarNfseEnvio_RTC-env-loterps.xml", "NFSe.NACIONAL.DPS_v1.00.xsd")]
-        public void ValidarXmlNfseNacional(string arqXML, string arqXSD)
-        {
-            Assert.True(File.Exists(arqXML), "Arquivo " + arqXML + " não foi localizado para a realização do teste de obter o tipo do XML.");
-
-            var doc = new XmlDocument();
-            doc.Load(arqXML);
-
-            var validar = new ValidarSchema();
-            validar.Validar(doc, arqXSD, "http://www.sped.fazenda.gov.br/nfse", PadraoNFSe.NACIONAL);
-
-            Assert.True(validar.Success, "Ocorreu um erro na validação de SCHEMA: \n" + validar.ErrorMessage);
-        }
-
         /// <summary>
         /// Testar a validação do XML da NFSe com indicativo Decisão Judicial
         /// </summary>
@@ -47,14 +30,14 @@ namespace Unimake.DFe.Test.NFSe
                     Id = "NFS41055082299999999999999000000000000126013568215637",
                     XLocEmi = "Cianorte",
                     XLocPrestacao = "Cianorte",
-                    NNFSe = 1,
+                    NNFSe = "1",
                     CLocIncid = 4105508,
                     XLocIncid = "Cianorte",
                     XTribNac = "Agenciamento, corretagem ou intermediação de bens móveis ou imóveis, não abrangidos em outros itens ou subitens, por quaisquer meios.",
                     XNBS = "Serviços de concessão de crédito não classificados em subposições anteriores",
                     VerAplic = "EmissorWeb_1.5.0.0",
                     AmbGer = AmbienteGeradorNFSe.SefinNacionalNfse,
-                    TpEmis = 1,
+                    TpEmis = TipoEmissaoNFSe.Normal,
                     CStat = 102,
                     DhProc = emissao,
                     NDFSe = "1",

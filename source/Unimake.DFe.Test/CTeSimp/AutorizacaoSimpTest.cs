@@ -19,7 +19,7 @@ namespace Unimake.DFe.Test.CTe
         /// <param name="ufBrasil">UF para onde deve ser enviado a CTe</param>
         /// <param name="tipoAmbiente">Ambiente para onde deve ser enviado a CTe</param>
         [Theory]
-        [Trait("DFe", "CTe")]
+        [Trait("DFe", "CTeSimp")]
         [InlineData(UFBrasil.AC, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.AL, TipoAmbiente.Homologacao)]
         [InlineData(UFBrasil.AP, TipoAmbiente.Homologacao)]
@@ -103,7 +103,7 @@ namespace Unimake.DFe.Test.CTe
         /// <param name="tipoAmbiente">Ambiente para onde deve ser enviado a CTe</param>
         /// <param name="versao">Versão do schema</param>
         [Theory]
-        [Trait("DFe", "CTe")]
+        [Trait("DFe", "CTeSimp")]
         [InlineData(UFBrasil.PR, TipoAmbiente.Homologacao)]
         public void EnviarCTeSimpString(UFBrasil ufBrasil, TipoAmbiente tipoAmbiente)
         {
@@ -157,7 +157,7 @@ namespace Unimake.DFe.Test.CTe
                         TpServ = TipoServicoCTe.Normal,
                         UFIni = ufBrasil,
                         UFFim = ufBrasil,
-                        Retira = SimNao.Nao,
+                        Retira = SimNao01.Nao,
                         XDetRetira = "xDetRetira1"                        
                     },
                     Compl = new Compl
@@ -314,7 +314,7 @@ namespace Unimake.DFe.Test.CTe
                             }
                         }
                     },
-                    Imp = new Business.DFe.Xml.CTe.Imp
+                    Imp = new Business.DFe.Xml.CTeSimp.Imp
                     {
                         ICMS = new Business.DFe.Xml.CTe.ICMS
                         {

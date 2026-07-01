@@ -39,13 +39,20 @@ namespace Unimake.Business.DFe.Servicos.NFCom
         {
             XmlValidarConteudo(); // Efetuar a validação antes de validar schema para evitar alguns erros que não ficam claros para o desenvolvedor.
 
-            var validar = new ValidarSchema();
-            validar.Validar(ConteudoXML, Configuracoes.TipoDFe.ToString() + "." + Configuracoes.SchemaArquivo, Configuracoes.TargetNS);
+            var resultadoValidacao = ValidarXMLCentralizado();
 
-            if (!validar.Success)
+            if (!resultadoValidacao.Validado)
             {
-                throw new ValidarXMLException(validar.ErrorMessage);
+                throw new ValidarXMLException(resultadoValidacao.MensagemRetorno);
             }
+
+            //var validar = new ValidarSchema();
+            //validar.Validar(ConteudoXML, Configuracoes.TipoDFe.ToString() + "." + Configuracoes.SchemaArquivo, Configuracoes.TargetNS);
+
+            //if (!validar.Success)
+            //{
+            //    throw new ValidarXMLException(validar.ErrorMessage);
+            //}
         }
 
         /// <summary>
@@ -89,6 +96,18 @@ namespace Unimake.Business.DFe.Servicos.NFCom
                 }
             }
         }
+
+#if INTEROP
+
+        /// <summary>
+        /// Gravar o XML de distribuição em uma pasta no HD
+        /// </summary>
+        /// <param name="pasta">Pasta onde deve ser gravado o XML no HD</param>
+        /// <param name="nomeArquivo">Nome do arquivo a ser gravado no HD</param>
+        /// <param name="conteudoXML">String contendo o conteúdo do XML a ser gravado no HD</param>
+        public void GravarXmlDistribuicaoComConteudo(string pasta, string nomeArquivo, string conteudoXML) => GravarXmlDistribuicao(pasta, nomeArquivo, conteudoXML);
+
+#endif
 
         /// <summary>
         /// Gravar o XML de distribuição em um stream

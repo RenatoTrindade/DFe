@@ -107,11 +107,14 @@ namespace Unimake.Business.DFe.Xml.CTeOS
         [XmlElement("imp")]
         public Imp Imp { get; set; }
 
+        [XmlElement("pgtoVinc")]
+        public CTe.PgtoVinc PgtoVinc { get; set; }
+
         [XmlElement("infCTeNorm")]
         public InfCTeNorm InfCTeNorm { get; set; }
 
         [XmlElement("infCteComp")]
-        public InfCteComp InfCteComp { get; set; }
+        public List<InfCteComp> InfCteComp { get; set; }
 
         [XmlElement("infCteAnu")]
         public InfCteAnu InfCteAnu { get; set; }
@@ -140,18 +143,21 @@ namespace Unimake.Business.DFe.Xml.CTeOS
         {
             get
             {
-                ChaveField = ((int)Ide.CUF).ToString() +
-                    Ide.DhEmi.ToString("yyMM") +
-                    Emit.CNPJ.PadLeft(14, '0') +
-                    ((int)Ide.Mod).ToString().PadLeft(2, '0') +
-                    Ide.Serie.ToString().PadLeft(3, '0') +
-                    Ide.NCT.ToString().PadLeft(9, '0') +
-                    ((int)Ide.TpEmis).ToString() +
-                    Ide.CCT.PadLeft(8, '0');
+                var conteudoChaveDFe = new XMLUtility.ConteudoChaveDFe
+                {
+                    UFEmissor = (UFBrasil)(int)Ide.CUF,
+                    AnoEmissao = Ide.DhEmi.ToString("yy"),
+                    MesEmissao = Ide.DhEmi.ToString("MM"),
+                    CNPJCPFEmissor = Emit.CNPJ.PadLeft(14, '0'),
+                    Modelo = (ModeloDFe)(int)Ide.Mod,
+                    Serie = Ide.Serie,
+                    NumeroDoctoFiscal = Ide.NCT,
+                    TipoEmissao = (TipoEmissao)(int)Ide.TpEmis,
+                    CodigoNumerico = Ide.CCT
+                };
 
-                Ide.CDV = Utility.XMLUtility.CalcularDVChave(ChaveField);
-
-                ChaveField += Ide.CDV.ToString();
+                ChaveField = XMLUtility.MontarChaveCTe(ref conteudoChaveDFe);
+                Ide.CDV = conteudoChaveDFe.DigitoVerificador;
 
                 return ChaveField;
             }
@@ -173,6 +179,40 @@ namespace Unimake.Business.DFe.Xml.CTeOS
 
             AutXML.Add(autxml);
         }
+
+        /// <summary>
+        /// Adicionar novo elemento a lista
+        /// </summary>
+        /// <param name="infCteComp">Elemento</param>
+        public void AddInfCteComp(InfCteComp infCteComp)
+        {
+            if (InfCteComp == null)
+            {
+                InfCteComp = new List<InfCteComp>();
+            }
+
+            InfCteComp.Add(infCteComp);
+        }
+
+        /// <summary>
+        /// Retorna o elemento da lista InfCteComp (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// </summary>
+        /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
+        /// <returns>Conteúdo do index passado por parâmetro da InfCteComp</returns>
+        public InfCteComp GetInfCteComp(int index)
+        {
+            if ((InfCteComp?.Count ?? 0) == 0)
+            {
+                return default;
+            }
+
+            return InfCteComp[index];
+        }
+
+        /// <summary>
+        /// Retorna a quantidade de elementos existentes na lista InfCteComp
+        /// </summary>
+        public int GetInfCteCompCount => (InfCteComp != null ? InfCteComp.Count : 0);
 
         /// <summary>
         /// Retorna o elemento da lista AutXML (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
@@ -322,7 +362,8 @@ namespace Unimake.Business.DFe.Xml.CTeOS
             set
             {
                 if (value == ProcessoEmissao.AvulsaPeloContribuinteSiteFisco ||
-                    value == ProcessoEmissao.AvulsaPeloFisco)
+                    value == ProcessoEmissao.AvulsaPeloFisco ||
+                    value == ProcessoEmissao.ProvedorAutorizacaoAssinatura)
                 {
                     throw new Exception("Conteúdo da TAG <procEmi> inválido! Valores aceitos: 0 e 3.");
                 }
