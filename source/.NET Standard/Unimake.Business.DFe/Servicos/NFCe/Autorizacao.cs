@@ -26,9 +26,6 @@ namespace Unimake.Business.DFe.Servicos.NFCe
         /// </summary>
         protected override void AjustarXMLAposAssinado()
         {
-            //GAT TECNOLOGIA - recarregar o objeto EnviNFe com o conteúdo do XML já assinado
-            EnviNFe = new EnviNFe().LerXML<EnviNFe>(ConteudoXML);
-
             QrCodeXmlHelper.MontarQrCodeNFCe(ConteudoXML, Configuracoes);
             base.AjustarXMLAposAssinado();
         }

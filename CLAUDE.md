@@ -23,8 +23,9 @@ Toda alteração de comportamento feita pela GAT sobre o código original da Uni
 
 Locais atuais com customização (atualizar esta lista sempre que uma nova for adicionada):
 
-- `source/.NET Standard/Unimake.Business.DFe/Servicos/NFCe/Autorizacao.cs` — recarrega o objeto `EnviNFe` a partir do XML já assinado, antes de montar o QRCode.
 - `source/.NET Standard/Unimake.Business.DFe/Utility/QrCodeXmlHelper.cs`, método `MontarQrCodeNFCe` — preserva o `qrCode`/`urlChave` que já existirem no XML de entrada; sempre recria o grupo `infNFeSupl` (removendo o existente antes, em vez de pular quando já presente); usa a `urlChave`/`urlQrCode` originais extraídas do XML quando informadas, em vez de recalcular sempre a partir de `Configuracao`.
+
+Observação: `source/.NET Standard/Unimake.Business.DFe/Servicos/NFCe/Autorizacao.cs` já teve customização (recarregar `EnviNFe` após assinatura), mas foi removida por não ser usada no fluxo de integração da GAT (que consome só `urlChave` via `infNFeSupl`, não usa `NfeProcResult`/`NfeProcResults`). O arquivo está hoje idêntico ao upstream. Só reavaliar se algum dia passar a usar `NfeProcResult`/`NfeProcResults` — nesse caso o objeto `EnviNFe` cacheado fica sem assinatura/QRCode, pois estes são injetados só no `ConteudoXML` (DOM), não no objeto.
 
 ## Como manter as branches atualizadas com o upstream
 
@@ -57,6 +58,10 @@ Se houver conflito:
    dotnet build "source/.NET Standard/Unimake.Business.DFe/Unimake.Business.DFe.csproj"
    ```
 5. `git add` nos arquivos resolvidos, `git commit` (sem `--no-verify`), depois `git push origin gat-main`.
+
+## Convenção de commits
+
+Não incluir rodapé `Co-Authored-By: Claude ...` (ou qualquer assinatura de IA) nas mensagens de commit deste repositório. Commits devem ficar limpos, só com a mensagem descrevendo a alteração.
 
 ## Build de referência
 
