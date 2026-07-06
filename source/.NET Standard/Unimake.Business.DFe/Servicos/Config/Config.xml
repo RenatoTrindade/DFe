@@ -227,12 +227,6 @@
 		<ArqConfig>ItabaianaSE.xml</ArqConfig>
 		<PadraoNFSe>WEBISS</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="5107909">
-		<Nome>Sinop - MT</Nome>
-		<UF>MT</UF>
-		<ArqConfig>SinopMT.xml</ArqConfig>
-		<PadraoNFSe>COPLAN</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="4209102">
 		<Nome>Joinville - SC</Nome>
 		<UF>SC</UF>
@@ -532,12 +526,6 @@
 		<UF>BA</UF>
 		<ArqConfig>SimoesFilhoBA.xml</ArqConfig>
 		<PadraoNFSe>EL</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="3551702">
-		<Nome>Sertãozinho - SP</Nome>
-		<UF>SP</UF>
-		<ArqConfig>SertaozinhoSP.xml</ArqConfig>
-		<PadraoNFSe>SMARAPD</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="3515509">
 		<Nome>Fernandópolis - SP</Nome>
@@ -893,12 +881,6 @@
 		<ArqConfig>PaulistaPE.xml</ArqConfig>
 		<PadraoNFSe>GISSONLINE</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="4322806">
-		<Nome>Veranópolis - RS</Nome>
-		<UF>RS</UF>
-		<ArqConfig>VeranopolisRS.xml</ArqConfig>
-		<PadraoNFSe>FIORILLI</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="5107602">
 		<Nome>Rondonópolis - MT</Nome>
 		<UF>MT</UF>
@@ -910,12 +892,6 @@
 		<UF>PR</UF>
 		<ArqConfig>GuairaPR.xml</ArqConfig>
 		<PadraoNFSe>IPM</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="3202405">
-		<Nome>Guarapari - ES</Nome>
-		<UF>ES</UF>
-		<ArqConfig>GuarapariES.xml</ArqConfig>
-		<PadraoNFSe>SMARAPD</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="4203808">
 		<Nome>Canoinhas - SC</Nome>
@@ -1161,12 +1137,6 @@
 		<Nome>São José do Rio Preto - SP</Nome>
 		<UF>SP</UF>
 		<ArqConfig>SaoJoseDoRioPretoSP.xml</ArqConfig>
-		<PadraoNFSe>GISSONLINE</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="3529302">
-		<Nome>Matão - SP</Nome>
-		<UF>SP</UF>
-		<ArqConfig>MataoSP.xml</ArqConfig>
 		<PadraoNFSe>GISSONLINE</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="3548500">
@@ -1420,12 +1390,6 @@
 		<UF>RJ</UF>
 		<ArqConfig>DuqueDeCaxiasRJ.xml</ArqConfig>
 		<PadraoNFSe>ISSNET</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="3302502">
-		<Nome>Magé - RJ</Nome>
-		<UF>RJ</UF>
-		<ArqConfig>MageRJ.xml</ArqConfig>
-		<PadraoNFSe>MODERNIZACAO_PUBLICA</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="3305208">
 		<Nome>São Pedro da Aldeia - RJ</Nome>

@@ -1530,7 +1530,7 @@ namespace Unimake.Business.DFe
                 {
                     try
                     {
-                        AssinaturaDigital.Assinar(xmlEventoEspecifico, "eSocial", tagAtributoID, cert, AlgorithmType.Sha256, true, "Id");
+                        AssinaturaDigital.Assinar(xmlEventoEspecifico, "eSocial", tagAtributoID, cert, AlgorithmType.Sha256, false, "Id");
                     }
                     catch (Exception ex)
                     {
@@ -1586,15 +1586,10 @@ namespace Unimake.Business.DFe
                         if (!AssinaturaDigital.EstaAssinado(xml, tagAssinatura))
                         {
                             AssinaturaDigital.Assinar(xml, tagAssinatura, tagID, cert, signatureAlgorithmType, exclusiveC14N: assinaCanonicalizacaoExclusiva);
-
-
                         }
-
-
                     }
                     catch (Exception ex)
                     {
-
                         throw new AssinaturaException(
                             $"Ocorreu um erro ao assinar o XML: {ex.Message}");
                     }

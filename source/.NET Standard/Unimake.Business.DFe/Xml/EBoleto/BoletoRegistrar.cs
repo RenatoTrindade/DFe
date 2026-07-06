@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 #if INTEROP
 using System.Runtime.InteropServices;
 #endif
+using Unimake.Business.DFe.Converters.Json;
 using Unimake.Business.DFe.Servicos;
 
 namespace Unimake.Business.DFe.Xml.EBoleto
@@ -33,8 +35,15 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         public bool Aceite { get; set; }
 
         /// <summary>
+        /// Indica se Aceite deve ser serializado
+        /// </summary>
+        [XmlIgnore]
+        public bool AceiteSpecified { get; set; }
+
+        /// <summary>
         /// Agencia coletora (S/N)
         /// </summary>
+        [JsonConverter(typeof(XmlEnumJsonConverter))]
         [XmlElement("AgenciaColetora")]
         public SimNaoLetra AgenciaColetora { get; set; }
 
@@ -207,6 +216,12 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         public int NumeroParcela { get; set; }
 
         /// <summary>
+        /// Indica se NumeroParcela deve ser serializado
+        /// </summary>
+        [XmlIgnore]
+        public bool NumeroParcelaSpecified { get; set; }
+
+        /// <summary>
         /// Numero de variacao de carteira
         /// </summary>
         [XmlElement("NumeroVariacaoCarteira")]
@@ -233,6 +248,7 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         /// <summary>
         /// Permite recebimento parcial (S/N)
         /// </summary>
+        [JsonConverter(typeof(XmlEnumJsonConverter))]
         [XmlElement("PermiteRecebimentoParcial")]
         public SimNaoLetra PermiteRecebimentoParcial { get; set; }
 
@@ -1039,6 +1055,12 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         /// </summary>
         [XmlElement("TryGeneratePDF")]
         public bool TryGeneratePDF { get; set; }
+
+        /// <summary>
+        /// Indica se TryGeneratePDF deve ser serializado
+        /// </summary>
+        [XmlIgnore]
+        public bool TryGeneratePDFSpecified { get; set; }
     }
 
     /// <summary>
@@ -1122,9 +1144,9 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         public EBoletoTipoProtesto Tipo { get; set; }
 
         /// <summary>
-        /// Valor do protesto
+        /// Quantidade de dias em que  o documento deve ser protestado
         /// </summary>
         [XmlElement("Valor")]
-        public decimal Valor { get; set; }
+        public int Valor { get; set; }
     }
 }

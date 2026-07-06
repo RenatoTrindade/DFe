@@ -50,6 +50,18 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         }
 
         /// <summary>
+        /// Indica se DataField deve ser serializado
+        /// </summary>
+        public bool ShouldSerializeDataField()
+        {
+#if INTEROP
+            return Data > DateTime.MinValue;
+#else
+            return Data > DateTimeOffset.MinValue;
+#endif
+        }
+
+        /// <summary>
         /// Instrucao
         /// </summary>
         [XmlElement("Instrucao")]
@@ -108,6 +120,18 @@ namespace Unimake.Business.DFe.Xml.EBoleto
         /// </summary>
         [XmlIgnore]
         public bool TipoDescontoSpecified { get; set; }
+
+        /// <summary>
+        /// Tipo de juros
+        /// </summary>
+        [XmlElement("TipoJuros")]
+        public EBoletoTipoJuros TipoJuros { get; set; }
+
+        /// <summary>
+        /// Indica se TipoJuros deve ser serializado
+        /// </summary>
+        [XmlIgnore]
+        public bool TipoJurosSpecified { get; set; }
 
         /// <summary>
         /// Valor
