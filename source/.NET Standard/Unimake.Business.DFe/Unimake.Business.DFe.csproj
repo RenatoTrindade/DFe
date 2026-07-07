@@ -4,8 +4,8 @@
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<LangVersion>7.3</LangVersion>
-		<AssemblyVersion>2026.07.01.1023</AssemblyVersion>
-		<FileVersion>2026.07.01.1023</FileVersion>
+		<AssemblyVersion>2026.07.06.1829</AssemblyVersion>
+		<FileVersion>2026.07.06.1829</FileVersion>
 		<RunPostBuildEvent>Always</RunPostBuildEvent>
 		<Configurations>Debug;Release;INTEROP_Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -278,6 +278,35 @@
 		<None Remove="Servicos\Config\DCe\SP.xml" />
 		<None Remove="Servicos\Config\DCe\SVRS.xml" />
 		<None Remove="Servicos\Config\DCe\TO.xml" />
+		<None Remove="Servicos\Config\BPe\AC.xml" />
+		<None Remove="Servicos\Config\BPe\AL.xml" />
+		<None Remove="Servicos\Config\BPe\AM.xml" />
+		<None Remove="Servicos\Config\BPe\AP.xml" />
+		<None Remove="Servicos\Config\BPe\BA.xml" />
+		<None Remove="Servicos\Config\BPe\CE.xml" />
+		<None Remove="Servicos\Config\BPe\Config.xml" />
+		<None Remove="Servicos\Config\BPe\DF.xml" />
+		<None Remove="Servicos\Config\BPe\ES.xml" />
+		<None Remove="Servicos\Config\BPe\GO.xml" />
+		<None Remove="Servicos\Config\BPe\MA.xml" />
+		<None Remove="Servicos\Config\BPe\MG.xml" />
+		<None Remove="Servicos\Config\BPe\MS.xml" />
+		<None Remove="Servicos\Config\BPe\MT.xml" />
+		<None Remove="Servicos\Config\BPe\PA.xml" />
+		<None Remove="Servicos\Config\BPe\PB.xml" />
+		<None Remove="Servicos\Config\BPe\PE.xml" />
+		<None Remove="Servicos\Config\BPe\PI.xml" />
+		<None Remove="Servicos\Config\BPe\PR.xml" />
+		<None Remove="Servicos\Config\BPe\RJ.xml" />
+		<None Remove="Servicos\Config\BPe\RN.xml" />
+		<None Remove="Servicos\Config\BPe\RO.xml" />
+		<None Remove="Servicos\Config\BPe\RR.xml" />
+		<None Remove="Servicos\Config\BPe\RS.xml" />
+		<None Remove="Servicos\Config\BPe\SC.xml" />
+		<None Remove="Servicos\Config\BPe\SE.xml" />
+		<None Remove="Servicos\Config\BPe\SP.xml" />
+		<None Remove="Servicos\Config\BPe\SVRS.xml" />
+		<None Remove="Servicos\Config\BPe\TO.xml" />
 		<None Remove="Servicos\Config\NFCom\AC.xml" />
 		<None Remove="Servicos\Config\NFCom\AL.xml" />
 		<None Remove="Servicos\Config\NFCom\AM.xml" />
@@ -426,7 +455,6 @@
 		<None Remove="Servicos\Config\NFSe\CabedeloPB.xml" />
 		<None Remove="Servicos\Config\NFSe\CaboDeSantoAgostinhoPE.xml" />
 		<None Remove="Servicos\Config\NFSe\CaboFrioRJ.xml" />
-		<None Remove="Servicos\Config\NFSe\CaceresMT.xml" />
 		<None Remove="Servicos\Config\NFSe\CachoeiraDoSulRS.xml" />
 		<None Remove="Servicos\Config\NFSe\CachoeirinhaRS.xml" />
 		<None Remove="Servicos\Config\NFSe\CaieirasSP.xml" />
@@ -459,7 +487,6 @@
 		<None Remove="Servicos\Config\NFSe\CaxiasDoSulRS.xml" />
 		<None Remove="Servicos\Config\NFSe\CedralSP.xml" />
 		<None Remove="Servicos\Config\NFSe\ChapecoSC.xml" />
-		<None Remove="Servicos\Config\NFSe\CodoMA.xml" />
 		<None Remove="Servicos\Config\NFSe\ConcordiaSC.xml" />
 		<None Remove="Servicos\Config\NFSe\Config.xml" />
 		<None Remove="Servicos\Config\NFSe\ContagemMG.xml" />
@@ -487,7 +514,6 @@
 		<None Remove="Servicos\Config\NFSe\FeiraDeSantanaBA.xml" />
 		<None Remove="Servicos\Config\NFSe\FernandopolisSP.xml" />
 		<None Remove="Servicos\Config\NFSe\FISCO.xml" />
-		<None Remove="Servicos\Config\NFSe\FloresDaCunhaRS.xml" />
 		<None Remove="Servicos\Config\NFSe\FormigaMG.xml" />
 		<None Remove="Servicos\Config\NFSe\FortalezaCE.xml" />
 		<None Remove="Servicos\Config\NFSe\FozDoIguacuPR.xml" />
@@ -624,7 +650,6 @@
 		<None Remove="Servicos\Config\NFSe\PortoBeloSC.xml" />
 		<None Remove="Servicos\Config\NFSe\PortoSeguroBA.xml" />
 		<None Remove="Servicos\Config\NFSe\PortoVelhoRO.xml" />
-		<None Remove="Servicos\Config\NFSe\PresidenteLucenaRS.xml" />
 		<None Remove="Servicos\Config\NFSe\PresidentePrudenteSP.xml" />
 		<None Remove="Servicos\Config\NFSe\PrimaveraDoLesteMT.xml" />
 		<None Remove="Servicos\Config\NFSe\ProfessorJamilGO.xml" />
@@ -639,7 +664,6 @@
 		<None Remove="Servicos\Config\NFSe\RolandiaPR.xml" />
 		<None Remove="Servicos\Config\NFSe\RondonopolisMT.xml" />
 		<None Remove="Servicos\Config\NFSe\SalvadorBA.xml" />
-		<None Remove="Servicos\Config\NFSe\SalvadorDoSulRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SantaCruzDoSulRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SantaMariaRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SantaRosaRS.xml" />
@@ -666,10 +690,8 @@
 		<None Remove="Servicos\Config\NFSe\SaoJoseDosPinhaisPR.xml" />
 		<None Remove="Servicos\Config\NFSe\SaoJoseDoSulRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SaoJoseSC.xml" />
-		<None Remove="Servicos\Config\NFSe\SaoMarcosRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SaoPauloSP.xml" />
 		<None Remove="Servicos\Config\NFSe\SaoPedroDaAldeiaRJ.xml" />
-		<None Remove="Servicos\Config\NFSe\SaoSebastiaoDoCaiRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SapirangaRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SapucaiaDoSulRS.xml" />
 		<None Remove="Servicos\Config\NFSe\SenadorCanedoGO.xml" />
@@ -719,6 +741,33 @@
 		<None Remove="Servicos\Config\NFSe\XangriLaRS.xml" />
 		<None Remove="Servicos\Config\SNCM\Config.xml" />
 		<None Remove="Servicos\Config\SNCM\SNCM.xml" />
+		<None Remove="Xml\Schemas\BPe\bpeTA_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\bpeTiposBasico_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\bpeTM_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\bpe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\consSitBPeTiposBasico_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\consSitBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\consStatServBPeTiposBasico_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\consStatServBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\DFeTiposBasicos_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\DFeTiposBasicos_v1.00_old.xsd" />
+		<None Remove="Xml\Schemas\BPe\evAlteracaoPoltrona_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\evCancBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\evCancVincPgto_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\eventoBPeTiposBasico_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\eventoBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\evExcessoBagagem_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\evNaoEmbBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\evVincPgto_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\procBPeTM_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\procBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\procEventoBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\retBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\retConsSitBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\retConsStatServBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\retEventoBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\tiposGeralBPe_v1.00.xsd" />
+		<None Remove="Xml\Schemas\BPe\xmldsig-core-schema_v1.01.xsd" />
 		<None Remove="Xml\Schemas\CCG\consGTIN_v1.00.xsd" />
 		<None Remove="Xml\Schemas\CCG\leiauteCcgConsGTIN_v1.00.xsd" />
 		<None Remove="Xml\Schemas\CCG\retConsGTIN_v1.00.xsd" />
@@ -1239,7 +1288,17 @@
 		<None Remove="Xml\Schemas\NFSe\COPLAN\xmldsig-core-schema20020212.xsd" />
 		<None Remove="Xml\Schemas\NFSe\DIGIFRED\nfse_v02.xsd" />
 		<None Remove="Xml\Schemas\NFSe\DIGIFRED\xmldsig-core-schema_v02.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\CNC_v1.00.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\DPS_v1.01.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\evento_v1.01.xsd" />
 		<None Remove="Xml\Schemas\NFSe\DSF\nfse.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\NFSe_v1.01.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\pedRegEvento_v1.01.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\tiposCnc_v1.00.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\tiposComplexos_v1.01.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\tiposEventos_v1.01.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\tiposSimples_v1.01.xsd" />
+		<None Remove="Xml\Schemas\NFSe\DSF\xmldsig-core-schema.xsd" />
 		<None Remove="Xml\Schemas\NFSe\DSF\xmldsig-core-schema20020212.xsd" />
 		<None Remove="Xml\Schemas\NFSe\ELOTECH\nfse_v2_03.xsd" />
 		<None Remove="Xml\Schemas\NFSe\EL\CNC_v1.00.xsd" />
@@ -1576,7 +1635,6 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="Servicos\Config\NFSe\AraucariaPR.xml" />
-		<EmbeddedResource Include="Servicos\Config\NFSe\MirandopolisSP.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\AvareSP.xml" />
 	</ItemGroup>
 
@@ -1630,6 +1688,35 @@
 	  <EmbeddedResource Include="Servicos\Config\DCe\SP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\DCe\SVRS.xml" />
 	  <EmbeddedResource Include="Servicos\Config\DCe\TO.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\AC.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\AL.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\AM.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\AP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\BA.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\CE.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\Config.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\DF.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\ES.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\GO.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\MA.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\MG.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\MS.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\MT.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\PA.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\PB.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\PE.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\PI.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\PR.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\RJ.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\RN.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\RO.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\RR.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\RS.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\SC.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\SE.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\SP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\SVRS.xml" />
+	  <EmbeddedResource Include="Servicos\Config\BPe\TO.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFCom\AC.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFCom\AL.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFCom\AM.xml" />
@@ -1705,7 +1792,6 @@
 	  <EmbeddedResource Include="Servicos\Config\NFSe\BebedouroSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\BomDespachoMG.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\BragancaPaulistaSP.xml" />
-	  <EmbeddedResource Include="Servicos\Config\NFSe\CaceresMT.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\CachoeirinhaRS.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\CaieirasSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\CajuruSP.xml" />
@@ -1872,7 +1958,6 @@
 		</EmbeddedResource>
 		<EmbeddedResource Include="Servicos\Config\NFSe\CamacariBA.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\CedralSP.xml" />
-		<EmbeddedResource Include="Servicos\Config\NFSe\FloresDaCunhaRS.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\JaboticabalSP.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\JoaoPessoaPB.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\JuazeiroBA.xml" />
@@ -1912,7 +1997,6 @@
 		<EmbeddedResource Include="Servicos\Config\NFSe\BalnearioPicarrasSC.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\CampoLargoPR.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\CarlosBarbosaRS.xml" />
-		<EmbeddedResource Include="Servicos\Config\NFSe\CodoMA.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\ConcordiaSC.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\FrancaSP.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\GetulioVargasRS.xml" />
@@ -2000,12 +2084,6 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Servicos\Config\NFSe\ItapemaSC.xml" />
-		<EmbeddedResource Include="Servicos\Config\NFSe\SaoMarcosRS.xml">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Servicos\Config\NFSe\SaoSebastiaoDoCaiRS.xml">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</EmbeddedResource>
 		<EmbeddedResource Include="Servicos\Config\NFSe\PortoVelhoRO.xml">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
@@ -2060,9 +2138,6 @@
 		<EmbeddedResource Include="Servicos\Config\NFSe\IvotiRS.xml">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Servicos\Config\NFSe\SalvadorDoSulRS.xml">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</EmbeddedResource>
 		<EmbeddedResource Include="Servicos\Config\NFSe\PaveramaRS.xml">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
@@ -2070,9 +2145,6 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Servicos\Config\NFSe\GuaribaSP.xml">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Servicos\Config\NFSe\PresidenteLucenaRS.xml">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Servicos\Config\NFSe\SantaMariaRS.xml">
@@ -2236,6 +2308,33 @@
 		<EmbeddedResource Include="Servicos\Config\NFSe\BlumenauSC.xml">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\BPe\bpeTA_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\bpeTiposBasico_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\bpeTM_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\bpe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\consSitBPeTiposBasico_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\consSitBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\consStatServBPeTiposBasico_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\consStatServBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\DFeTiposBasicos_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\DFeTiposBasicos_v1.00_old.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\evAlteracaoPoltrona_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\evCancBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\evCancVincPgto_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\eventoBPeTiposBasico_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\eventoBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\evExcessoBagagem_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\evNaoEmbBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\evVincPgto_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\procBPeTM_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\procBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\procEventoBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\retBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\retConsSitBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\retConsStatServBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\retEventoBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\tiposGeralBPe_v1.00.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\BPe\xmldsig-core-schema_v1.01.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\CIOT\cancelamentoOperacaoTransporte_v1.00.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\CIOT\consultarCIOTGerado_v1.00.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\CIOT\consultarExcecao_v1.00.xsd" />
@@ -2585,6 +2684,36 @@
 		<EmbeddedResource Include="Xml\Schemas\NFSe\DBSELLER\substituir-nfse-envio-v2_04.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\DBSELLER\tipos-v2_04.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\DBSELLER\xmldsig-core-schema20020212.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\CNC_v1.00.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\DPS_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\evento_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\NFSe_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\pedRegEvento_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\tiposCnc_v1.00.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\tiposComplexos_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\tiposEventos_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\tiposSimples_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\xmldsig-core-schema.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Xml\Schemas\NFSe\ELOTECH\nfse_v2_03.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\EL\CNC_v1.00.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\EL\DPS_v1.01.xsd">
@@ -3714,6 +3843,11 @@
 		<None Remove="Servicos\Config\CIOT\Config.xml" />
 		<EmbeddedResource Include="Servicos\Config\CIOT\AN.xml" />
 		<EmbeddedResource Include="Servicos\Config\CIOT\Config.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Servicos\BPe\" />
+	  <Folder Include="Servicos\Config\BPe\" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

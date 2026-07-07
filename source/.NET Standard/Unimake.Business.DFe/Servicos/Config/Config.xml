@@ -160,12 +160,6 @@
 		<ArqConfig>Ginfes.xml</ArqConfig>
 		<PadraoNFSe>GINFES</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="9999901">
-		<Nome>MEMORY</Nome>
-		<UF>BR</UF>
-		<ArqConfig>Memory.xml</ArqConfig>
-		<PadraoNFSe>MEMORY</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="9999902">
 		<Nome>ABASE</Nome>
 		<UF>BR</UF>
@@ -695,12 +689,6 @@
 		<ArqConfig>JataiGO.xml</ArqConfig>
 		<PadraoNFSe>BSITBR</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="4315149">
-		<Nome>Presidente Lucena - RS</Nome>
-		<UF>RS</UF>
-		<ArqConfig>PresidenteLucenaRS.xml</ArqConfig>
-		<PadraoNFSe>TECNOSISTEMAS</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="4314803">
 		<Nome>Portão - RS</Nome>
 		<UF>RS</UF>
@@ -724,12 +712,6 @@
 		<UF>SC</UF>
 		<ArqConfig>CamboriuSC.xml</ArqConfig>
 		<PadraoNFSe>IPM</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="4316501">
-		<Nome>Salvador do Sul - RS</Nome>
-		<UF>RS</UF>
-		<ArqConfig>SalvadorDoSulRS.xml</ArqConfig>
-		<PadraoNFSe>TECNOSISTEMAS</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="4310801">
 		<Nome>Ivoti - RS</Nome>
@@ -845,12 +827,6 @@
 		<ArqConfig>BarreirasBA.xml</ArqConfig>
 		<PadraoNFSe>EL</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="4319505">
-		<Nome>São Sebastião do Caí - RS</Nome>
-		<UF>RS</UF>
-		<ArqConfig>SaoSebastiaoDoCaiRS.xml</ArqConfig>
-		<PadraoNFSe>TECNOSISTEMAS</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="2607901">
 		<Nome>Jaboatão dos Guararapes - PE</Nome>
 		<UF>PE</UF>
@@ -868,12 +844,6 @@
 		<UF>PE</UF>
 		<ArqConfig>GaranhunsPE.xml</ArqConfig>
 		<PadraoNFSe>TINUS</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="4319000">
-		<Nome>São Marcos - RS</Nome>
-		<UF>RS</UF>
-		<ArqConfig>SaoMarcosRS.xml</ArqConfig>
-		<PadraoNFSe>TECNOSISTEMAS</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="2610707">
 		<Nome>Paulista - PE</Nome>
@@ -1097,12 +1067,6 @@
 		<ArqConfig>GurupiTO.xml</ArqConfig>
 		<PadraoNFSe>WEBISS</PadraoNFSe>
 	</Arquivo>
-	<Arquivo ID="2103307">
-		<Nome>Codó - MA</Nome>
-		<UF>MA</UF>
-		<ArqConfig>CodoMA.xml</ArqConfig>
-		<PadraoNFSe>FIORILLI</PadraoNFSe>
-	</Arquivo>
 	<Arquivo ID="3516200">
 		<Nome>Franca - SP</Nome>
 		<UF>SP</UF>
@@ -1198,12 +1162,6 @@
 		<UF>GO</UF>
 		<ArqConfig>OrizonaGO.xml</ArqConfig>
 		<PadraoNFSe>BSITBR</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="4308201">
-		<Nome>Flores da Cunha - RS</Nome>
-		<UF>RS</UF>
-		<ArqConfig>FloresDaCunhaRS.xml</ArqConfig>
-		<PadraoNFSe>TECNOSISTEMAS</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="2918407">
 		<Nome>Juazeiro - BA</Nome>
@@ -1504,12 +1462,6 @@
 		<UF>ES</UF>
 		<ArqConfig>VianaES.xml</ArqConfig>
 		<PadraoNFSe>EL</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="5102504">
-		<Nome>Cáceres - MT</Nome>
-		<UF>MT</UF>
-		<ArqConfig>CaceresMT.xml</ArqConfig>
-		<PadraoNFSe>RLZ_INFORMATICA</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="5107958">
 		<Nome>Tangará da Serra - MT</Nome>
@@ -2049,12 +2001,6 @@
 		<Nome>Avaré - SP</Nome>
 		<UF>SP</UF>
 		<ArqConfig>AvareSP.xml</ArqConfig>
-		<PadraoNFSe>FIORILLI</PadraoNFSe>
-	</Arquivo>
-	<Arquivo ID="3530102">
-		<Nome>Mirandopolis - SP</Nome>
-		<UF>SP</UF>
-		<ArqConfig>MirandopolisSP.xml</ArqConfig>
 		<PadraoNFSe>FIORILLI</PadraoNFSe>
 	</Arquivo>
 	<Arquivo ID="4205803">

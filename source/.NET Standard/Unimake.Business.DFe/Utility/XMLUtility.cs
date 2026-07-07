@@ -813,6 +813,10 @@ namespace Unimake.Business.DFe.Utility
             {
                 tipoDFe = TipoDFe.NFCom;
             }
+            else if (xml.Contains("<mod>63</mod>"))
+            {
+                tipoDFe = TipoDFe.BPe;
+            }
 
             return tipoDFe;
         }
@@ -860,6 +864,10 @@ namespace Unimake.Business.DFe.Utility
 
                 case "67":
                     tipoDFe = TipoDFe.CTeOS;
+                    break;
+
+                case "63":
+                    tipoDFe = TipoDFe.BPe;
                     break;
             }
 
@@ -1464,6 +1472,13 @@ namespace Unimake.Business.DFe.Utility
         /// <param name="conteudoChaveDFe">Conteúdos da NFGas necessários para montagem da chave</param>
         /// <returns>Chave da NFGas</returns>
         public static string MontarChaveNFGas(ref ConteudoChaveDFe conteudoChaveDFe) => MontarChaveNF3e(ref conteudoChaveDFe);
+
+        /// <summary>
+        /// Monta a chave do BP-e com base nos valores informados
+        /// </summary>
+        /// <param name="conteudoChaveDFe">Conteudos do BP-e necessarios para montagem da chave</param>
+        /// <returns>Chave do BP-e</returns>
+        public static string MontarChaveBPe(ref ConteudoChaveDFe conteudoChaveDFe) => MontarChaveDFe(ref conteudoChaveDFe);
 
         /// <summary>
         /// Monta a chave do DCe com base nos valores informados
