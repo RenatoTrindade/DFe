@@ -115,11 +115,6 @@ namespace Unimake.Business.DFe.Servicos
                 Configuracoes.Load(GetType().Name);
             }
 
-            if (Configuracoes.HttpContent == null && Configuracoes.RequestURI != null && Configuracoes.MetodoAPI != "get")  //Esta verificação é para API. WebSOAP ainda não foi alterado e está percocorrendo o caminho original dentro do ConsumirBase.cs
-            {
-                Configuracoes.HttpContent = CriarHttpContentPadrao();
-            }
-
             Configuracoes.Definida = true;
         }
 
@@ -193,7 +188,6 @@ namespace Unimake.Business.DFe.Servicos
             }
         }
 
-
         /// <summary>
         /// Helper que delega a validação para a implementação centralizada ValidarEstruturaXML.
         /// Retorna o resultado sem lançar exceção — o chamador decide como tratar o resultado e quando chamar AjustarXMLAposAssinado().
@@ -204,9 +198,6 @@ namespace Unimake.Business.DFe.Servicos
             var resultado = validator.ValidarServico(ConteudoXML, Configuracoes);
             return resultado;
         }
-
-
-
 
 #if INTEROP
 
@@ -276,6 +267,11 @@ namespace Unimake.Business.DFe.Servicos
 
             if (Configuracoes.IsAPI)
             {
+                if (Configuracoes.RequestURI != null && !string.Equals(Configuracoes.MetodoAPI, "get", StringComparison.OrdinalIgnoreCase))
+                {
+                    Configuracoes.HttpContent = CriarHttpContentPadrao();
+                }
+
                 var apiConfig = new ConfiguracaoApiConfigMapper().Map(Configuracoes);
 
                 var consumirAPI = new ConsumirAPI();
