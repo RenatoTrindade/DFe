@@ -118,6 +118,7 @@
 		<None Remove="Servicos\Config\DARE\AN.xml" />
 		<None Remove="Servicos\Config\DARE\Config.xml" />
 		<None Remove="Servicos\Config\NFSe\GuarulhosSP.xml" />
+		<None Remove="Servicos\Config\NFSe\OlimpiaSP.xml" />
 		<None Remove="Servicos\Config\NFSe\PatoBrancoPR.xml" />
 		<None Remove="Servicos\Config\NFSe\PiratiniRS.xml" />
 		<None Remove="Servicos\Config\NFSe\ItatibaSP.xml" />
@@ -1371,6 +1372,7 @@
 		<None Remove="Xml\Schemas\NFSe\GISSONLINE\substituir-nfse-envio-v2_04.xsd" />
 		<None Remove="Xml\Schemas\NFSe\GISSONLINE\substituir-nfse-resposta-v2_04.xsd" />
 		<None Remove="Xml\Schemas\NFSe\GISSONLINE\tipos-v2_04.xsd" />
+		<None Remove="Xml\Schemas\NFSe\GISSONLINE\xmldsig-core-schema20020212-RTC.xsd" />
 		<None Remove="Xml\Schemas\NFSe\GISSONLINE\xmldsig-core-schema20020212.xsd" />
 		<None Remove="Xml\Schemas\NFSe\INTERSOL\cabecalho_v1.xsd" />
 		<None Remove="Xml\Schemas\NFSe\INTERSOL\cancelar_nfse_envio_v1.xsd" />
@@ -1602,6 +1604,7 @@
 	  <EmbeddedResource Include="Servicos\Config\NFSe\DiademaSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\GuararapesSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\GuarulhosSP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\NFSe\OlimpiaSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\PatoBrancoPR.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\PiratiniRS.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\ItatibaSP.xml" />
@@ -1623,6 +1626,7 @@
 		<EmbeddedResource Include="Servicos\Config\NFSe\SaoCaetanoDoSulSP.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\SaoSepeRS.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\TrindadeGO.xml" />
+		<EmbeddedResource Include="Xml\Schemas\NFSe\GISSONLINE\xmldsig-core-schema20020212-RTC.xsd" />
 		<EmbeddedResource Include="Xml\Validar\ValidarConfig.xml" />
 	</ItemGroup>
 
