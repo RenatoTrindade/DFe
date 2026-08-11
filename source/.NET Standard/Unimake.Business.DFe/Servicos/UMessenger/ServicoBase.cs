@@ -20,6 +20,15 @@ namespace Unimake.Business.DFe.Servicos.UMessenger
 #endif
     public abstract class ServicoBase : Servicos.ServicoBase
     {
+        #region Protected Properties
+
+        /// <summary>
+        /// Tempo limite da requisição HTTP, em milissegundos. Zero utiliza o padrão do HttpClient.
+        /// </summary>
+        protected int TimeoutEmMilissegundos { get; set; }
+
+        #endregion Protected Properties
+
         #region Protected Constructors
 
         /// <summary>
@@ -92,8 +101,6 @@ namespace Unimake.Business.DFe.Servicos.UMessenger
         /// <summary>
         /// Verificar assinatura (não aplicável ao uMessenger)
         /// </summary>
-        protected override void VerificarAssinarXML(string tagAssinatura, string tagAtributoID) { }
-
         /// <summary>
         /// Inicializar o serviço
         /// </summary>
@@ -149,6 +156,7 @@ namespace Unimake.Business.DFe.Servicos.UMessenger
         public override void Executar()
         {
             var apiConfig = new ConfiguracaoApiConfigMapper().MapExplicitEnvironment(Configuracoes);
+            apiConfig.Timeout = TimeoutEmMilissegundos;
 
             var consumirAPI = new ConsumirAPI();
             consumirAPI.ExecutarServico(apiConfig, Configuracoes.CertificadoDigital);

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -58,6 +59,27 @@ namespace Unimake.DFe.Test.UMessenger.Parsing
 
         [Fact]
         [Trait("DFe", "UMessenger")]
+        public void DeveCriarRetornoCompativelParaIdentificadorSerializadoComoStringXml()
+        {
+            const string messageId = "BAE572D1B77AFA4E";
+            const string rawResponse = "BAE572D1B77AFA4E";
+
+            var xml = new XmlDocument();
+            xml.LoadXml("<?xml version=\"1.0\" encoding=\"utf-16\"?><string xmlns=\"\">BAE572D1B77AFA4E</string>");
+
+            var metodo = typeof(Business.DFe.Servicos.UMessenger.PublishUMessenger).GetMethod("CriarRetornoCompativel", BindingFlags.Static | BindingFlags.NonPublic);
+            var retorno = (retUMessengerPublish)metodo.Invoke(null, new object[] { xml, rawResponse });
+
+            Assert.Single(retorno.Mensagem);
+            Assert.Equal(1, retorno.Mensagem[0].Status);
+            Assert.Equal("Mensagem enviada com sucesso.", retorno.Mensagem[0].Motivo);
+            Assert.Equal(messageId, retorno.Mensagem[0].MessageID);
+            Assert.Equal(Info.VersaoDLL, retorno.Mensagem[0].DLLVersao);
+            Assert.Equal(rawResponse, retorno.RawResponse);
+        }
+
+        [Fact]
+        [Trait("DFe", "UMessenger")]
         public void DeveMapearRetornoDeErroComErrorsComoArray()
         {
             const string json = @"{
@@ -74,7 +96,7 @@ namespace Unimake.DFe.Test.UMessenger.Parsing
             var retorno = ExecutarParser(json, HttpStatusCode.BadRequest, "application/problem+json");
 
             Assert.Single(retorno.Mensagem);
-            Assert.Equal(0, retorno.Mensagem[0].Status);
+            Assert.Equal(999, retorno.Mensagem[0].Status);
             Assert.Equal("Mensagem de erro de teste.", retorno.Mensagem[0].Motivo);
             Assert.Equal("trace-array", retorno.Mensagem[0].TraceId);
             Assert.Equal("https://example.test/help", retorno.Mensagem[0].HelpLink);
@@ -103,12 +125,40 @@ namespace Unimake.DFe.Test.UMessenger.Parsing
             var retorno = ExecutarParser(json, HttpStatusCode.BadRequest, "application/problem+json");
 
             Assert.Single(retorno.Mensagem);
-            Assert.Equal(0, retorno.Mensagem[0].Status);
+            Assert.Equal(999, retorno.Mensagem[0].Status);
             Assert.Equal("The Text field is required.", retorno.Mensagem[0].Motivo);
             Assert.Equal("trace-object", retorno.Mensagem[0].TraceId);
             Assert.Equal("https://example.test/validation-help", retorno.Mensagem[0].HelpLink);
             Assert.Equal("ValidationException", retorno.Mensagem[0].ErrorType);
             Assert.Equal("One or more validation errors occurred.", retorno.Mensagem[0].ErrorTitle);
+            Assert.Equal(Info.VersaoDLL, retorno.Mensagem[0].DLLVersao);
+        }
+
+        [Fact]
+        [Trait("DFe", "UMessenger")]
+        public void DeveMapearHttp500ProblemJsonComoErroNoTratamentoCompleto()
+        {
+            const string json = @"{
+    ""errors"": [
+        ""Erro desconhecido ao processar resposta: {\""statusCode\"":500,\""error\"":\""internal-server-error\"",\""messages\"":[\""Erro interno do servidor.\""]}""
+    ],
+    ""helpLink"": ""https://unimake.app/problems?q=Erro"",
+    ""status"": 500,
+    ""title"": ""Publish"",
+    ""traceId"": ""0HNNDGA9HLC75-00000001"",
+    ""type"": ""ResponseException""
+}";
+
+            var retorno = ExecutarTratamentoCompleto(json, HttpStatusCode.InternalServerError, "application/problem+json");
+
+            Assert.Single(retorno.Mensagem);
+            Assert.Equal(999, retorno.Mensagem[0].Status);
+            Assert.Contains("Erro desconhecido ao processar resposta", retorno.Mensagem[0].Motivo);
+            Assert.Null(retorno.Mensagem[0].MessageID);
+            Assert.Equal("0HNNDGA9HLC75-00000001", retorno.Mensagem[0].TraceId);
+            Assert.Equal("https://unimake.app/problems?q=Erro", retorno.Mensagem[0].HelpLink);
+            Assert.Equal("ResponseException", retorno.Mensagem[0].ErrorType);
+            Assert.Equal("Publish", retorno.Mensagem[0].ErrorTitle);
             Assert.Equal(Info.VersaoDLL, retorno.Mensagem[0].DLLVersao);
         }
 
@@ -142,6 +192,26 @@ namespace Unimake.DFe.Test.UMessenger.Parsing
             var xmlRetorno = (XmlDocument)metodo.Invoke(parser, parametros);
 
             return XMLUtility.Deserializar<retUMessengerPublish>(xmlRetorno);
+        }
+
+        private static retUMessengerPublish ExecutarTratamentoCompleto(string conteudo, HttpStatusCode statusCode, string mediaType)
+        {
+            var config = new APIConfig
+            {
+                ResponseMediaType = mediaType,
+                Servico = Servico.UMessengerPublish
+            };
+
+            using (var response = new HttpResponseMessage(statusCode))
+            {
+                response.Content = new StringContent(conteudo);
+                response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaType);
+
+                Stream stream = null;
+                var xmlRetorno = TratarRetornoAPI.ReceberRetorno(ref config, response, ref stream);
+
+                return XMLUtility.Deserializar<retUMessengerPublish>(xmlRetorno);
+            }
         }
     }
 }

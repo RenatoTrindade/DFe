@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
@@ -182,6 +181,9 @@ namespace Unimake.Business.DFe
         /// <exception cref="Exception"></exception>
         public ResultadoValidacao ValidarServico(XmlDocument xml, Configuracao configuracao)
         {
+            //Tenho que salvar o tipo do DFe antes pois no caso da NFCe é alterado para NFe e temos que voltar antes de sair do método, pois a configuração é compartilhada e não podemos alterar o tipo do DFe da configuração original.
+            var tipoDFeSalva = configuracao.TipoDFe;
+
             var certificado = configuracao.CertificadoDigital;
             var tipoAmbiente = configuracao.TipoAmbiente;
             var padraoNFSe = configuracao.PadraoNFSe;
@@ -213,6 +215,15 @@ namespace Unimake.Business.DFe
                 }
 
                 AtribuirUrl(servico, codigoUF, configuracao);
+
+                // A NT 2026.003 determina que a NF-e com DANFE Simplificado Tipo 2 utilize
+                // as URLs de consulta do Portal Nacional da NFC-e. Mantemos as URLs em uma
+                // única fonte no catálogo da NFC-e e as reutilizamos somente na validação da NF-e.
+                if (tipoDFe == TipoDFe.NFe && string.IsNullOrWhiteSpace(configuracao.UrlQrCodeHomologacao))
+                {
+                    var servicoNFCe = xmlConfig.SelectSingleNode("ServicosValidacao/NFCe/Servico[@tagRaiz='" + tagRaiz + "' and @versao='" + versao + "']");
+                    AtribuirUrl(servicoNFCe, codigoUF, configuracao);
+                }
 
                 var inform = MontarInformacaoGeral(servico, codigoConfiguracao);
 
@@ -246,6 +257,10 @@ namespace Unimake.Business.DFe
             catch (Exception ex)
             {
                 return CriarResultadoFalha(xml, null, ex, ObterStatus(ex));
+            }
+            finally
+            {
+                configuracao.TipoDFe = tipoDFeSalva;
             }
         }
 
@@ -1332,6 +1347,126 @@ namespace Unimake.Business.DFe
         }
 
         /// <summary>
+        /// Define o tipo de serviço de NFSe com base no XML, padrão e versão informados.
+        /// </summary>
+        /// <param name="conteudoXML">Conteúdo XML enviado para identificação</param>
+        /// <param name="padraoNFSe">Padrão da NFSe</param>
+        /// <param name="versao">Versão do XML</param>
+        /// <returns>Tipo de serviço correspondente</returns>
+        public static Servico DefinirTipoServicoNFSe(string conteudoXML, PadraoNFSe padraoNFSe, string versao)
+        {
+            return DefinirTipoServicoNFSe(conteudoXML, padraoNFSe, versao, 0);
+        }
+
+        /// <summary>
+        /// Define o tipo de serviço de NFSe com base no XML, padrão, versão e município informados.
+        /// </summary>
+        /// <param name="conteudoXML">Conteúdo XML enviado para identificação</param>
+        /// <param name="padraoNFSe">Padrão da NFSe</param>
+        /// <param name="versao">Versão do XML</param>
+        /// <param name="codigoMunicipio">Código do município</param>
+        /// <returns>Tipo de serviço correspondente</returns>
+        public static Servico DefinirTipoServicoNFSe(string conteudoXML, PadraoNFSe padraoNFSe, string versao, int codigoMunicipio)
+        {
+            if (string.IsNullOrWhiteSpace(conteudoXML))
+            {
+                throw new ArgumentNullException(nameof(conteudoXML));
+            }
+
+            var xml = new XmlDocument();
+            xml.LoadXml(conteudoXML);
+
+            return DefinirTipoServicoNFSe(xml, padraoNFSe, versao, codigoMunicipio);
+        }
+
+        /// <summary>
+        /// Define o tipo de serviço de NFSe com base no XML, padrão e versão informados.
+        /// </summary>
+        /// <param name="xml">Arquivo XML enviado para identificação</param>
+        /// <param name="padraoNFSe">Padrão da NFSe</param>
+        /// <param name="versao">Versão do XML</param>
+        /// <returns>Tipo de serviço correspondente</returns>
+        public static Servico DefinirTipoServicoNFSe(XmlDocument xml, PadraoNFSe padraoNFSe, string versao)
+        {
+            return DefinirTipoServicoNFSe(xml, padraoNFSe, versao, 0);
+        }
+
+        /// <summary>
+        /// Define o tipo de serviço de NFSe com base no XML, padrão, versão e município informados.
+        /// </summary>
+        /// <param name="xml">Arquivo XML enviado para identificação</param>
+        /// <param name="padraoNFSe">Padrão da NFSe</param>
+        /// <param name="versao">Versão do XML</param>
+        /// <param name="codigoMunicipio">Código do município</param>
+        /// <returns>Tipo de serviço correspondente</returns>
+        public static Servico DefinirTipoServicoNFSe(XmlDocument xml, PadraoNFSe padraoNFSe, string versao, int codigoMunicipio)
+        {
+            if (xml is null)
+            {
+                throw new ArgumentNullException(nameof(xml));
+            }
+
+            if (xml.DocumentElement is null)
+            {
+                throw new Exception("Não foi possível identificar o tipo de serviço NFSe: XML sem tag raiz.");
+            }
+
+            var xmlConfig = CarregarConfigValidacao();
+            var tagRaiz = xml.DocumentElement.Name;
+            var servico = ResolvedorServicoValidacao.ResolverNFSe(xml, versao, tagRaiz, xmlConfig, padraoNFSe);
+
+            if (servico is null)
+            {
+                throw new Exception($"Não foi possível encontrar a configuração para identificar o tipo de serviço NFSe com padrão: '{padraoNFSe}', tag raiz: '{tagRaiz}' ou versão: '{versao}'.");
+            }
+
+            var tipoServico = ObterTipoServico(servico, codigoMunicipio);
+
+            if (string.IsNullOrWhiteSpace(tipoServico))
+            {
+                throw new Exception($"A tag TipoServico não foi configurada para o padrão: '{padraoNFSe}', tag raiz: '{tagRaiz}' e versão: '{versao}'.");
+            }
+
+            if (!Enum.TryParse(tipoServico, false, out Servico result))
+            {
+                throw new Exception($"TipoServico inválido no ValidarConfig.xml: '{tipoServico}'.");
+            }
+
+            return result;
+        }
+
+        private static string ObterTipoServico(XmlNode servico, int codigoMunicipio)
+        {
+            var nodeTipoServico = servico.SelectSingleNode("*[local-name()='TipoServico']");
+
+            if (nodeTipoServico is null)
+            {
+                return string.Empty;
+            }
+
+            if (codigoMunicipio > 0)
+            {
+                var excecao = nodeTipoServico
+                    .SelectNodes("*[local-name()='Excecao']")
+                    .Cast<XmlNode>()
+                    .FirstOrDefault(x => string.Equals(x.Attributes?["codMunicipio"]?.Value, codigoMunicipio.ToString(), StringComparison.Ordinal));
+
+                if (excecao != null)
+                {
+                    return excecao.InnerText?.Trim();
+                }
+            }
+
+            return nodeTipoServico
+                .ChildNodes
+                .Cast<XmlNode>()
+                .Where(x => x.NodeType == XmlNodeType.Text || x.NodeType == XmlNodeType.CDATA)
+                .Select(x => x.Value)
+                .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x))
+                ?.Trim();
+        }
+
+        /// <summary>
         /// Define a versão do XML de NFSe com base no conteúdo do XML, padrão de NFSe e código do município.
         /// </summary>
         /// <param name="xml">Arquivo XML enviado para a validação</param>
@@ -1442,11 +1577,6 @@ namespace Unimake.Business.DFe
                     if (RaizEh("ConsultarSituacaoLoteRpsEnvio"))
                     {
                         return "3.00";
-                    }
-
-                    if (codigoMunicipio == 3170206)
-                    {
-                        return "2.04";
                     }
 
                     if ((codigoMunicipio == 3549904 && Contem("ginfes")) ||

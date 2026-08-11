@@ -138,7 +138,7 @@ namespace Unimake.Business.DFe.Servicos.NFCom
         {
             get
             {
-                if (Result.ProtNFCom != null)
+                if (Result.ProtNFCom != null && StatusProtocoloAutorizacao.NFCom(Result.ProtNFCom.InfProt.CStat))
                 {
                     if (NFComProcs.ContainsKey(NFCom.InfNFCom.Chave))
                     {
@@ -154,7 +154,7 @@ namespace Unimake.Business.DFe.Servicos.NFCom
                         });
                     }
                 }
-                else
+                else if (Result.ProtNFCom == null)
                 {
                     if (RetConsSitNFCom.Count <= 0)
                     {
@@ -174,11 +174,17 @@ namespace Unimake.Business.DFe.Servicos.NFCom
                                 switch (item.ProtNFCom.InfProt.CStat)
                                 {
                                     case 100: //NFCom autorizada
+                                    case 150: //NFCom autorizada fora do prazo
                                         protNFCom = item.ProtNFCom;
                                         break;
                                 }
                             }
                         }
+                    }
+
+                    if (protNFCom == null)
+                    {
+                        return NFComProcs;
                     }
 
                     if (NFComProcs.ContainsKey(NFCom.InfNFCom.Chave))

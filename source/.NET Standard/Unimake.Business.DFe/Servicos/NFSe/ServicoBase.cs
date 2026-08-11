@@ -109,6 +109,13 @@ namespace Unimake.Business.DFe.Servicos.NFSe
                     BETHA_CLOUD();
                     break;
 
+                case PadraoNFSe.DSF:
+                    if(Configuracoes.SchemaVersao == "1.01")
+                    {
+                        DSF();
+                    }
+                    break;
+
             }
             Configuracoes.Definida = true;
             base.DefinirConfiguracao();
@@ -597,6 +604,21 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         }
         #endregion BETHA_CLOUD
 
+        #region DSF
+
+        private void DSF()
+        {
+            if (Configuracoes.RequestURI.Contains("{Chave}"))
+            {
+                var startIndex = ConteudoXML.OuterXml.IndexOf("Id=\"") + 7;
+                var endIndex = ConteudoXML.OuterXml.IndexOf("\"", startIndex);
+                var chave = ConteudoXML.OuterXml.Substring(startIndex, endIndex - startIndex);
+                Configuracoes.RequestURI = Configuracoes.RequestURI.Replace("{Chave}", chave);
+            }
+        }
+
+        #endregion DSF
+
         #endregion Configurações separadas por PadrãoNFSe
 
         private void PadroesConfigUnica()
@@ -618,105 +640,6 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         private string GetXMLElementInnertext(string tag) => ConteudoXML.GetElementsByTagName(tag)[0]?.InnerText;
 
         private string GetXmlElementOuterXml(string tag) => ConteudoXML.GetElementsByTagName(tag)[0]?.OuterXml;
-
-        /// <summary>
-        /// Ajustes no XMLs, depois de assinado.
-        /// </summary>
-        protected override void AjustarXMLAposAssinado()
-        {
-            #region Resolver problema da assinatura de Uberlândia-MG, que fugiu padrão mundial
-
-            if (Configuracoes.CodigoMunicipio == 3170206) //Uberlândia (Tem esta zica na assinatura, pensa em merda.)
-            {
-                if (Configuracoes.Servico == Servico.NFSeRecepcionarLoteRps ||
-                    Configuracoes.Servico == Servico.NFSeRecepcionarLoteRpsSincrono ||
-                    Configuracoes.Servico == Servico.NFSeGerarNfse ||
-                    Configuracoes.Servico == Servico.NFSeSubstituirNfse ||
-                    Configuracoes.Servico == Servico.NFSeCancelarNfse)
-                {
-
-                    var xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(ConteudoXML.OuterXml);
-                    var mudouXml = false;
-                    if (Configuracoes.TagAssinatura.Equals("Rps"))
-                    {
-                        if (Configuracoes.Servico == Servico.NFSeGerarNfse)
-                        {
-                            var nodeRps = xmlDoc.GetElementsByTagName("Rps")[0];
-                            var elementNodeRps = (XmlElement)nodeRps;
-                            var elementInfDeclaracao = (XmlElement)elementNodeRps.GetElementsByTagName("InfDeclaracaoPrestacaoServico")[0];
-                            var id = elementInfDeclaracao.GetAttribute("Id").Replace("ID_", "");
-                            var elementSignatureValue = (XmlElement)elementNodeRps.GetElementsByTagName("SignatureValue")[0];
-
-                            if (string.IsNullOrWhiteSpace(elementSignatureValue.GetAttribute("Id")))
-                            {
-                                var attributeId = xmlDoc.CreateAttribute("Id");
-                                attributeId.Value = "ID_ASSINATURA_" + id;
-                                elementSignatureValue.SetAttributeNode(attributeId);
-
-                                mudouXml = true;
-                            }
-                        }
-                        else
-                        {
-                            var listListaRps = xmlDoc.GetElementsByTagName("ListaRps");
-                            foreach (XmlNode nodeListaRps in listListaRps)
-                            {
-                                var elementListaRps = (XmlElement)nodeListaRps;
-                                foreach (XmlNode nodeRps in elementListaRps.GetElementsByTagName("Rps"))
-                                {
-                                    var elementRps = (XmlElement)nodeRps;
-                                    if (elementRps.GetElementsByTagName("InfDeclaracaoPrestacaoServico").Count > 0)
-                                    {
-                                        var elementInfDeclaracao = (XmlElement)elementRps.GetElementsByTagName("InfDeclaracaoPrestacaoServico")[0];
-                                        var id = elementInfDeclaracao.GetAttribute("Id").Replace("ID_", "");
-                                        var elementSignatureValue = (XmlElement)elementRps.GetElementsByTagName("SignatureValue")[0];
-
-                                        if (string.IsNullOrWhiteSpace(elementSignatureValue.GetAttribute("Id")))
-                                        {
-                                            var attributeId = xmlDoc.CreateAttribute("Id");
-                                            attributeId.Value = "ID_ASSINATURA_" + id;
-                                            elementSignatureValue.SetAttributeNode(attributeId);
-                                            mudouXml = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (mudouXml)
-                        {
-                            ConteudoXML.LoadXml(xmlDoc.OuterXml);
-                        }
-                    }
-                    else if (Configuracoes.TagAssinatura.Equals("Pedido")) //Para o serviço CancelarNfse
-                    {
-                        var nodePedido = xmlDoc.GetElementsByTagName("Pedido")[0];
-                        var elementNodePedido = (XmlElement)nodePedido;
-                        var elementInfPedidoCancelamento = (XmlElement)elementNodePedido.GetElementsByTagName("InfPedidoCancelamento")[0];
-                        var id = elementInfPedidoCancelamento.GetAttribute("Id").Replace("ID_PEDIDO_CANCELAMENTO_", "");
-                        var elementSignatureValue = (XmlElement)elementNodePedido.GetElementsByTagName("SignatureValue")[0];
-
-                        if (string.IsNullOrWhiteSpace(elementSignatureValue.GetAttribute("Id")))
-                        {
-                            var attributeId = xmlDoc.CreateAttribute("Id");
-                            attributeId.Value = "ID_ASSINATURA_PEDIDO_CANCELAMENTO_" + id;
-                            elementSignatureValue.SetAttributeNode(attributeId);
-
-                            mudouXml = true;
-                        }
-                    }
-
-                    if (mudouXml)
-                    {
-                        ConteudoXML.LoadXml(xmlDoc.OuterXml);
-                    }
-
-                }
-            }
-
-            #endregion
-        }
 
         /// <summary>
         /// Conteúdo do XML assinado.
@@ -741,6 +664,8 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         {
             XmlValidarConteudo(); // Efetuar a validação antes de validar schema para evitar alguns erros que não ficam claros para o desenvolvedor.
 
+            EncriptarTagAssinaturaPaulistanaAntesDaAssinaturaXML();
+
             var resultado = ValidarXMLCentralizadoNFSe();
 
             if (resultado.ValidacaoExecutada)
@@ -751,6 +676,15 @@ namespace Unimake.Business.DFe.Servicos.NFSe
                 }
 
                 return;
+            }
+        }
+
+        private void EncriptarTagAssinaturaPaulistanaAntesDaAssinaturaXML()
+        {
+            if (Configuracoes.EncriptaTagAssinatura &&
+                Configuracoes.PadraoNFSe == PadraoNFSe.PAULISTANA)
+            {
+                XMLUtility.EncryptTagAssinaturaNFSe(Configuracoes.PadraoNFSe, ConteudoXML, Configuracoes.CertificadoDigital);
             }
         }
 
@@ -906,10 +840,19 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         /// <param name="nomeArquivo">Nome do arquivo a ser gravado no HD</param>
         /// <param name="conteudoXML">String contendo o conteúdo do XML a ser gravado no HD</param>
 #if INTEROP
-        [ComVisible(false)]
+        [ComVisible(true)]
 #endif
         public override void GravarXmlDistribuicao(string pasta, string nomeArquivo, string conteudoXML)
         {
+            //Como é o DEV que vai passar o XML por parâmetro, vou deixar ele gravar o que desejar. Wandrey 06/08/2026
+            //if (Configuracoes.PadraoNFSe != PadraoNFSe.NACIONAL && Configuracoes.PadraoNFSe != PadraoNFSe.ELOTECH)
+            //{
+            //    throw new InvalidOperationException(
+            //        $"O método GravarXmlDistribuicao(string pasta, string nomeArquivo, string conteudoXML) está disponível apenas para os padrões NACIONAL e ELOTECH. " +
+            //        $"Padrão atual: {Configuracoes.PadraoNFSe}"
+            //    );
+            //}
+
             using (var fileStream = new FileStream(Path.Combine(pasta, nomeArquivo), FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 GravarXmlDistribuicao(fileStream, conteudoXML, Encoding.UTF8);

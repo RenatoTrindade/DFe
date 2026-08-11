@@ -2105,4 +2105,34 @@
 		<ArqConfig>OlimpiaSP.xml</ArqConfig>
 		<PadraoNFSe>GISSONLINE</PadraoNFSe>
 	</Arquivo>
+	<Arquivo ID="3542602">
+		<Nome>Registro - SP</Nome>
+		<UF>SP</UF>
+		<ArqConfig>RegistroSP.xml</ArqConfig>
+		<PadraoNFSe>GISSONLINE</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3529401">
+		<Nome>Mauá - SP</Nome>
+		<UF>SP</UF>
+		<ArqConfig>MauaSP.xml</ArqConfig>
+		<PadraoNFSe>GISSONLINE</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="4323002">
+		<Nome>Viamão - RS</Nome>
+		<UF>RS</UF>
+		<ArqConfig>ViamaoRS.xml</ArqConfig>
+		<PadraoNFSe>PRONIM</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="3518701">
+		<Nome>Guarujá - SP</Nome>
+		<UF>SP</UF>
+		<ArqConfig>GuarujaSP.xml</ArqConfig>
+		<PadraoNFSe>GISSONLINE</PadraoNFSe>
+	</Arquivo>
+	<Arquivo ID="4211207">
+		<Nome>Morro da Fumaça - SC</Nome>
+		<UF>SC</UF>
+		<ArqConfig>MorroDaFumacaSC.xml</ArqConfig>
+		<PadraoNFSe>IPM</PadraoNFSe>
+	</Arquivo>
 </Configuracoes>

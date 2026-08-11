@@ -4,8 +4,8 @@
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<LangVersion>7.3</LangVersion>
-		<AssemblyVersion>2026.07.10.1617</AssemblyVersion>
-		<FileVersion>2026.07.10.1617</FileVersion>
+		<AssemblyVersion>2026.08.10.1926</AssemblyVersion>
+		<FileVersion>2026.08.10.1926</FileVersion>
 		<RunPostBuildEvent>Always</RunPostBuildEvent>
 		<Configurations>Debug;Release;INTEROP_Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -117,15 +117,19 @@
 		<None Remove="Servicos\Config\CTe\TO.xml" />
 		<None Remove="Servicos\Config\DARE\AN.xml" />
 		<None Remove="Servicos\Config\DARE\Config.xml" />
+		<None Remove="Servicos\Config\NFSe\GuarujaSP.xml" />
 		<None Remove="Servicos\Config\NFSe\GuarulhosSP.xml" />
+		<None Remove="Servicos\Config\NFSe\MorroDaFumacaSC.xml" />
 		<None Remove="Servicos\Config\NFSe\OlimpiaSP.xml" />
 		<None Remove="Servicos\Config\NFSe\PatoBrancoPR.xml" />
 		<None Remove="Servicos\Config\NFSe\PiratiniRS.xml" />
 		<None Remove="Servicos\Config\NFSe\ItatibaSP.xml" />
+		<None Remove="Servicos\Config\NFSe\RegistroSP.xml" />
 		<None Remove="Servicos\Config\NFSe\RioClaroSP.xml" />
 		<None Remove="Servicos\Config\NFSe\SaoSepeRS.xml" />
 		<None Remove="Servicos\Config\EBoleto\AN.xml" />
 		<None Remove="Servicos\Config\EBoleto\Config.xml" />
+		<None Remove="Servicos\Config\NFSe\ViamaoRS.xml" />
 		<None Remove="Servicos\Config\PIX\AN.xml" />
 		<None Remove="Servicos\Config\PIX\Config.xml" />
 		<None Remove="Servicos\Config\UMessenger\AN.xml" />
@@ -1475,6 +1479,7 @@
 		<None Remove="Xml\Schemas\NFSe\RLZ_INFORMATICA\xmldsig-core-schema.xsd" />
 		<None Remove="Xml\Schemas\NFSe\RLZ_INFORMATICA\xmldsig-core-schema20020212.xsd" />
 		<None Remove="Xml\Schemas\NFSe\RLZ_INFORMATICA\XSDRLZ_Informatica_02.xsd" />
+		<None Remove="Xml\Schemas\NFSe\SALVADOR_BA\nfse_salvador_rtc.xsd" />
 		<None Remove="Xml\Schemas\NFSe\SIGCORP\nfse.xsd" />
 		<None Remove="Xml\Schemas\NFSe\SIGCORP\nfse_v2-03.xsd" />
 		<None Remove="Xml\Schemas\NFSe\SIGCORP\nfse_v3-00.xsd" />
@@ -1603,11 +1608,15 @@
 	<ItemGroup>
 	  <EmbeddedResource Include="Servicos\Config\NFSe\DiademaSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\GuararapesSP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\NFSe\GuarujaSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\GuarulhosSP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\NFSe\MorroDaFumacaSC.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\OlimpiaSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\PatoBrancoPR.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\PiratiniRS.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\ItatibaSP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\NFSe\MauaSP.xml" />
+	  <EmbeddedResource Include="Servicos\Config\NFSe\RegistroSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\RioClaroSP.xml" />
 	  <EmbeddedResource Include="Servicos\Config\NFSe\SaoBernardoDoCampoSP.xml" />
 	</ItemGroup>
@@ -1626,7 +1635,10 @@
 		<EmbeddedResource Include="Servicos\Config\NFSe\SaoCaetanoDoSulSP.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\SaoSepeRS.xml" />
 		<EmbeddedResource Include="Servicos\Config\NFSe\TrindadeGO.xml" />
+		<EmbeddedResource Include="Servicos\Config\NFSe\ViamaoRS.xml" />
+		<EmbeddedResource Include="Xml\Schemas\NFSe\EL\nfse_v2-04.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\GISSONLINE\xmldsig-core-schema20020212-RTC.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\NFSe\SALVADOR_BA\nfse_salvador_rtc.xsd" />
 		<EmbeddedResource Include="Xml\Validar\ValidarConfig.xml" />
 	</ItemGroup>
 
@@ -3465,7 +3477,6 @@
 		<EmbeddedResource Include="Xml\Schemas\NFSe\DIGIFRED\xmldsig-core-schema_v02.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\nfse.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\DSF\xmldsig-core-schema20020212.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\EL\nfse_v2-04.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\EL\xmldsig-core-schema20020212.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\GINFES\cabecalho_v03.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\GINFES\servico_cancelar_nfse_envio_v02.xsd" />
@@ -3666,15 +3677,33 @@
 		<EmbeddedResource Include="Xml\Schemas\NFSe\QUASAR\tiposSimples_v1.01.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\QUASAR\xmldsig-core-schema.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\QUASAR\xmldsig-core-schema20020212.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\CNC_v1.00.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\DPS_v1.01.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\evento_v1.01.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\NFSe_v1.01.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\pedRegEvento_v1.01.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposCnc_v1.00.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposComplexos_v1.01.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposEventos_v1.01.xsd" />
-		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposSimples_v1.01.xsd" />
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\CNC_v1.00.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\DPS_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\evento_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\NFSe_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\pedRegEvento_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposCnc_v1.00.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposComplexos_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposEventos_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\tiposSimples_v1.01.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\xmldsig-core-schema.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\xmldsig-core-schema20020212.xsd" />
 		<EmbeddedResource Include="Xml\Schemas\NFSe\RLZ_INFORMATICA\XSDRLZ_Informatica_02.xsd" />
@@ -3795,11 +3824,11 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageReference Include="System.Net.Http.Json" Version="10.0.9" />
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.9" />
-		<PackageReference Include="Unimake.Cryptography" Version="20260618.1051.35" />
-		<PackageReference Include="Unimake.Extensions" Version="20260618.1051.35" />
-		<PackageReference Include="Unimake.Utils" Version="20260618.1051.35" />
+		<PackageReference Include="System.Net.Http.Json" Version="10.0.10" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
+		<PackageReference Include="Unimake.Cryptography" Version="20260803.1649.49" />
+		<PackageReference Include="Unimake.Extensions" Version="20260803.1649.49" />
+		<PackageReference Include="Unimake.Utils" Version="20260803.1649.49" />
 	</ItemGroup>
 
 	<ItemGroup>

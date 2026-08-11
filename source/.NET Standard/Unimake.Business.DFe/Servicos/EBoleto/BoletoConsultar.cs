@@ -1,6 +1,7 @@
 ﻿#if INTEROP
 using System.Runtime.InteropServices;
 #endif
+using System.Net.Http;
 using Unimake.Business.DFe.Utility;
 using Unimake.Business.DFe.Xml.EBoleto;
 
@@ -19,20 +20,37 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
         /// <summary>
         /// Resultado do retorno da consulta de boleto
         /// </summary>
-        public retBoletoConsultar Result => RetornoWSXML != null
-            ? XMLUtility.Deserializar<retBoletoConsultar>(RetornoWSXML)
-            : new retBoletoConsultar
+        public retBoletoConsultar Result => ObterResultado(() => new retBoletoConsultar
             {
                 Status = 999,
                 Motivo = "Ocorreu um erro ao tentar obter o objeto no retorno da API",
                 DLLVersao = Info.VersaoDLL
-            };
+            });
 
         /// <inheritdoc />
         protected override Servico ServicoEBoleto => Servico.EBoletoConsultar;
 
         /// <inheritdoc />
         protected override string SchemaArquivoEBoleto => "BoletoConsultar_1_00.xsd";
+
+        /// <inheritdoc />
+        protected override HttpContent CriarHttpContentPadrao()
+        {
+            if (Envio.PageNumber == 0)
+            {
+                Envio.PageNumber = 1;
+            }
+
+            if (Envio.PageSize == 0)
+            {
+                Envio.PageSize = 50;
+            }
+
+            Envio.PageNumberSpecified = true;
+            Envio.PageSizeSpecified = true;
+
+            return base.CriarHttpContentPadrao();
+        }
 
         /// <summary>
         /// Construtor

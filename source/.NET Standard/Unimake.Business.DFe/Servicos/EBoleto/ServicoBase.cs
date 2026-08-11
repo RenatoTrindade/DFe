@@ -16,6 +16,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Unimake.Business.DFe.Security;
+using Unimake.Business.DFe.Utility;
 using Unimake.Business.DFe.Xml;
 using Unimake.Exceptions;
 
@@ -30,6 +31,12 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
     public abstract class ServicoBase<TEnvio> : Servicos.ServicoBase
         where TEnvio : XMLBase, new()
     {
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new EBoletoContractResolver()
+        };
+
         private TEnvio envio;
 
         /// <summary>
@@ -74,10 +81,16 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
 
             Configuracoes.Load(GetType().Name);
             Configuracoes.SchemaArquivo = SchemaArquivoEBoleto;
-            ConfigureAuth();
             ConfigurarRequestURI();
             Configuracoes.HttpContent = CriarHttpContentPadrao();
             Configuracoes.Definida = true;
+        }
+
+        /// <inheritdoc />
+        public override void Executar()
+        {
+            ConfigureAuth();
+            base.Executar();
         }
 
         /// <summary>
@@ -101,13 +114,7 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
         /// </summary>
         protected override HttpContent CriarHttpContentPadrao()
         {
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new EBoletoContractResolver()
-            };
-
-            var jsonObject = JObject.FromObject(Envio, JsonSerializer.Create(settings));
+            var jsonObject = JObject.FromObject(Envio, JsonSerializer.Create(JsonSerializerSettings));
             NormalizarJson(jsonObject);
             var json = jsonObject.ToString(Newtonsoft.Json.Formatting.None);
 
@@ -144,13 +151,13 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
         /// <summary>
         /// Verificar assinatura (não aplicável ao eBoleto)
         /// </summary>
-        protected override void VerificarAssinarXML(string tagAssinatura, string tagAtributoID) { }
-
         /// <summary>
         /// Inicializar serviço
         /// </summary>
         protected void InicializarServico(TEnvio xml, Configuracao configuracao)
         {
+            PrepararInicializacao();
+
             if (configuracao is null)
             {
                 throw new ArgumentNullException(nameof(configuracao));
@@ -164,6 +171,8 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
         /// </summary>
         protected void InicializarServico(string conteudoXML, Configuracao configuracao)
         {
+            PrepararInicializacao();
+
             if (configuracao is null)
             {
                 throw new ArgumentNullException(nameof(configuracao));
@@ -174,22 +183,26 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
             Inicializar(doc, configuracao);
         }
 
+        /// <summary>
+        /// Desserializar o retorno do serviço ou criar o retorno padrão quando a API não retornou XML
+        /// </summary>
+        protected TResult ObterResultado<TResult>(Func<TResult> criarRetornoSemResposta)
+            where TResult : new()
+        {
+            return RetornoWSXML != null
+                ? XMLUtility.Deserializar<TResult>(RetornoWSXML)
+                : criarRetornoSemResposta();
+        }
+
         /// <inheritdoc />
 #if INTEROP
         [ComVisible(false)]
 #endif
         public override void GravarXmlDistribuicao(string pasta, string nomeArquivo, string conteudoXML)
         {
-            StreamWriter streamWriter = null;
-
-            try
+            using (var streamWriter = File.CreateText(Path.Combine(pasta, nomeArquivo)))
             {
-                streamWriter = File.CreateText(Path.Combine(pasta, nomeArquivo));
                 streamWriter.Write(conteudoXML);
-            }
-            finally
-            {
-                streamWriter?.Close();
             }
         }
 
@@ -247,6 +260,12 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
                 Configuracoes.RequestURILoginHomologacao);
 
             Configuracoes.MunicipioToken = "Bearer " + token;
+        }
+
+        private void PrepararInicializacao()
+        {
+            envio = null;
+            Warnings = Warnings ?? new List<ValidatorDFeException>();
         }
 
         private bool GetBoolTag(string tagName)
@@ -313,10 +332,7 @@ namespace Unimake.Business.DFe.Servicos.EBoleto
 
         private static void RemoverPropriedade(JObject jsonObject, string propertyName)
         {
-            if (jsonObject.Property(propertyName) != null)
-            {
-                jsonObject.Remove(propertyName);
-            }
+            jsonObject.Remove(propertyName);
         }
 
         private sealed class EBoletoContractResolver : CamelCasePropertyNamesContractResolver

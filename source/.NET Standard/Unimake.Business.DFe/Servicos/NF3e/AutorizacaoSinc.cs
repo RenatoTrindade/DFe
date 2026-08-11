@@ -139,7 +139,7 @@ namespace Unimake.Business.DFe.Servicos.NF3e
         {
             get
             {
-                if (Result.ProtNF3e != null)
+                if (Result.ProtNF3e != null && StatusProtocoloAutorizacao.NF3e(Result.ProtNF3e.InfProt.CStat))
                 {
                     if (NF3eProcs.ContainsKey(NF3e.InfNF3e.Chave))
                     {
@@ -155,7 +155,7 @@ namespace Unimake.Business.DFe.Servicos.NF3e
                         });
                     }
                 }
-                else
+                else if (Result.ProtNF3e == null)
                 {
                     if (RetConsSitNF3.Count <= 0)
                     {
@@ -175,11 +175,17 @@ namespace Unimake.Business.DFe.Servicos.NF3e
                                 switch (item.ProtNF3e.InfProt.CStat)
                                 {
                                     case 100: //NF3e autorizada
+                                    case 150: //NF3e autorizada fora do prazo
                                         protNF3e = item.ProtNF3e;
                                         break;
                                 }
                             }
                         }
+                    }
+
+                    if (protNF3e == null)
+                    {
+                        return NF3eProcs;
                     }
 
                     if (NF3eProcs.ContainsKey(NF3e.InfNF3e.Chave))

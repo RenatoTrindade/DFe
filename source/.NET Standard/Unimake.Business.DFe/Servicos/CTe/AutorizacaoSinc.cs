@@ -119,9 +119,7 @@ namespace Unimake.Business.DFe.Servicos.CTe
             }
          
 
-            //if (Configuracoes.SchemasEspecificos.Count > 0)
             //{
-            //    var schemaArquivo = Configuracoes.SchemasEspecificos["1"].SchemaArquivo; //De qualquer modal o xml de validação da parte geral é o mesmo, então vou pegar do número 1, pq tanto faz.
 
             //    #region Validar o XML geral
 
@@ -144,7 +142,6 @@ namespace Unimake.Business.DFe.Servicos.CTe
             //        {
             //            var xmlEspecifico = new XmlDocument();
             //            xmlEspecifico.LoadXml(itemInfModal.InnerXml);
-            //            var schemaArquivoEspecifico = Configuracoes.SchemasEspecificos[modal.Substring(1, 1)].SchemaArquivoEspecifico;
 
             //            ValidarXMLCTe(xmlEspecifico, schemaArquivoEspecifico, Configuracoes.TargetNS);
             //        }
@@ -166,7 +163,7 @@ namespace Unimake.Business.DFe.Servicos.CTe
         {
             get
             {
-                if (Result.ProtCTe != null)
+                if (Result.ProtCTe != null && StatusProtocoloAutorizacao.CTe(Result.ProtCTe.InfProt.CStat))
                 {
                     if (CteProcs.ContainsKey(CTe.InfCTe.Chave))
                     {
@@ -182,7 +179,7 @@ namespace Unimake.Business.DFe.Servicos.CTe
                         });
                     }
                 }
-                else
+                else if (Result.ProtCTe == null)
                 {
                     if (RetConsSitCTe == null || RetConsSitCTe.Count <= 0)
                     {
@@ -202,6 +199,7 @@ namespace Unimake.Business.DFe.Servicos.CTe
                                 switch (item.ProtCTe.InfProt.CStat)
                                 {
                                     case 100: //CTe Autorizado
+                                    case 150: //CTe autorizado fora de prazo
                                         protCTe = item.ProtCTe;
                                         break;
                                 }
@@ -210,6 +208,11 @@ namespace Unimake.Business.DFe.Servicos.CTe
                     }
 
                     #endregion
+
+                    if (protCTe == null)
+                    {
+                        return CteProcs;
+                    }
 
                     if (CteProcs.ContainsKey(CTe.InfCTe.Chave))
                     {

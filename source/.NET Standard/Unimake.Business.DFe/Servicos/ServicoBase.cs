@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 #endif
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Xml;
 using Unimake.Business.DFe.ConsumirServico.Builders;
 using Unimake.Business.DFe.ConsumirServico.Compatibility;
 using Unimake.Business.DFe.Security;
+using Unimake.Business.DFe.Utility;
 using Unimake.Business.DFe.Validator;
 using Unimake.Business.DFe.Validator.Abstractions;
 using Unimake.Business.DFe.Xml;
@@ -29,31 +31,6 @@ namespace Unimake.Business.DFe.Servicos
     {
         private bool _disposed = false;
         private XmlDocument _ConteudoXML;
-
-        /// <summary>
-        /// Verifica se o XML está assinado, se não estiver assina. Só faz isso para XMLs que tem tag de assinatura, demais ele mantem como está, sem assinar.
-        /// </summary>
-        /// <param name="tagAssinatura">Tag de assinatura</param>
-        /// <param name="tagAtributoID">Tag que detêm o atributo ID</param>
-        protected virtual void VerificarAssinarXML(string tagAssinatura, string tagAtributoID)
-        {
-            if (Configuracoes.UsaCertificadoDigital)
-            {
-                if (!string.IsNullOrWhiteSpace(tagAssinatura) && Configuracoes.NaoAssina == null && Configuracoes.NaoAssina != Configuracoes.TipoAmbiente)
-                {
-                    if (AssinaturaDigital.EstaAssinado(ConteudoXML, tagAssinatura))
-                    {
-                        AjustarXMLAposAssinado();
-                    }
-                    else
-                    {
-                        AssinaturaDigital.Assinar(ConteudoXML, tagAssinatura, tagAtributoID, Configuracoes.CertificadoDigital, AlgorithmType.Sha1, true, "", true);
-
-                        AjustarXMLAposAssinado();
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Conteúdo do XML, pode ou não estar assinado. Esta propriedade é utilizada em tempo de processamento.
@@ -256,15 +233,6 @@ namespace Unimake.Business.DFe.Servicos
 #endif
         public virtual void Executar()
         {
-            if (!string.IsNullOrWhiteSpace(Configuracoes.TagAssinatura) && Configuracoes.NaoAssina != null && Configuracoes.NaoAssina != Configuracoes.TipoAmbiente)
-            {
-                if (!AssinaturaDigital.EstaAssinado(ConteudoXML, Configuracoes.TagAssinatura))
-                {
-                    AssinaturaDigital.Assinar(ConteudoXML, Configuracoes.TagAssinatura, Configuracoes.TagAtributoID, Configuracoes.CertificadoDigital, AlgorithmType.Sha1, true, "Id");
-                    AjustarXMLAposAssinado();
-                }
-            }
-
             if (Configuracoes.IsAPI)
             {
                 if (Configuracoes.RequestURI != null && !string.Equals(Configuracoes.MetodoAPI, "get", StringComparison.OrdinalIgnoreCase))
@@ -275,7 +243,31 @@ namespace Unimake.Business.DFe.Servicos
                 var apiConfig = new ConfiguracaoApiConfigMapper().Map(Configuracoes);
 
                 var consumirAPI = new ConsumirAPI();
-                consumirAPI.ExecutarServico(apiConfig, Configuracoes.CertificadoDigital);
+                if (!TelemetriaDisponibilidade.EstaHabilitada(Configuracoes))
+                {
+                    consumirAPI.ExecutarServico(apiConfig, Configuracoes.CertificadoDigital);
+                }
+                else
+                {
+                    var inicioTelemetria = Stopwatch.GetTimestamp();
+                    Exception falhaTransporte = null;
+                    try
+                    {
+                        consumirAPI.ExecutarServico(apiConfig, Configuracoes.CertificadoDigital);
+                    }
+                    catch (Exception ex)
+                    {
+                        falhaTransporte = ex;
+                        throw;
+                    }
+                    finally
+                    {
+                        var duracaoTelemetria = (long)((Stopwatch.GetTimestamp() - inicioTelemetria) *
+                            1000.0 / Stopwatch.Frequency);
+                        TelemetriaDisponibilidade.Registrar(Configuracoes, apiConfig.RequestURI, "REST", duracaoTelemetria,
+                            consumirAPI.HttpStatusCode, consumirAPI.RetornoServicoXML, falhaTransporte);
+                    }
+                }
 
                 RetornoWSString = consumirAPI.RetornoServicoString;
                 RetornoWSRawString = consumirAPI.RetornoServicoRawString;
@@ -301,9 +293,34 @@ namespace Unimake.Business.DFe.Servicos
             else
             {
                 var soap = new ConfiguracaoWSSoapMapper().Map(Configuracoes);
+                var conteudoXMLAssinado = ConteudoXMLAssinado;
 
                 var consumirWS = new ConsumirWS();
-                consumirWS.ExecutarServico(ConteudoXML, soap, Configuracoes.CertificadoDigital);
+                if (!TelemetriaDisponibilidade.EstaHabilitada(Configuracoes))
+                {
+                    consumirWS.ExecutarServico(conteudoXMLAssinado, soap, Configuracoes.CertificadoDigital);
+                }
+                else
+                {
+                    var inicioTelemetria = Stopwatch.GetTimestamp();
+                    Exception falhaTransporte = null;
+                    try
+                    {
+                        consumirWS.ExecutarServico(conteudoXMLAssinado, soap, Configuracoes.CertificadoDigital);
+                    }
+                    catch (Exception ex)
+                    {
+                        falhaTransporte = ex;
+                        throw;
+                    }
+                    finally
+                    {
+                        var duracaoTelemetria = (long)((Stopwatch.GetTimestamp() - inicioTelemetria) *
+                            1000.0 / Stopwatch.Frequency);
+                        TelemetriaDisponibilidade.Registrar(Configuracoes, soap.EnderecoWeb, "SOAP", duracaoTelemetria,
+                            consumirWS.HttpStatusCode, consumirWS.RetornoServicoXML, falhaTransporte);
+                    }
+                }
 
                 RetornoWSString = consumirWS.RetornoServicoString;
                 RetornoWSXML = consumirWS.RetornoServicoXML;

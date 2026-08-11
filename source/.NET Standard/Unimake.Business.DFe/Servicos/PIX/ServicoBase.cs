@@ -74,7 +74,6 @@ namespace Unimake.Business.DFe.Servicos.PIX
 
             Configuracoes.Load(GetType().Name);
             Configuracoes.SchemaArquivo = SchemaArquivoPIX;
-            ConfigureAuth();
             ConfigurarRequestURI();
 
             if (Configuracoes.MetodoAPI != "get")
@@ -83,6 +82,13 @@ namespace Unimake.Business.DFe.Servicos.PIX
             }
 
             Configuracoes.Definida = true;
+        }
+
+        /// <inheritdoc />
+        public override void Executar()
+        {
+            ConfigureAuth();
+            base.Executar();
         }
 
         /// <summary>
@@ -149,8 +155,6 @@ namespace Unimake.Business.DFe.Servicos.PIX
         /// <summary>
         /// Verificar assinatura (não aplicável ao PIX)
         /// </summary>
-        protected override void VerificarAssinarXML(string tagAssinatura, string tagAtributoID) { }
-
         /// <summary>
         /// Inicializar serviço
         /// </summary>
@@ -273,7 +277,21 @@ namespace Unimake.Business.DFe.Servicos.PIX
 
         private static void NormalizarJson(JObject jsonObject)
         {
+            NormalizarValorCobranca(jsonObject);
             RemoverPropriedade(jsonObject, "useHomologServer");
+        }
+
+        private static void NormalizarValorCobranca(JObject jsonObject)
+        {
+            if (!jsonObject.TryGetValue("valor", out var valor) || valor is JObject)
+            {
+                return;
+            }
+
+            jsonObject["valor"] = new JObject
+            {
+                { "original", valor }
+            };
         }
 
         private static void RemoverPropriedade(JObject jsonObject, string propertyName)

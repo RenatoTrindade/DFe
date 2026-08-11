@@ -28,6 +28,38 @@ namespace Unimake.DFe.Test.Utility.Validacao
         }
 
         [Fact]
+        public void ConfiguracaoNaoDeveExporEstruturasLegadasDeValidacao()
+        {
+            var tipoConfiguracao = typeof(Configuracao);
+            var assembly = tipoConfiguracao.Assembly;
+
+            Assert.Null(tipoConfiguracao.GetField("SchemasEspecificos"));
+            Assert.Null(tipoConfiguracao.GetField("TiposEventosEspecificos"));
+            Assert.Null(tipoConfiguracao.GetProperty("TagAssinatura"));
+            Assert.Null(tipoConfiguracao.GetProperty("TagAtributoID"));
+            Assert.Null(tipoConfiguracao.GetProperty("TagLoteAssinatura"));
+            Assert.Null(tipoConfiguracao.GetProperty("TagLoteAtributoID"));
+            Assert.Null(tipoConfiguracao.GetProperty("SchemaVersaoEvento"));
+            Assert.Null(assembly.GetType("Unimake.Business.DFe.Servicos.SchemaEspecifico"));
+            Assert.Null(assembly.GetType("Unimake.Business.DFe.Servicos.TiposEventosEspecificos"));
+        }
+
+        [Fact]
+        public void ConfiguracaoDevePreservarCamposAindaUtilizadosPorCodigo()
+        {
+            var configuracao = new Configuracao
+            {
+                SchemaArquivo = "schema-programatico.xsd",
+                TagExtraAssinatura = "SubstituirNfseEnvio",
+                TagExtraAtributoID = "SubstituicaoNfse"
+            };
+
+            Assert.Equal("schema-programatico.xsd", configuracao.SchemaArquivo);
+            Assert.Equal("SubstituirNfseEnvio", configuracao.TagExtraAssinatura);
+            Assert.Equal("SubstituicaoNfse", configuracao.TagExtraAtributoID);
+        }
+
+        [Fact]
         public void DeveManterServicosVersionadosENaoVersionados()
         {
             var catalogo = CarregarCatalogo();
@@ -54,6 +86,24 @@ namespace Unimake.DFe.Test.Utility.Validacao
                     $"SignatureAlgorithmType inválido no catálogo: {valor}."
                 );
             }
+        }
+
+        [Theory]
+        [InlineData("enviNFe")]
+        [InlineData("NFe")]
+        public void DeveConterUrlsQRCodeNFCeParaAlagoas(string tagRaiz)
+        {
+            var catalogo = CarregarCatalogo();
+            var servico = catalogo.SelectSingleNode($"ServicosValidacao/NFCe/Servico[@tagRaiz='{tagRaiz}' and @versao='4.00']");
+            var configuracao = new Configuracao();
+
+            Assert.NotNull(servico);
+            InvocarAtribuirUrl(servico, UFBrasil.AL, configuracao);
+
+            Assert.Equal("www.sefaz.al.gov.br/nfce/consulta", configuracao.UrlChaveHomologacao);
+            Assert.Equal("www.sefaz.al.gov.br/nfce/consulta", configuracao.UrlChaveProducao);
+            Assert.Equal("http://nfce.sefaz.al.gov.br/QRCode/consultarNFCe.jsp", configuracao.UrlQrCodeHomologacao);
+            Assert.Equal("http://nfce.sefaz.al.gov.br/QRCode/consultarNFCe.jsp", configuracao.UrlQrCodeProducao);
         }
 
         [Fact]
@@ -154,6 +204,17 @@ namespace Unimake.DFe.Test.Utility.Validacao
 
             Assert.NotNull(metodo);
             return (XmlNode)metodo.Invoke(null, parametros);
+        }
+
+        private static void InvocarAtribuirUrl(XmlNode servico, UFBrasil codigoUF, Configuracao configuracao)
+        {
+            var metodo = typeof(ValidarEstruturaXML).GetMethod(
+                "AtribuirUrl",
+                BindingFlags.NonPublic | BindingFlags.Static
+            );
+
+            Assert.NotNull(metodo);
+            metodo.Invoke(null, new object[] { servico, codigoUF, configuracao });
         }
     }
 }

@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -23,6 +24,11 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
         public XmlDocument Parse(ref ApiResponseContext context)
         {
+            if (context.Config.Servico == Servico.EBoletoCancelar && !context.Response.IsSuccessStatusCode)
+            {
+                return CriarXmlRetornoBoletoCancelar(ref context);
+            }
+
             var tipoRetorno = string.IsNullOrWhiteSpace(context.Config.ResponseMediaType)
                 ? context.Response.Content.Headers.ContentType.MediaType
                 : context.Config.ResponseMediaType;
@@ -231,7 +237,7 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             var root = JObject.Parse(context.ResponseContent);
             var mensagem = new retUMessengerMensagem
             {
-                Status = context.Response.IsSuccessStatusCode ? 1 : 0,
+                Status = context.Response.IsSuccessStatusCode ? 1 : 999,
                 Motivo = context.Response.IsSuccessStatusCode
                     ? "Mensagem enviada com sucesso."
                     : ExtrairMotivoErroUMessenger(root),
@@ -303,37 +309,69 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             var root = TryParseJsonObject(context.ResponseContent);
             var retorno = new retBoletoRegistrar
             {
-                DLLVersao = Info.VersaoDLL,
-                QRCodeContent = new retBoletoRegistrarQRCodeContent()
+                DLLVersao = Info.VersaoDLL
             };
 
             if (!context.Response.IsSuccessStatusCode)
             {
                 retorno.Status = 999;
-                retorno.Motivo = ExtrairMotivoErroApi(root, "Falha ao registrar boleto.");
+                retorno.Motivo = ExtrairMotivoErroApi(root, "Falha ao registrar boleto.").Replace("\r\n", "");
+                retorno.TraceId = ObterPrimeiroValorTexto(root, "traceId");
                 return retorno.GerarXML();
             }
 
             retorno.Status = ResolverStatusEBoleto(root, 0, 1);
-            retorno.Motivo = ResolverMotivoEBoleto(root, retorno.Status, "Boleto registrado", "Falha ao registrar boleto.");
-            retorno.CodigoBarraNumerico = ObterPrimeiroValorTexto(root, "codigoBarraNumerico", "codigoBarrasNumerico", "barcodeNumeric");
-            retorno.NumeroNoBanco = ObterPrimeiroValorTexto(root, "numeroNoBanco");
-            retorno.LinhaDigitavel = ObterPrimeiroValorTexto(root, "linhaDigitavel");
+            retorno.Motivo = retorno.Status == 0
+                ? "Boleto registrado"
+                : ResolverMotivoEBoleto(root, retorno.Status, "Boleto registrado", "Falha ao registrar boleto.");
+            retorno.CodigoBarraNumerico = ObterPrimeiroValorTexto(root, "codigoBarraNumerico", "codigoBarrasNumerico", "barcodeNumeric") ?? string.Empty;
+            retorno.NumeroNoBanco = ObterPrimeiroValorTexto(root, "numeroNoBanco") ?? string.Empty;
+            retorno.LinhaDigitavel = ObterPrimeiroValorTexto(root, "linhaDigitavel") ?? string.Empty;
             retorno.PdfContentSuccess = ObterPrimeiroValorBooleano(root, "pdfContentSuccess", "successPdf")
                 ?? ObterPrimeiroValorBooleanoPorCaminhos(root, new[] { "pdfContent", "success" })
                 ?? false;
             retorno.PdfContentMessage = ObterPrimeiroValorTexto(root, "pdfContentMessage")
-                ?? ObterPrimeiroValorTextoPorCaminhos(root, new[] { "pdfContent", "message" });
+                ?? ObterPrimeiroValorTextoPorCaminhos(root, new[] { "pdfContent", "message" })
+                ?? string.Empty;
             retorno.PdfContentBase64 = ObterPrimeiroValorTexto(root, "pdfContentBase64")
-                ?? ObterPrimeiroValorTextoPorCaminhos(root, new[] { "pdfContent", "content" }, new[] { "pdfContent", "base64" });
-            retorno.PdfPath = ObterPrimeiroValorTexto(root, "pdfPath", "caminhoPdf");
-            retorno.QRCodeContent.Image = ObterPrimeiroValorTextoPorCaminhos(root, new[] { "qrCodeContent", "image" })
+                ?? ObterPrimeiroValorTextoPorCaminhos(root, new[] { "pdfContent", "content" }, new[] { "pdfContent", "base64" })
+                ?? string.Empty;
+            retorno.PdfPath = ObterPrimeiroValorTexto(root, "pdfPath", "caminhoPdf") ?? string.Empty;
+
+            var pixPagamentoDetalhe = LocalizarTokenPorNome(root, "pixPagamentoDetalhe");
+            if (pixPagamentoDetalhe != null && pixPagamentoDetalhe.Type != JTokenType.Null)
+            {
+                retorno.PixPagamentoDetalhe = new retBoletoRegistrarPIXPagamentoDetalhe
+                {
+                    DataPagamento = FormatarDataPagamentoBoletoRegistrar(LocalizarTokenPorNome(pixPagamentoDetalhe, "dataPagamento")),
+                    TxId = ObterPrimeiroValorTexto(pixPagamentoDetalhe, "txId") ?? string.Empty,
+                    ValorAbatimento = FormatarValorEBoleto(ObterPrimeiroValorTexto(pixPagamentoDetalhe, "valorAbatimento"), true),
+                    ValorDesconto = FormatarValorEBoleto(ObterPrimeiroValorTexto(pixPagamentoDetalhe, "valorDesconto"), true),
+                    ValorJuros = FormatarValorEBoleto(ObterPrimeiroValorTexto(pixPagamentoDetalhe, "valorJuros"), true),
+                    ValorLiquidado = FormatarValorEBoleto(ObterPrimeiroValorTexto(pixPagamentoDetalhe, "valorLiquidado"), false),
+                    ValorMulta = FormatarValorEBoleto(ObterPrimeiroValorTexto(pixPagamentoDetalhe, "valorMulta"), true),
+                    ValorOriginal = FormatarValorEBoleto(ObterPrimeiroValorTexto(pixPagamentoDetalhe, "valorOriginal"), false)
+                };
+            }
+
+            var qrCodeImage = ObterPrimeiroValorTextoPorCaminhos(root, new[] { "qrCodeContent", "image" })
                 ?? ObterPrimeiroValorTexto(root, "qrCodeImage");
-            retorno.QRCodeContent.Success = ObterPrimeiroValorBooleanoPorCaminhos(root, new[] { "qrCodeContent", "success" })
-                ?? ObterPrimeiroValorBooleano(root, "qrCodeSuccess")
-                ?? false;
-            retorno.QRCodeContent.Text = ObterPrimeiroValorTextoPorCaminhos(root, new[] { "qrCodeContent", "text" })
+            var qrCodeSuccess = ObterPrimeiroValorBooleanoPorCaminhos(root, new[] { "qrCodeContent", "success" })
+                ?? ObterPrimeiroValorBooleano(root, "qrCodeSuccess");
+            var qrCodeText = ObterPrimeiroValorTextoPorCaminhos(root, new[] { "qrCodeContent", "text" })
                 ?? ObterPrimeiroValorTexto(root, "qrCodeText", "pixCopiaECola");
+
+            if (!string.IsNullOrWhiteSpace(qrCodeImage) ||
+                !string.IsNullOrWhiteSpace(qrCodeText) ||
+                qrCodeSuccess == true)
+            {
+                retorno.QRCodeContent = new retBoletoRegistrarQRCodeContent
+                {
+                    Image = qrCodeImage ?? string.Empty,
+                    Success = qrCodeSuccess.GetValueOrDefault(),
+                    Text = qrCodeText ?? string.Empty
+                };
+            }
 
             return retorno.GerarXML();
         }
@@ -350,15 +388,15 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             {
                 retorno.Status = 999;
                 retorno.Motivo = ExtrairMotivoErroApi(root, "Falha ao consultar boleto.");
+                retorno.TraceId = ObterPrimeiroValorTexto(root, "traceId");
                 return retorno.GerarXML();
             }
 
             retorno.BoletoResponse.AddRange(CriarListaItensEBoleto(root));
-            retorno.Status = ResolverStatusEBoleto(root, 0, 1);
-            retorno.Motivo = ResolverMotivoEBoleto(root,
-                retorno.Status,
-                retorno.BoletoResponse.Count > 0 ? "Boletos encontrados" : "Consulta realizada com sucesso",
-                "Falha ao consultar boleto.");
+            retorno.Status = retorno.BoletoResponse.Count > 0 ? 0 : 1;
+            retorno.Motivo = retorno.BoletoResponse.Count > 0
+                ? "Boletos encontrados"
+                : "Nenhum boleto encontrado";
 
             return retorno.GerarXML();
         }
@@ -372,6 +410,13 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             };
 
             PreencherRetornoEBoletoBasico(retorno, root, context.Response.IsSuccessStatusCode, "Boleto cancelado com sucesso", "Falha ao cancelar boleto.", 0, 1);
+
+            if (!context.Response.IsSuccessStatusCode)
+            {
+                retorno.Status = 1;
+                retorno.TraceId = ObterPrimeiroValorTexto(root, "traceId");
+            }
+
             return retorno.GerarXML();
         }
 
@@ -384,6 +429,13 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             };
 
             PreencherRetornoEBoletoBasico(retorno, root, context.Response.IsSuccessStatusCode, "Vencimento alterado com sucesso", "Falha ao alterar vencimento do boleto.", 0, 1);
+
+            if (!context.Response.IsSuccessStatusCode)
+            {
+                retorno.Status = 1;
+                retorno.TraceId = ObterPrimeiroValorTexto(root, "traceId");
+            }
+
             return retorno.GerarXML();
         }
 
@@ -407,7 +459,26 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
                 DLLVersao = Info.VersaoDLL
             };
 
-            PreencherRetornoEBoletoBasico(retorno, root, context.Response.IsSuccessStatusCode, "Boleto foi marcado como pago com sucesso", "Falha ao informar pagamento do boleto.", 0, 1);
+            if (context.Response.StatusCode == System.Net.HttpStatusCode.Accepted ||
+                context.Response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                retorno.Status = 0;
+                retorno.Motivo = "Instrução para marcar o boleto como pago enviado com sucesso";
+            }
+            else
+            {
+                var codigo = ObterPrimeiroValorTexto(root, "codigo", "code");
+                var mensagem = ObterPrimeiroValorTexto(root, "mensagem", "message");
+
+                retorno.Status = 1;
+                retorno.Motivo = "Não foi possível marcar o boleto como pago. Tente novamente mais tarde. (Status Code: " +
+                    ((int)context.Response.StatusCode).ToString() + ")" +
+                    (!string.IsNullOrWhiteSpace(codigo)
+                        ? " - (Erro: " + codigo + (!string.IsNullOrWhiteSpace(mensagem) ? " - " + mensagem : "") + ")"
+                        : "");
+                retorno.TraceId = ObterPrimeiroValorTexto(root, "traceId");
+            }
+
             return retorno.GerarXML();
         }
 
@@ -466,13 +537,25 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             {
                 retorno.Status = 999;
                 retorno.Motivo = ExtrairMotivoErroApi(root, "Falha ao criar cobrança PIX.");
+                retorno.TraceId = ObterPrimeiroValorTexto(root, "traceId");
+                retorno.PixCopiaECola = string.Empty;
+                retorno.ImageQRCode = string.Empty;
                 return retorno.GerarXML();
             }
 
             retorno.Status = ResolverStatusPIXCobrancaCriar(root);
-            retorno.Motivo = ResolverMotivoPIXCobrancaCriar(root, retorno.Status);
-            retorno.PixCopiaECola = ObterPrimeiroValorTexto(root, "PixCopiaECola", "pixCopiaECola", "copiaECola", "pixCopiaCola", "emv");
-            retorno.ImageQRCode = ObterPrimeiroValorTexto(root, "ImageQRCode", "imageQRCode", "qrCodeImagePath", "qrCodeImage", "imagemQRCode");
+            retorno.Motivo = ResolverMotivoPIXCobrancaCriar(retorno.Status);
+
+            if (retorno.Status == 0)
+            {
+                retorno.PixCopiaECola = ObterPrimeiroValorTexto(root, "PixCopiaECola", "pixCopiaECola", "copiaECola", "pixCopiaCola", "emv");
+                retorno.ImageQRCode = ObterPrimeiroValorTexto(root, "ImageQRCode", "imageQRCode", "qrCodeImagePath", "qrCodeImage", "imagemQRCode");
+            }
+            else
+            {
+                retorno.PixCopiaECola = string.Empty;
+                retorno.ImageQRCode = string.Empty;
+            }
 
             return retorno.GerarXML();
         }
@@ -546,7 +629,21 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
             try
             {
-                return JObject.Parse(responseContent);
+                var token = JToken.Parse(responseContent);
+                if (token is JObject objeto)
+                {
+                    return objeto;
+                }
+
+                if (token is JArray array)
+                {
+                    return new JObject
+                    {
+                        ["items"] = array
+                    };
+                }
+
+                return new JObject();
             }
             catch
             {
@@ -585,30 +682,24 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
             return 0;
         }
 
-        private string ResolverMotivoPIXCobrancaCriar(JObject root, int status)
+        private string ResolverMotivoPIXCobrancaCriar(int status)
         {
-            var motivoExplicito = ObterPrimeiroValorTexto(root, "motivo", "message", "mensagem");
-            if (!string.IsNullOrWhiteSpace(motivoExplicito))
-            {
-                return motivoExplicito;
-            }
-
             switch (status)
             {
                 case 0:
-                    return "PIX Ativo (Cobrança gerada)";
+                    return "PIX Ativo (Cobranca gerada)";
 
                 case 1:
-                    return "PIX Concluído.";
+                    return "PIX Concluído (PIX ja foi pago)";
 
                 case 2:
-                    return "PIX removido pelo usuário recebedor.";
+                    return "Cobranca do PIX removida pelo usuario recebedor";
 
                 case 3:
-                    return "PIX removido pelo PSP.";
+                    return "Cobranca do PIX removida pelo PSP do recebedor";
             }
 
-            return "PIX processado com sucesso.";
+            return string.Empty;
         }
 
         private List<retPIXItem> CriarListaItensPIX(JObject root)
@@ -769,33 +860,37 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
             var item = new retBoletoConsultarItem
             {
-                CodigoBarras = ObterPrimeiroValorTexto(token, "codigoBarras", "codigoBarra", "barcode"),
-                DataEmissao = ObterPrimeiroValorTexto(token, "dataEmissao", "emissao"),
-                DataLiquidacao = ObterPrimeiroValorTexto(token, "dataLiquidacao"),
-                DataVencimento = ObterPrimeiroValorTexto(token, "dataVencimento", "vencimento"),
-                NumeroNaEmpresa = ObterPrimeiroValorTexto(token, "numeroNaEmpresa", "numeroEmpresa", "seuNumero"),
-                NumeroNoBanco = ObterPrimeiroValorTexto(token, "numeroNoBanco", "nossoNumero"),
+                CodigoBarras = ObterPrimeiroValorTexto(token, "codigoBarras", "codigoBarra", "barcode") ?? string.Empty,
+                DataEmissao = FormatarDataEBoleto(ObterPrimeiroValorTexto(token, "dataEmissao", "emissao")),
+                DataLiquidacao = FormatarDataEBoleto(ObterPrimeiroValorTexto(token, "dataLiquidacao")),
+                DataVencimento = FormatarDataEBoleto(ObterPrimeiroValorTexto(token, "dataVencimento", "vencimento")),
+                NumeroNaEmpresa = ObterPrimeiroValorTexto(token, "numeroNaEmpresa", "numeroEmpresa", "seuNumero") ?? string.Empty,
+                NumeroNoBanco = ObterPrimeiroValorTexto(token, "numeroNoBanco", "nossoNumero") ?? string.Empty,
                 Pagador = CriarPagadorEBoleto(LocalizarTokenPorNome(token, "pagador", "payer")),
-                PdfContent = CriarPdfContentEBoleto(LocalizarTokenPorNome(token, "pdfContent")),
-                QrCodeContent = CriarQrCodeContentEBoleto(LocalizarTokenPorNome(token, "qrCodeContent")),
+                PdfContent = CriarPdfContentEBoleto(LocalizarTokenPorNome(token, "pdfContent")) ?? new retBoletoConsultarPdfContent(),
+                PIXPagamentoDetalhe = CriarPIXPagamentoDetalheEBoleto(LocalizarTokenPorNome(token, "pixPagamentoDetalhe")),
+                QrCodeContent = CriarQrCodeContentEBoleto(LocalizarTokenPorNome(token, "qrCodeContent")) ?? new retBoletoConsultarQrCodeContent(),
                 Situacao = ObterPrimeiroValorInteiro(token, "situacao", "statusBoleto").GetValueOrDefault(),
                 TipoLiquidacao = ObterPrimeiroValorInteiro(token, "tipoLiquidacao").GetValueOrDefault(),
-                Valor = ObterPrimeiroValorTexto(token, "valor"),
-                ValorAbatimento = ObterPrimeiroValorTexto(token, "valorAbatimento"),
-                ValorDesconto = ObterPrimeiroValorTexto(token, "valorDesconto"),
-                ValorJuros = ObterPrimeiroValorTexto(token, "valorJuros"),
-                ValorLiquidado = ObterPrimeiroValorTexto(token, "valorLiquidado"),
-                ValorMulta = ObterPrimeiroValorTexto(token, "valorMulta")
+                Valor = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valor"), false),
+                ValorAbatimento = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorAbatimento"), false),
+                ValorDesconto = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorDesconto"), false),
+                ValorJuros = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorJuros"), false),
+                ValorLiquidado = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorLiquidado"), false),
+                ValorMulta = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorMulta"), false)
             };
 
             if (string.IsNullOrWhiteSpace(item.NumeroNoBanco) &&
                 string.IsNullOrWhiteSpace(item.NumeroNaEmpresa) &&
                 string.IsNullOrWhiteSpace(item.CodigoBarras) &&
-                string.IsNullOrWhiteSpace(item.Valor) &&
-                string.IsNullOrWhiteSpace(item.DataVencimento) &&
-                item.Pagador == null &&
-                item.PdfContent == null &&
-                item.QrCodeContent == null)
+                LocalizarTokenPorNome(token,
+                    "valor",
+                    "dataVencimento",
+                    "pagador",
+                    "payer",
+                    "pdfContent",
+                    "pixPagamentoDetalhe",
+                    "qrCodeContent") == null)
             {
                 return null;
             }
@@ -812,22 +907,14 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
             var retorno = new retBoletoConsultarPagador
             {
-                Codigo = ObterPrimeiroValorTexto(token, "codigo"),
-                Nome = ObterPrimeiroValorTexto(token, "nome", "name"),
-                Inscricao = ObterPrimeiroValorTexto(token, "inscricao", "cpf", "cnpj", "documento"),
-                Telefone = ObterPrimeiroValorTexto(token, "telefone", "phone"),
-                Email = ObterPrimeiroValorTexto(token, "email", "mail"),
+                Codigo = ObterPrimeiroValorTexto(token, "codigo") ?? string.Empty,
+                Nome = ObterPrimeiroValorTexto(token, "nome", "name") ?? string.Empty,
+                Inscricao = ObterPrimeiroValorTexto(token, "inscricao", "cpf", "cnpj", "documento") ?? string.Empty,
+                Telefone = ObterPrimeiroValorTexto(token, "telefone", "phone") ?? string.Empty,
+                Email = ObterPrimeiroValorTexto(token, "email", "mail") ?? string.Empty,
                 TipoInscricao = ObterPrimeiroValorInteiro(token, "tipoInscricao").GetValueOrDefault(),
                 Endereco = CriarEnderecoEBoleto(LocalizarTokenPorNome(token, "endereco", "address"))
             };
-
-            if (string.IsNullOrWhiteSpace(retorno.Nome) &&
-                string.IsNullOrWhiteSpace(retorno.Inscricao) &&
-                string.IsNullOrWhiteSpace(retorno.Email) &&
-                retorno.Endereco == null)
-            {
-                return null;
-            }
 
             return retorno;
         }
@@ -841,21 +928,14 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
             var retorno = new retBoletoConsultarEndereco
             {
-                Logradouro = ObterPrimeiroValorTexto(token, "logradouro", "street"),
-                Numero = ObterPrimeiroValorTexto(token, "numero", "number"),
-                Complemento = ObterPrimeiroValorTexto(token, "complemento", "complement"),
-                Bairro = ObterPrimeiroValorTexto(token, "bairro", "district"),
-                Cidade = ObterPrimeiroValorTexto(token, "cidade", "city"),
-                UF = ObterPrimeiroValorTexto(token, "uf", "state"),
-                CEP = ObterPrimeiroValorTexto(token, "cep", "zipCode")
+                Logradouro = ObterPrimeiroValorTexto(token, "logradouro", "street") ?? string.Empty,
+                Numero = ObterPrimeiroValorTexto(token, "numero", "number") ?? string.Empty,
+                Complemento = ObterPrimeiroValorTexto(token, "complemento", "complement") ?? string.Empty,
+                Bairro = ObterPrimeiroValorTexto(token, "bairro", "district") ?? string.Empty,
+                Cidade = ObterPrimeiroValorTexto(token, "cidade", "city") ?? string.Empty,
+                UF = ObterPrimeiroValorTexto(token, "uf", "state") ?? string.Empty,
+                CEP = ObterPrimeiroValorTexto(token, "cep", "zipCode") ?? string.Empty
             };
-
-            if (string.IsNullOrWhiteSpace(retorno.Logradouro) &&
-                string.IsNullOrWhiteSpace(retorno.Cidade) &&
-                string.IsNullOrWhiteSpace(retorno.CEP))
-            {
-                return null;
-            }
 
             return retorno;
         }
@@ -869,19 +949,30 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
             var retorno = new retBoletoConsultarPdfContent
             {
-                Content = ObterPrimeiroValorTexto(token, "content", "base64"),
+                Content = ObterPrimeiroValorTexto(token, "content", "base64") ?? string.Empty,
                 Success = ObterPrimeiroValorBooleano(token, "success").GetValueOrDefault(),
-                Message = ObterPrimeiroValorTexto(token, "message", "mensagem")
+                Message = ObterPrimeiroValorTexto(token, "message", "mensagem") ?? string.Empty
             };
 
-            if (string.IsNullOrWhiteSpace(retorno.Content) &&
-                string.IsNullOrWhiteSpace(retorno.Message) &&
-                !retorno.Success)
+            return retorno;
+        }
+
+        private retBoletoConsultarPIXPagamentoDetalhe CriarPIXPagamentoDetalheEBoleto(JToken token)
+        {
+            if (token == null || token.Type == JTokenType.Null)
             {
                 return null;
             }
 
-            return retorno;
+            return new retBoletoConsultarPIXPagamentoDetalhe
+            {
+                DataPagamento = FormatarDataEBoleto(ObterPrimeiroValorTexto(token, "dataPagamento")),
+                ValorDesconto = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorDesconto"), true),
+                ValorJuros = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorJuros"), true),
+                ValorLiquidado = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorLiquidado"), false),
+                ValorMulta = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorMulta"), true),
+                ValorOriginal = FormatarValorEBoleto(ObterPrimeiroValorTexto(token, "valorOriginal"), false)
+            };
         }
 
         private retBoletoConsultarQrCodeContent CriarQrCodeContentEBoleto(JToken token)
@@ -893,19 +984,79 @@ namespace Unimake.Business.DFe.ConsumirServico.Parsers
 
             var retorno = new retBoletoConsultarQrCodeContent
             {
-                Text = ObterPrimeiroValorTexto(token, "text", "texto"),
-                Image = ObterPrimeiroValorTexto(token, "image", "imagem"),
+                Text = ObterPrimeiroValorTexto(token, "text", "texto") ?? string.Empty,
+                Image = ObterPrimeiroValorTexto(token, "image", "imagem") ?? string.Empty,
                 Success = ObterPrimeiroValorBooleano(token, "success").GetValueOrDefault()
             };
 
-            if (string.IsNullOrWhiteSpace(retorno.Text) &&
-                string.IsNullOrWhiteSpace(retorno.Image) &&
-                !retorno.Success)
+            return retorno;
+        }
+
+        private string FormatarDataEBoleto(string valor)
+        {
+            if (string.IsNullOrWhiteSpace(valor))
             {
-                return null;
+                return string.Empty;
             }
 
-            return retorno;
+            if (DateTimeOffset.TryParse(valor, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var data) ||
+                DateTimeOffset.TryParse(valor, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces, out data))
+            {
+                return data.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
+            }
+
+            return valor;
+        }
+
+        private string FormatarDataPagamentoBoletoRegistrar(JToken token)
+        {
+            if (token == null || token.Type == JTokenType.Null)
+            {
+                return string.Empty;
+            }
+
+            if (token is JValue valorData && valorData.Value is DateTimeOffset dataOffset)
+            {
+                return dataOffset.ToString("yyyy-MM-ddTHH:mm:ss.fff'Z'", CultureInfo.InvariantCulture);
+            }
+
+            if (token is JValue valorDataHora && valorDataHora.Value is DateTime dataHora)
+            {
+                return dataHora.ToString("yyyy-MM-ddTHH:mm:ss.fff'Z'", CultureInfo.InvariantCulture);
+            }
+
+            var valor = token.ToString();
+            if (string.IsNullOrWhiteSpace(valor))
+            {
+                return string.Empty;
+            }
+
+            if (DateTimeOffset.TryParse(valor, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var data) ||
+                DateTimeOffset.TryParse(valor, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces, out data))
+            {
+                return data.ToString("yyyy-MM-ddTHH:mm:ss.fff'Z'", CultureInfo.InvariantCulture);
+            }
+
+            return valor;
+        }
+
+        private string FormatarValorEBoleto(string valor, bool nullable)
+        {
+            if (string.IsNullOrWhiteSpace(valor))
+            {
+                return nullable ? string.Empty : "0.00";
+            }
+
+            var culturaOrigem = valor.IndexOf(',') >= 0 && valor.IndexOf('.') < 0
+                ? CultureInfo.CurrentCulture
+                : CultureInfo.InvariantCulture;
+
+            if (decimal.TryParse(valor, NumberStyles.Any, culturaOrigem, out var numero))
+            {
+                return numero.ToString("N2", CultureInfo.GetCultureInfo("en-US"));
+            }
+
+            return valor;
         }
 
         private string ExtrairMotivoErroApi(JObject root, string mensagemPadrao)

@@ -118,7 +118,7 @@ namespace Unimake.Business.DFe.Servicos.MDFe
         {
             get
             {
-                if (Result.ProtMDFe != null)
+                if (Result.ProtMDFe != null && StatusProtocoloAutorizacao.MDFe(Result.ProtMDFe.InfProt.CStat))
                 {
                     if (MdfeProcs.ContainsKey(MDFe.InfMDFe.Chave))
                     {
@@ -134,7 +134,7 @@ namespace Unimake.Business.DFe.Servicos.MDFe
                         });
                     }
                 }
-                else
+                else if (Result.ProtMDFe == null)
                 {
                     if (RetConsSitMDFe.Count <= 0)
                     {
@@ -159,6 +159,11 @@ namespace Unimake.Business.DFe.Servicos.MDFe
                                 }
                             }
                         }
+                    }
+
+                    if (protMDFe == null)
+                    {
+                        return MdfeProcs;
                     }
 
                     if (MdfeProcs.ContainsKey(MDFe.InfMDFe.Chave))
@@ -288,7 +293,6 @@ namespace Unimake.Business.DFe.Servicos.MDFe
             //var schemaArquivo = string.Empty;
             //var schemaArquivoEspecifico = string.Empty;
 
-            //if (Configuracoes.SchemasEspecificos.Count > 0)
             //{
             //    if (ConteudoXML.GetElementsByTagName("MDFe").Count <= 0)
             //    {
@@ -316,8 +320,6 @@ namespace Unimake.Business.DFe.Servicos.MDFe
 
             //    var modal = Convert.ToInt32(elementIde.GetElementsByTagName("modal")[0].InnerText);
 
-            //    schemaArquivo = Configuracoes.SchemasEspecificos[modal.ToString()].SchemaArquivo;
-            //    schemaArquivoEspecifico = Configuracoes.SchemasEspecificos[modal.ToString()].SchemaArquivoEspecifico;
             //}
 
             //#region Validar o XML geral

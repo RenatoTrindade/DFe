@@ -2188,25 +2188,25 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Dados dos produtos e serviços da NFe/NFCe
         /// </summary>
-        [XmlElement("prod")]
+        [XmlElement("prod", Order = 0)]
         public Prod Prod { get; set; }
 
         /// <summary>
         /// Tributos incidentes nos produtos ou serviços da NFe/NFCe
         /// </summary>
-        [XmlElement("imposto")]
+        [XmlElement("imposto", Order = 1)]
         public Imposto Imposto { get; set; }
 
         /// <summary>
         /// Grupo de devolução de tributos
         /// </summary>
-        [XmlElement("impostoDevol")]
+        [XmlElement("impostoDevol", Order = 2)]
         public ImpostoDevol ImpostoDevol { get; set; }
 
         /// <summary>
         /// Informações adicionais do produto (norma referenciada, informações complementares, etc)
         /// </summary>
-        [XmlElement("infAdProd")]
+        [XmlElement("infAdProd", Order = 3)]
         public string InfAdProd
         {
             get => string.IsNullOrWhiteSpace(InfAdProdField) ? null : InfAdProdField;
@@ -2216,7 +2216,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Grupo de observações de uso livre (para o item da NFe/NFCe
         /// </summary>
-        [XmlElement("obsItem")]
+        [XmlElement("obsItem", Order = 4)]
         public ObsItem ObsItem { get; set; }
 
         /// <summary>
@@ -2228,7 +2228,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Propriedade auxiliar para serialização/desserialização do XML (Utilize sempre a propriedade vItem para atribuir ou resgatar o valor)
         /// </summary>
-        [XmlElement("vItem")]
+        [XmlElement("vItem", Order = 5)]
         public string VItemField
         {
             get => VItem.ToString("F2", CultureInfo.InvariantCulture);
@@ -2238,7 +2238,7 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// <summary>
         /// Documento Fiscal Eletrônico Referenciado 
         /// </summary>
-        [XmlElement("DFeReferenciado")]
+        [XmlElement("DFeReferenciado", Order = 6)]
         public DFeReferenciado DFeReferenciado { get; set; }
 
         #region ShouldSerialize
@@ -8164,13 +8164,13 @@ namespace Unimake.Business.DFe.Xml.NFe
 
         public bool ShouldSerializeModBC() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1);
 
-        public bool ShouldSerializeVBCField() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1); //Se a modalidade for informada tem que ir esta TAG
+        public bool ShouldSerializeVBCField() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1) && VBC >= 0; //Se a modalidade for informada tem que ir esta TAG
 
         public bool ShouldSerializePRedBCField() => PRedBC != null;
 
-        public bool ShouldSerializePICMSField() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1); //Se a modalidade for informada tem que ir esta TAG
+        public bool ShouldSerializePICMSField() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1) && PICMS >= 0; //Se a modalidade for informada tem que ir esta TAG
 
-        public bool ShouldSerializeVICMSField() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1); //Se a modalidade for informada tem que ir esta TAG
+        public bool ShouldSerializeVICMSField() => ModBC != null && ModBC != (ModalidadeBaseCalculoICMS)(-1) && VICMS >= 0; //Se a modalidade for informada tem que ir esta TAG
 
         public bool ShouldSerializeModBCST() => ModBCST != null && ModBCST != (ModalidadeBaseCalculoICMSST)(-1);
 
@@ -14969,10 +14969,10 @@ namespace Unimake.Business.DFe.Xml.NFe
     public class GPagAntecipado
     {
         /// <summary>
-        /// Chave de acesso do documento fiscal de antecipação de pagamento
+        /// Chave de acesso da NF-e de antecipação de pagamento
         /// </summary>
-        [XmlElement("refDFe")]
-        public List<string> RefDFe { get; set; }
+        [XmlElement("refNFe")]
+        public List<string> RefNFe { get; set; }
 
 #if INTEROP
 
@@ -14980,40 +14980,35 @@ namespace Unimake.Business.DFe.Xml.NFe
         /// Adicionar novo elemento a lista
         /// </summary>
         /// <param name="item">Elemento</param>
-        public void AddRefDFe(string item)
+        public void AddRefNFe(string item)
         {
-            if (RefDFe == null)
+            if (RefNFe == null)
             {
-                RefDFe = new List<string>();
+                RefNFe = new List<string>();
             }
 
-            RefDFe.Add(item);
+            RefNFe.Add(item);
         }
 
         /// <summary>
-        /// Retorna o elemento da lista RefDFe (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
+        /// Retorna o elemento da lista RefNFe (Utilizado para linguagens diferentes do CSharp que não conseguem pegar o conteúdo da lista)
         /// </summary>
         /// <param name="index">Índice da lista a ser retornado (Começa com 0 (zero))</param>
-        /// <returns>Conteúdo do index passado por parâmetro da RefDFe</returns>
-        public string GetRefDFe(int index)
+        /// <returns>Conteúdo do index passado por parâmetro da RefNFe</returns>
+        public string GetRefNFe(int index)
         {
-            if ((RefDFe?.Count ?? 0) == 0)
+            if ((RefNFe?.Count ?? 0) == 0)
             {
                 return default;
             }
 
-            return RefDFe[index];
+            return RefNFe[index];
         }
 
         /// <summary>
         /// Retorna a quantidade de elementos existentes na lista RefNFe
         /// </summary>
-        public int GetRefNFeCount => GetRefDFeCount;
-
-        /// <summary>
-        /// Retorna a quantidade de elementos existentes na lista RefDFe
-        /// </summary>
-        public int GetRefDFeCount => (RefDFe != null ? RefDFe.Count : 0);
+        public int GetRefNFeCount => (RefNFe != null ? RefNFe.Count : 0);
 
 #endif
     }
