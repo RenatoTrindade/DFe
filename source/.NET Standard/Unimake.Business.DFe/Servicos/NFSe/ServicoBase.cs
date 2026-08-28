@@ -31,12 +31,18 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         protected ServicoBase() : base() { }
 
         /// <summary>
+        /// Obtém o nome da tag do serviço que deve ser carregada do arquivo de configuração da NFSe.
+        /// </summary>
+        /// <returns>Nome da tag do serviço.</returns>
+        protected virtual string ObterNomeTagServico() => GetType().Name;
+
+        /// <summary>
         /// Definir configurações específicas da NFSe
         /// </summary>
         protected override void DefinirConfiguracao()
         {
             //Esta linha irá carregar as informações referentes ao município.
-            Configuracoes.Load(GetType().Name);
+            Configuracoes.Load(ObterNomeTagServico());
 
             //Depois de carregar as configurações
             switch (Configuracoes.PadraoNFSe)
@@ -110,7 +116,7 @@ namespace Unimake.Business.DFe.Servicos.NFSe
                     break;
 
                 case PadraoNFSe.DSF:
-                    if(Configuracoes.SchemaVersao == "1.01")
+                    if (Configuracoes.SchemaVersao == "1.01")
                     {
                         DSF();
                     }
@@ -230,6 +236,8 @@ namespace Unimake.Business.DFe.Servicos.NFSe
 
         private void NACIONAL()
         {
+            Configuracoes.RequestURI = Configuracoes.TipoAmbiente == TipoAmbiente.Homologacao ? Configuracoes.RequestURIHomologacao : Configuracoes.RequestURIProducao;
+
             // Substitui todos os placeholders {tag} na URL pelo valor do elemento XML de mesmo nome.
             // Novos serviços com placeholders na URL são suportados automaticamente sem alteração aqui.
             foreach (Match match in Regex.Matches(Configuracoes.RequestURI, @"\{(\w+)\}"))
@@ -261,6 +269,10 @@ namespace Unimake.Business.DFe.Servicos.NFSe
                 var lote = GetXMLElementInnertext("lote");
                 if (!string.IsNullOrWhiteSpace(lote))
                     queryParams.Add($"lote={Uri.EscapeDataString(lote)}");
+
+                var cnpjConsulta = GetXMLElementInnertext("cnpjConsulta");
+                if (!string.IsNullOrWhiteSpace(cnpjConsulta))
+                    queryParams.Add($"cnpjConsulta={Uri.EscapeDataString(cnpjConsulta)}");
 
                 if (queryParams.Count > 0)
                     Configuracoes.RequestURI += "?" + string.Join("&", queryParams);
@@ -610,11 +622,23 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         {
             if (Configuracoes.RequestURI.Contains("{Chave}"))
             {
-                var startIndex = ConteudoXML.OuterXml.IndexOf("Id=\"") + 7;
-                var endIndex = ConteudoXML.OuterXml.IndexOf("\"", startIndex);
-                var chave = ConteudoXML.OuterXml.Substring(startIndex, endIndex - startIndex);
+                var chave = ObterChaveDSF(ConteudoXML, Configuracoes.Servico);
+
                 Configuracoes.RequestURI = Configuracoes.RequestURI.Replace("{Chave}", chave);
             }
+        }
+
+        private static string ObterChaveDSF(XmlDocument conteudoXML, Servico servico)
+        {
+            if (servico == Servico.NFSeCancelarNfse)
+            {
+                return conteudoXML.GetElementsByTagName("chNFSe")[0]?.InnerText;
+            }
+
+            var startIndex = conteudoXML.OuterXml.IndexOf("Id=\"") + 7;
+            var endIndex = conteudoXML.OuterXml.IndexOf("\"", startIndex);
+
+            return conteudoXML.OuterXml.Substring(startIndex, endIndex - startIndex);
         }
 
         #endregion DSF
@@ -909,11 +933,53 @@ namespace Unimake.Business.DFe.Servicos.NFSe
         }
 
         /// <summary>
+        /// Criar retorno de erro do padrão NACIONAL.
+        /// </summary>
+        private Xml.NFSe.NACIONAL.Temp CriarResultErro(Xml.NFSe.NACIONAL.Temp retorno,
+                                                       string codigo,
+                                                       string descricao) =>
+            new Xml.NFSe.NACIONAL.Temp
+            {
+                TipoAmbiente = retorno?.TipoAmbiente ?? Configuracoes.TipoAmbiente,
+                VersaoAplicativo = retorno?.VersaoAplicativo,
+                DataHoraProcessamento = retorno?.DataHoraProcessamento ?? default,
+                Erro = CriarErroNacional(codigo, descricao)
+            };
+
+        /// <summary>
+        /// Criar erro do padrão NACIONAL.
+        /// </summary>
+        private static Xml.NFSe.NACIONAL.Erro CriarErroNacional(string codigo,
+                                                                string descricao,
+                                                                string complemento = null) =>
+            new Xml.NFSe.NACIONAL.Erro
+            {
+                Codigo = codigo,
+                Descricao = descricao,
+                Complemento = complemento
+            };
+
+        /// <summary>
+        /// Normalizar o grupo "erros" para a propriedade "Erro" usada por C# e INTEROP/COM.
+        /// </summary>
+        private static void NormalizarErroNacional(Xml.NFSe.NACIONAL.Temp retorno)
+        {
+            if (retorno?.Erro != null || retorno?.Erros == null)
+            {
+                return;
+            }
+
+            retorno.Erro = CriarErroNacional(retorno.Erros.Codigo,
+                                             retorno.Erros.Descricao,
+                                             retorno.Erros.Complemento);
+        }
+
+        /// <summary>
         /// Resultado quando ocorreu erro (apenas para padrão NACIONAL).
         /// Retorna null se processamento foi bem-sucedido.
         /// </summary>
 #if INTEROP
-[ComVisible(true)]
+        [ComVisible(true)]
 #endif
         public Xml.NFSe.NACIONAL.Temp ResultErro
         {
@@ -923,46 +989,24 @@ namespace Unimake.Business.DFe.Servicos.NFSe
 
                 if (string.IsNullOrWhiteSpace(RetornoWSString))
                 {
-                    return new Xml.NFSe.NACIONAL.Temp
-                    {
-                        Erro = new Xml.NFSe.NACIONAL.Erro
-                        {
-                            Codigo = "0",
-                            Descricao = "Não há retorno do servidor para processar."
-                        }
-                    };
+                    return CriarResultErro(null, "0", "Não há retorno do servidor para processar.");
                 }
 
                 try
                 {
                     var retorno = XMLUtility.Deserializar<Xml.NFSe.NACIONAL.Temp>(RetornoWSXML);
+                    NormalizarErroNacional(retorno);
+
                     if (retorno?.Erro != null)
                     {
                         return retorno;
                     }
 
-                    return new Xml.NFSe.NACIONAL.Temp
-                    {
-                        TipoAmbiente = retorno?.TipoAmbiente ?? Configuracoes.TipoAmbiente,
-                        VersaoAplicativo = retorno?.VersaoAplicativo,
-                        DataHoraProcessamento = retorno?.DataHoraProcessamento ?? default,
-                        Erro = new Xml.NFSe.NACIONAL.Erro
-                        {
-                            Codigo = "0",
-                            Descricao = "O retorno do servidor não contém o evento processado nem os detalhes do erro."
-                        }
-                    };
+                    return CriarResultErro(retorno, "0", "O retorno do servidor não contém o evento processado nem os detalhes do erro.");
                 }
                 catch
                 {
-                    return new Xml.NFSe.NACIONAL.Temp
-                    {
-                        Erro = new Xml.NFSe.NACIONAL.Erro
-                        {
-                            Codigo = "0",
-                            Descricao = "Ocorreu uma falha ao tentar criar o objeto a partir do XML retornado da SEFAZ."
-                        }
-                    };
+                    return CriarResultErro(null, "0", "Ocorreu uma falha ao tentar criar o objeto a partir do XML retornado da SEFAZ.");
                 }
             }
         }

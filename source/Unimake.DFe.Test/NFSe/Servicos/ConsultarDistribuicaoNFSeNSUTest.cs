@@ -170,6 +170,52 @@ namespace Unimake.DFe.Test.NFSe.Servicos
 
         #endregion Testes de Integração
 
+        [Fact]
+        [Trait("DFe", "NFSe")]
+        public void GravarXMLNFSeDeveUsarNomeComNSUParaEventos()
+        {
+            var chave = "12345678901234567890123456789012345678901234567890";
+            var nsuEvento = "000000000000002";
+            var xmlRetorno = "<?xml version=\"1.0\" encoding=\"utf-8\"?><retDistribuicaoNFSe>" +
+                $"<LoteDFe><NSU>000000000000001</NSU><ChaveAcesso>{chave}</ChaveAcesso><TipoDocumento>NFSE</TipoDocumento><ArquivoXml><NFSe><InfNFSe Id=\"nfse\">NFSe original</InfNFSe></NFSe></ArquivoXml></LoteDFe>" +
+                $"<LoteDFe><NSU>{nsuEvento}</NSU><ChaveAcesso>{chave}</ChaveAcesso><TipoDocumento>EVENTO</TipoDocumento><TipoEvento>CANCELAMENTO</TipoEvento><ArquivoXml><Evento><InfEvento Id=\"evento\">Evento da NFSe</InfEvento></Evento></ArquivoXml></LoteDFe>" +
+                "</retDistribuicaoNFSe>";
+
+            var retornoWSXML = new XmlDocument();
+            retornoWSXML.LoadXml(xmlRetorno);
+
+            var servico = new ConsultarDistribuicaoNFSeNSU
+            {
+                RetornoWSXML = retornoWSXML,
+                RetornoWSString = xmlRetorno
+            };
+
+            var pastaTemp = Path.Combine(Path.GetTempPath(), "ConsultarDistribuicaoNFSeNSU_Evento", Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(pastaTemp);
+
+            try
+            {
+                servico.GravarXMLNFSe(pastaTemp);
+
+                var arquivoNFSe = Path.Combine(pastaTemp, $"{chave}-nfse.xml");
+                var arquivoEvento = Path.Combine(pastaTemp, $"{chave}-evt-{nsuEvento}-nfse.xml");
+
+                Assert.True(File.Exists(arquivoNFSe));
+                Assert.True(File.Exists(arquivoEvento));
+                Assert.Equal(2, Directory.GetFiles(pastaTemp, "*.xml").Length);
+                Assert.Contains("<NFSe>", File.ReadAllText(arquivoNFSe, Encoding.UTF8));
+                Assert.Contains("<Evento>", File.ReadAllText(arquivoEvento, Encoding.UTF8));
+            }
+            finally
+            {
+                try
+                {
+                    Directory.Delete(pastaTemp, true);
+                }
+                catch { }
+            }
+        }
+
         /// <summary>
         /// Teste unitário para validar a gravação do XML de distribuição em UTF-8
         /// </summary>
@@ -214,11 +260,11 @@ namespace Unimake.DFe.Test.NFSe.Servicos
         }
 
         /// <summary>
-        /// Testa que a gravação do XML de distribuição fica restrita ao padrão NFSe Nacional
+        /// Testa que a gravação do XML de distribuição permite qualquer padrão NFSe
         /// </summary>
         [Fact]
         [Trait("DFe", "NFSe")]
-        public void TesteGravarXmlDistribuicaoDevePermitirApenasPadraoNacional()
+        public void TesteGravarXmlDistribuicaoDevePermitirQualquerPadrao()
         {
             var servico = new ConsultarDistribuicaoNFSeNSU
             {
@@ -227,15 +273,28 @@ namespace Unimake.DFe.Test.NFSe.Servicos
                     PadraoNFSe = PadraoNFSe.GINFES
                 }
             };
+            var pastaTemp = Path.Combine(Path.GetTempPath(), "ConsultarDistribuicaoNFSeNSU_GINFES", Guid.NewGuid().ToString("N"));
+            var nomeArquivo = "nfse.xml";
+            var conteudoXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><NFSe />";
 
-            var ex = Assert.Throws<InvalidOperationException>(() =>
-                servico.GravarXmlDistribuicao(
-                    Path.GetTempPath(),
-                    "nfse.xml",
-                    "<?xml version=\"1.0\" encoding=\"utf-8\"?><NFSe />"));
+            Directory.CreateDirectory(pastaTemp);
 
-            Assert.Contains("disponível apenas para o padrão NACIONAL", ex.Message);
-            Assert.Contains("GINFES", ex.Message);
+            try
+            {
+                servico.GravarXmlDistribuicao(pastaTemp, nomeArquivo, conteudoXml);
+
+                var caminhoArquivo = Path.Combine(pastaTemp, nomeArquivo);
+                Assert.True(File.Exists(caminhoArquivo));
+                Assert.Equal(conteudoXml, File.ReadAllText(caminhoArquivo, Encoding.UTF8));
+            }
+            finally
+            {
+                try
+                {
+                    Directory.Delete(pastaTemp, true);
+                }
+                catch { }
+            }
         }
 
         [Theory]
@@ -265,6 +324,7 @@ namespace Unimake.DFe.Test.NFSe.Servicos
             var configuracao = new Configuracao
             {
                 TipoDFe = TipoDFe.NFSe,
+                PadraoNFSe = padraoNFSe,
                 TipoAmbiente = tipoAmbiente,
                 CertificadoDigital = PropConfig.CertificadoDigital,
                 CodigoMunicipio = codigoMunicipio,
@@ -298,6 +358,99 @@ namespace Unimake.DFe.Test.NFSe.Servicos
             if (servico.Result.Erros != null && servico.Result.Erros.Count > 0)
             {
                 Assert.NotEmpty(servico.Result.Erros);
+            }
+        }
+
+        [Fact]
+        [Trait("DFe", "NFSe")]
+        public void TesteConsultarDistribuicaoNFSeNSUDeveRemontarRequestURIQuandoReutilizaConfiguracao()
+        {
+            var configuracao = new Configuracao
+            {
+                TipoDFe = TipoDFe.NFSe,
+                TipoAmbiente = TipoAmbiente.Homologacao,
+                CodigoMunicipio = 1001058,
+                Servico = Servico.NFSeConsultarDistribuicaoNFSeNSU,
+                SchemaVersao = "1.01"
+            };
+
+            var primeiraConsulta = new DistribuicaoNFSe
+            {
+                NSU = "000000000000001",
+                TipoNSU = "DISTRIBUICAO",
+                Lote = "false"
+            };
+
+            var segundaConsulta = new DistribuicaoNFSe
+            {
+                NSU = "000000000000002",
+                TipoNSU = "DISTRIBUICAO",
+                Lote = "false"
+            };
+
+            _ = new ConsultarDistribuicaoNFSeNSU(primeiraConsulta, configuracao);
+            var primeiraRequestURI = configuracao.RequestURI;
+
+            _ = new ConsultarDistribuicaoNFSeNSU(segundaConsulta, configuracao);
+            var segundaRequestURI = configuracao.RequestURI;
+
+            Assert.Contains("000000000000001", primeiraRequestURI);
+            Assert.Contains("000000000000002", segundaRequestURI);
+            Assert.DoesNotContain("000000000000001", segundaRequestURI);
+            Assert.Contains("tipoNSU=DISTRIBUICAO", segundaRequestURI);
+            Assert.Contains("lote=false", segundaRequestURI);
+        }
+
+        [Theory]
+        [Trait("DFe", "NFSe")]
+        [InlineData("00000000000191", true)]
+        [InlineData("", false)]
+        public void ConsultarDistribuicaoNFSeNSUDeveTratarCnpjConsultaNaSerializacaoENaRequestURI(string cnpjConsulta, bool deveInformarCnpjConsulta)
+        {
+            var parametros = new DistribuicaoNFSe
+            {
+                NSU = "000000000000003",
+                TipoNSU = "DISTRIBUICAO",
+                Lote = "false",
+                CnpjConsulta = cnpjConsulta
+            };
+
+            var parametrosXML = parametros.GerarXML().OuterXml;
+            var parametrosDesserializado = XMLUtility.Deserializar<DistribuicaoNFSe>(parametrosXML);
+
+            if (deveInformarCnpjConsulta)
+            {
+                Assert.Equal(cnpjConsulta, parametrosDesserializado.CnpjConsulta);
+            }
+            else
+            {
+                Assert.Null(parametrosDesserializado.CnpjConsulta);
+            }
+
+            var configuracao = new Configuracao
+            {
+                TipoDFe = TipoDFe.NFSe,
+                TipoAmbiente = TipoAmbiente.Homologacao,
+                CodigoMunicipio = 1001058,
+                Servico = Servico.NFSeConsultarDistribuicaoNFSeNSU,
+                SchemaVersao = "1.01"
+            };
+
+            _ = new ConsultarDistribuicaoNFSeNSU(parametros, configuracao);
+
+            Assert.Contains("000000000000003", configuracao.RequestURI);
+            Assert.Contains("tipoNSU=DISTRIBUICAO", configuracao.RequestURI);
+            Assert.Contains("lote=false", configuracao.RequestURI);
+
+            if (deveInformarCnpjConsulta)
+            {
+                Assert.Contains("cnpjConsulta=00000000000191", configuracao.RequestURI);
+                Assert.Contains("<cnpjConsulta>00000000000191</cnpjConsulta>", parametrosXML);
+            }
+            else
+            {
+                Assert.DoesNotContain("cnpjConsulta", configuracao.RequestURI);
+                Assert.DoesNotContain("<cnpjConsulta>", parametrosXML);
             }
         }
     }

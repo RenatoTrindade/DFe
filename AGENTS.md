@@ -48,6 +48,12 @@ Este repositório contém a biblioteca `Unimake.DFe`, usada para emissão, consu
 - Retornos tipados devem expor propriedade `Result` desserializando `RetornoWSXML` com `XMLUtility.Deserializar<T>()` e retornando objeto com erro amigável quando não houver retorno.
 - Exceções de serviço devem seguir o padrão existente com `ThrowHelper.Instance.Throw(...)` e exceções específicas (`ValidarXMLException`, `CertificadoDigitalException`, `ValidatorDFeException`) quando aplicável.
 
+## Manutenção do CIOT
+
+- Use a skill `manutencao-ciot` ao implementar, corrigir ou revisar XML, XSD, serviços, provedores, autenticação, transporte, retornos, INTEROP, testes ou integração UniNFe do CIOT via ANTT/eFrete.
+- A ANTT é o baseline: ausência de `<ProvedorCIOT>` continua selecionando ANTT e nenhuma regra exclusiva da eFrete pode alterar seu endpoint, payload, schema ou retorno.
+- Diferenças eFrete devem permanecer no provedor e ser normalizadas na DLL. Em especial, sucessos precisam chegar aos consumidores no contrato CIOT existente, incluindo `Codigo=110` e mensagens estruturadas quando aplicável; não transfira essa compatibilização para o UniNFe.
+
 ## Configurações, schemas e recursos embutidos
 
 - Ao adicionar novo serviço, versão de schema, município ou provedor:
@@ -57,6 +63,13 @@ Este repositório contém a biblioteca `Unimake.DFe`, usada para emissão, consu
   - confirme que `Configuracao.Load(...)` consegue localizar serviço, versão, namespace e schema.
 - Não altere nomes de recursos embutidos sem revisar chamadas que montam o caminho por namespace.
 - Mantenha compatibilidade com produção e homologação, SOAP e API, certificado digital, assinatura, GZip e autenticação municipal conforme o padrão já existente.
+
+## Resolução centralizada de NFSe
+
+- Use `ValidarEstruturaXML.DefinirVersaoNFSe(...)` como fonte única para identificar a versão de NFSe e `ValidarEstruturaXML.DefinirTipoServicoNFSe(...)` como fonte única para identificar o serviço; não replique switches por padrão ou município nos consumidores.
+- Em `ValidarConfig.xml`, exceções de `TipoServico` podem usar `codMunicipio`, `tipoAmbiente` ou ambos. A precedência obrigatória é: município e ambiente, somente município, somente ambiente e, por fim, o valor padrão de `TipoServico`.
+- Os overloads sem `TipoAmbiente` preservam produção como padrão por compatibilidade. Quem conhece o ambiente deve chamar o overload explícito.
+- Ao ativar município, padrão, versão ou serviço NFSe, confira em conjunto `Servicos/Config/Config.xml`, `Xml/Validar/ValidarConfig.xml` e os resolvedores centrais, executando os testes focados de versão e serviço.
 
 ## Validações
 
@@ -135,4 +148,4 @@ Este repositório contém a biblioteca `Unimake.DFe`, usada para emissão, consu
 - Configuração, schema e recursos embutidos foram atualizados juntos.
 - Testes xUnit foram adicionados ou ajustados com recursos XML representativos.
 - Build recomendado: `dotnet build "source/.NET Standard/Unimake.Business.DFe/Unimake.Business.DFe.csproj" --no-restore`.
-- Teste recomendado: `dotnet test source/Unimake.DFe.Test/Unimake.DFe.Test.csproj --no-restore --filter "<classe ou metodo alterado>"`.
+- Para xUnit v3 neste projeto, compile `Unimake.DFe.Test.csproj` e execute a DLL gerada diretamente com `dotnet "source/Unimake.DFe.Test/bin/Debug/net8.0/Unimake.DFe.Test.dll" -class "<namespace.classe>"`; não use o alvo VSTest legado quando o SDK o rejeitar.

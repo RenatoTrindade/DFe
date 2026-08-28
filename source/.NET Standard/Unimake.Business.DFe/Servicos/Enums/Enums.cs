@@ -311,6 +311,7 @@ namespace Unimake.Business.DFe.Servicos
         /// 50 - Enviar o XML de cancelamento da NFS-e para prefeitura
         /// </summary>
         [Description("Cancela NFS-e")]
+        [Obsolete("Utilize um serviço de cancelamento configurado para o município com a classe CancelarNfse.", false)]
         NFSeCancelaNota = 50,
 
         /// <summary>
@@ -341,6 +342,7 @@ namespace Unimake.Business.DFe.Servicos
         /// 55 - Consultar Rps Serviço Prestado da NFS-e para prefeitura
         /// </summary>
         [Description("Consultar Rps Serviço Prestado")]
+        [Obsolete("Utilize um serviço de consulta configurado para o município com a classe ConsultarNfsePorRps.", false)]
         NFSeConsultarRpsServicoPrestado = 55,
 
         /// <summary>
@@ -800,6 +802,30 @@ namespace Unimake.Business.DFe.Servicos
         /// </summary>
         [Description("Autorização de BPe TA")]
         BPeTAAutorizacao = 128,
+
+        /// <summary>
+        /// 129 - CIOT eFrete - Gravar motorista
+        /// </summary>
+        [Description("CIOT eFrete - Gravar motorista")]
+        CIOTGravarMotorista = 129,
+
+        /// <summary>
+        /// 130 - CIOT eFrete - Gravar proprietário
+        /// </summary>
+        [Description("CIOT eFrete - Gravar proprietário")]
+        CIOTGravarProprietario = 130,
+
+        /// <summary>
+        /// 131 - CIOT eFrete - Gravar veículo
+        /// </summary>
+        [Description("CIOT eFrete - Gravar veículo")]
+        CIOTGravarVeiculo = 131,
+
+        /// <summary>
+        /// 132 - Envio de NFSe com indicativo de decisão judicial
+        /// </summary>
+        [Description("Envio de NFSe com indicativo de decisão judicial")]
+        NFSeGerarNfseIndicativoDecisaoJudicial = 132,
 
         #endregion
 
@@ -14912,29 +14938,35 @@ namespace Unimake.Business.DFe.Servicos
         [XmlEnum("E")]
         ConversaoLicencaSaudeAcidenteTrabalho = 4,
 
+        ///<summary>
+        ///F - Outras verbas de natureza salarial ou não salarial devidas após o desligamento
+        /// </summary>
+        [XmlEnum("F")]
+        OutrasVerbasNaturalezaSalarialNaoSalarialDevidasAposDesligamento = 5,
+
         /// <summary>
         /// G - Antecipação de diferenças de acordo, convenção ou dissídio coletivo
         /// </summary>
         [XmlEnum("G")]
-        AntecipacaoDiferencasAcordoConvencaoDissidio = 5,
+        AntecipacaoDiferencasAcordoConvencaoDissidio = 6,
 
         /// <summary>
         /// H - Declaração de base de cálculo de FGTS anterior ao início do FGTS Digital
         /// </summary>
         [XmlEnum("H")]
-        DeclaracaoBaseCalculoFgtsAnteriorInicioFgtsDigital = 6,
+        DeclaracaoBaseCalculoFgtsAnteriorInicioFgtsDigital = 7,
 
         /// <summary>
         /// I - Sentença judicial (exceto reclamatória trabalhista)
         /// </summary>
         [XmlEnum("I")]
-        SentencaJudicial = 7,
+        SentencaJudicial = 8,
 
         /// <summary>
         /// J - Parcelas complementares conhecidas após o fechamento da folha
         /// </summary>
         [XmlEnum("J")]
-        ParcelasComplementaresAposFechamentoFolha = 8
+        ParcelasComplementaresAposFechamentoFolha = 9
     }
 
     #endregion
@@ -20531,6 +20563,22 @@ namespace Unimake.Business.DFe.Servicos
     #endregion NFGas
 
     #region CIOT
+
+    /// <summary>
+    /// Provedor utilizado para os serviços do CIOT.
+    /// </summary>
+    public enum ProvedorCIOT
+    {
+        /// <summary>
+        /// Integração direta com a ANTT.
+        /// </summary>
+        ANTT = 0,
+
+        /// <summary>
+        /// Integração por meio da instituição de pagamento eFrete.
+        /// </summary>
+        EFrete = 1
+    }
 
     /// <summary>
     /// Tipo da operação de transporte do CIOT

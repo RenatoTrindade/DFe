@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using Unimake.Business.DFe;
 using Unimake.Business.DFe.Utility;
 using Unimake.Business.DFe.Xml.NFe;
 using Xunit;
@@ -62,6 +63,20 @@ public class NFeTxtConverterTest
     [InlineData("NFe_2998-nfe-orig-v2.txt")]
     [InlineData("NFe_2999-nfe-orig-v2.txt")]
     [InlineData("000023655_11092080000179_001_11_08_2026-nfe-orig.txt")]
+    [InlineData("398_15528301000160_1_11_08_2026-NFE-orig.txt")]
+    [InlineData("399_15528301000160_1_11_08_2026-NFE-orig.txt")]
+    [InlineData("35260847498059000115550010004030011909226990-nfe.txt")]
+    [InlineData("35260847498059000115550010004030021004029993-nfe.txt")]
+    [InlineData("0000056689-nfe-orig.txt")]
+    [InlineData("NFe_000049184_08_27_14-nfe.txt")]
+    [InlineData("002320_01_01_17_08_2026-nfe.txt")]
+    [InlineData("000017136_19041494000180_001_19_08_2026-nfe-orig.txt")]
+    [InlineData("035814-nfe-orig.txt")]
+    [InlineData("161540-nfe-orig.txt")]
+    [InlineData("000015493-nfe.txt")]
+    [InlineData("000000892-nfe.txt")]
+    [InlineData("000002191-nfe-orig.txt")]
+    [InlineData("000000200-nfe.txt")]
     public void ConverterDeveRetornarXmlEmMemoria(string nomeArquivo)
     {
         var arquivo = Path.Combine(Environment.CurrentDirectory, @"NFe\Resources\Txt", nomeArquivo);
@@ -82,6 +97,357 @@ public class NFeTxtConverterTest
         Assert.Equal(47, id.Length);
         Assert.Equal(documento.Chave, id.Substring(3));
         Assert.Equal(documento.Chave.Substring(43, 1), xml.DocumentElement.SelectSingleNode("*[local-name()='infNFe']/*[local-name()='ide']/*[local-name()='cDV']").InnerText);
+    }
+
+    /// <summary>
+    /// Deve selecionar os grupos PISAliq e COFINSAliq pelo CST mesmo quando o ERP usa os segmentos Q04 e S04.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarGruposPisECofinsDaNfe35814()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("035814-nfe-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var pis = xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='imposto']/*[local-name()='PIS']/*");
+        var cofins = xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='imposto']/*[local-name()='COFINS']/*");
+
+        Assert.Equal("PISAliq", pis?.LocalName);
+        Assert.Equal("01", pis?.SelectSingleNode("*[local-name()='CST']")?.InnerText);
+        Assert.Equal("0.00", pis?.SelectSingleNode("*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("COFINSAliq", cofins?.LocalName);
+        Assert.Equal("01", cofins?.SelectSingleNode("*[local-name()='CST']")?.InnerText);
+        Assert.Equal("0.00", cofins?.SelectSingleNode("*[local-name()='vBC']")?.InnerText);
+    }
+
+    /// <summary>
+    /// Deve preservar os impostos por alíquota e os grupos da Reforma Tributária da NFCe 161540.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarImpostosDaNfce161540()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("161540-nfe-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+
+        Assert.Equal("65", xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='mod']")?.InnerText);
+        Assert.Null(xml.SelectSingleNode("//*[local-name()='dest']"));
+        Assert.Equal("32.00", xml.SelectSingleNode("//*[local-name()='ICMS00']/*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("5.44", xml.SelectSingleNode("//*[local-name()='ICMS00']/*[local-name()='vICMS']")?.InnerText);
+        Assert.Equal("26.56", xml.SelectSingleNode("//*[local-name()='PISAliq']/*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("0.44", xml.SelectSingleNode("//*[local-name()='PISAliq']/*[local-name()='vPIS']")?.InnerText);
+        Assert.Equal("26.56", xml.SelectSingleNode("//*[local-name()='COFINSAliq']/*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("2.02", xml.SelectSingleNode("//*[local-name()='COFINSAliq']/*[local-name()='vCOFINS']")?.InnerText);
+        Assert.Equal("000001", xml.SelectSingleNode("//*[local-name()='IBSCBS']/*[local-name()='cClassTrib']")?.InnerText);
+        Assert.Equal("24.10", xml.SelectSingleNode("//*[local-name()='IBSCBS']/*[local-name()='gIBSCBS']/*[local-name()='vBC']")?.InnerText);
+    }
+
+    /// <summary>
+    /// Deve omitir percentuais opcionais zerados e preservar os valores do ICMS-ST da NFe 15493.
+    /// </summary>
+    [Fact]
+    public void ConverterDeveOmitirPercentuaisZeradosDoIcms10DaNfe15493()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("000015493-nfe.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var icms = xml.SelectSingleNode("//*[local-name()='ICMS10']");
+
+        Assert.NotNull(icms);
+        Assert.Null(icms.SelectSingleNode("*[local-name()='pMVAST']"));
+        Assert.Null(icms.SelectSingleNode("*[local-name()='pRedBCST']"));
+        Assert.Equal("5585.21", icms.SelectSingleNode("*[local-name()='vBCST']")?.InnerText);
+        Assert.Equal("18.0000", icms.SelectSingleNode("*[local-name()='pICMSST']")?.InnerText);
+        Assert.Equal("335.12", icms.SelectSingleNode("*[local-name()='vICMSST']")?.InnerText);
+    }
+
+    /// <summary>
+    /// Deve preservar a referência à nota de produtor, os itens e os pagamentos da NFe 892.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarReferenciaProdutorItensEPagamentosDaNfe892()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("000000892-nfe.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        ValidarReferenciaProdutorItensEPagamentosDaNfe892(xml);
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+        Assert.DoesNotContain("indEscala", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve selecionar ICMSSN500 pelo CSOSN informado no segmento N10d em todos os itens.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarIcmsSn500DaNfe2191()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("000002191-nfe-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+
+        Assert.Equal(2, xml.SelectNodes("//*[local-name()='ICMSSN500']").Count);
+        Assert.Equal(2, xml.SelectNodes("//*[local-name()='ICMSSN500']/*[local-name()='orig' and text()='0']").Count);
+        Assert.Equal(2, xml.SelectNodes("//*[local-name()='ICMSSN500']/*[local-name()='CSOSN' and text()='500']").Count);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='ICMSSN102']").Count);
+        Assert.Equal("OUTROS MEIOS", xml.SelectSingleNode("//*[local-name()='detPag']/*[local-name()='xPag']")?.InnerText);
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve selecionar COFINSAliq pelo CST quando o ERP informa o valor no S05 e a base e alíquota no S07.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarCofinsAliquotaDaNfe200()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("000000200-nfe.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+
+        var grupos = xml.SelectNodes("//*[local-name()='COFINSAliq']");
+        Assert.Equal(3, grupos.Count);
+        Assert.Equal(3, xml.SelectNodes("//*[local-name()='COFINSAliq']/*[local-name()='CST' and text()='01']").Count);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='COFINSOutr']").Count);
+        Assert.Equal("45007.60", grupos[0].SelectSingleNode("*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("3.0000", grupos[0].SelectSingleNode("*[local-name()='pCOFINS']")?.InnerText);
+        Assert.Equal("1350.23", grupos[0].SelectSingleNode("*[local-name()='vCOFINS']")?.InnerText);
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+        Assert.DoesNotContain("CST", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve gerar o indicador de escala depois do CEST quando ambos forem informados no segmento I05c.
+    /// </summary>
+    [Fact]
+    public void ConverterDeveGerarIndicadorEscalaDepoisDoCest()
+    {
+        var arquivoTemporario = Path.GetTempFileName();
+        try
+        {
+            var conteudo = File.ReadAllText(CaminhoArquivo("000000892-nfe.txt"));
+            conteudo = conteudo.Replace("\nM|0.00", "\nI05c|0100100|N||\nM|0.00");
+            File.WriteAllText(arquivoTemporario, conteudo);
+
+            var resultado = new NFeTxtConverter().Converter(arquivoTemporario);
+
+            Assert.True(resultado.Sucesso, resultado.MensagemErro);
+            var xml = new XmlDocument();
+            xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+            foreach (XmlNode produto in xml.SelectNodes("//*[local-name()='det']/*[local-name()='prod']"))
+            {
+                var cest = produto.SelectSingleNode("*[local-name()='CEST']");
+                var indicadorEscala = produto.SelectSingleNode("*[local-name()='indEscala']");
+
+                Assert.Equal("0100100", cest?.InnerText);
+                Assert.Equal("N", indicadorEscala?.InnerText);
+                Assert.Same(cest.NextSibling, indicadorEscala);
+            }
+        }
+        finally
+        {
+            File.Delete(arquivoTemporario);
+        }
+    }
+
+    /// <summary>
+    /// Deve evidenciar no schema que o indicador de escala não pode ser informado sem o CEST.
+    /// </summary>
+    [Fact]
+    public void SchemaDeveRejeitarIndicadorEscalaSemCest()
+    {
+        var arquivoTemporario = Path.GetTempFileName();
+        try
+        {
+            var conteudo = File.ReadAllText(CaminhoArquivo("000000892-nfe.txt"));
+            conteudo = conteudo.Replace("\nM|0.00", "\nI05c||S||\nM|0.00");
+            File.WriteAllText(arquivoTemporario, conteudo);
+
+            var resultado = new NFeTxtConverter().Converter(arquivoTemporario);
+
+            Assert.True(resultado.Sucesso, resultado.MensagemErro);
+            var xml = new XmlDocument();
+            xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+            var validacao = new ValidarSchema();
+            validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+
+            Assert.False(validacao.Success);
+            Assert.Contains("indEscala", validacao.ErrorMessage);
+        }
+        finally
+        {
+            File.Delete(arquivoTemporario);
+        }
+    }
+
+    /// <summary>
+    /// Deve preservar todos os pagamentos e dados dos cartões informados em segmentos YA consecutivos.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarPagamentosDaNfce17136()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("000017136_19041494000180_001_19_08_2026-nfe-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var pagamentos = xml.SelectNodes("//*[local-name()='detPag']");
+        var cartoes = xml.SelectNodes("//*[local-name()='detPag']/*[local-name()='card']");
+
+        Assert.Equal(5, pagamentos.Count);
+        Assert.Equal(4, cartoes.Count);
+        Assert.Equal("196.00", pagamentos[0].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("295.00", pagamentos[1].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("300.00", pagamentos[2].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("65.00", pagamentos[3].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("24.00", pagamentos[4].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("AUT001", cartoes[0].SelectSingleNode("*[local-name()='cAut']")?.InnerText);
+        Assert.Equal("AUT004", cartoes[3].SelectSingleNode("*[local-name()='cAut']")?.InnerText);
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve reconhecer o cabeçalho da Reforma Tributária que informa os tipos de nota de
+    /// crédito/débito e omite o campo opcional cMunFGIBS.
+    /// </summary>
+    [Theory]
+    [InlineData("35260847498059000115550010004030011909226990-nfe.txt", "6", "07", null, "1", 0)]
+    [InlineData("35260847498059000115550010004030021004029993-nfe.txt", "5", null, "03", "0", 2)]
+    public void ConverterDeveProcessarNotaDeCreditoEDebitoSemMunicipioFatoGeradorIbs(
+        string nomeArquivo,
+        string finalidadeEsperada,
+        string tipoDebitoEsperado,
+        string tipoCreditoEsperado,
+        string tipoOperacaoEsperado,
+        int referenciasEsperadas)
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo(nomeArquivo));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+
+        Assert.Equal(finalidadeEsperada, xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='finNFe']").InnerText);
+        Assert.Equal(tipoOperacaoEsperado, xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='tpNF']").InnerText);
+        Assert.Equal(tipoDebitoEsperado, xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='tpNFDebito']")?.InnerText);
+        Assert.Equal(tipoCreditoEsperado, xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='tpNFCredito']")?.InnerText);
+        Assert.Null(xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='cMunFGIBS']"));
+        Assert.Equal(referenciasEsperadas, xml.SelectNodes("//*[local-name()='ide']/*[local-name()='NFref']").Count);
+        Assert.NotNull(xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='imposto']/*[local-name()='ICMS']"));
+        Assert.NotNull(xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='imposto']/*[local-name()='IBSCBS']"));
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve preservar a origem da mercadoria e o crédito do Simples Nacional informados no segmento N10c.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarOrigemECreditoDoIcmsSn101()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("0000056689-nfe-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var icms = xml.SelectSingleNode("//*[local-name()='ICMSSN101']");
+
+        Assert.NotNull(icms);
+        Assert.True(icms.SelectSingleNode("*[local-name()='orig']") != null, xml.OuterXml);
+        Assert.Equal("0", icms.SelectSingleNode("*[local-name()='orig']")?.InnerText);
+        Assert.Equal("101", icms.SelectSingleNode("*[local-name()='CSOSN']")?.InnerText);
+        Assert.Equal("3.9500", icms.SelectSingleNode("*[local-name()='pCredSN']")?.InnerText);
+        Assert.Equal("17.78", icms.SelectSingleNode("*[local-name()='vCredICMSSN']")?.InnerText);
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve serializar emitente, destinatário e detalhe na sequência definida pelo schema em qualquer runtime.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarOrdemDeEmitenteDestinatarioEDetalhe()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("NFe_000049184_08_27_14-nfe.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+
+        var emitente = xml.SelectSingleNode("//*[local-name()='emit']");
+        var destinatario = xml.SelectSingleNode("//*[local-name()='dest']");
+        var detalhe = xml.SelectSingleNode("//*[local-name()='det']");
+        Assert.Equal("CNPJ,xNome,xFant,enderEmit,IE,IM,CNAE,CRT", NomesElementosFilhos(emitente));
+        Assert.Equal("CNPJ,xNome,enderDest,indIEDest,email", NomesElementosFilhos(destinatario));
+        Assert.Equal("prod,imposto,infAdProd,vItem", NomesElementosFilhos(detalhe));
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
+    }
+
+    /// <summary>
+    /// Deve interpretar o layout completo do produto sem deslocar os campos posteriores ao benefício fiscal.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarProdutoIpiEReformaDaNFe2320()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("002320_01_01_17_08_2026-nfe.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var produto = xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='prod']");
+
+        Assert.Equal("ABRACADEIRA ROSCA SEM FIM 51X64(200X212) INCA", produto.SelectSingleNode("*[local-name()='xProd']")?.InnerText);
+        Assert.Equal("73269090", produto.SelectSingleNode("*[local-name()='NCM']")?.InnerText);
+        Assert.Equal("1006200", produto.SelectSingleNode("*[local-name()='CEST']")?.InnerText);
+        Assert.Equal("SP010830", produto.SelectSingleNode("*[local-name()='cBenef']")?.InnerText);
+        Assert.Null(produto.SelectSingleNode("*[local-name()='EXTIPI']"));
+        Assert.Equal("5124", produto.SelectSingleNode("*[local-name()='CFOP']")?.InnerText);
+        Assert.Equal("500.0000", produto.SelectSingleNode("*[local-name()='qCom']")?.InnerText);
+        Assert.Equal("8.7000", produto.SelectSingleNode("*[local-name()='vUnCom']")?.InnerText);
+        Assert.Equal("53", xml.SelectSingleNode("//*[local-name()='IPI']//*[local-name()='CST']")?.InnerText);
+        Assert.Equal("4219.50", xml.SelectSingleNode("//*[local-name()='IBSCBS']/*[local-name()='gIBSCBS']/*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("4392.18", xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='vItem']")?.InnerText);
+        Assert.Equal("4261.68", xml.SelectSingleNode("//*[local-name()='total']/*[local-name()='vNFTot']")?.InnerText);
+
+        var validacao = new ValidarSchema();
+        validacao.Validar(xml, "NFe.nfe_v4.00.xsd", "http://www.portalfiscal.inf.br/nfe");
+        Assert.False(validacao.Success);
+        Assert.Contains("Signature", validacao.ErrorMessage);
     }
 
     /// <summary>
@@ -714,6 +1080,100 @@ public class NFeTxtConverterTest
     }
 
     /// <summary>
+    /// Deve preservar cobrança, múltiplos pagamentos e Reforma Tributária da NFe 398.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarCobrancaPagamentosEReformaDaNfe398()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("398_15528301000160_1_11_08_2026-NFE-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var pagamentos = xml.SelectNodes("//*[local-name()='detPag']");
+
+        Assert.Equal(2, xml.SelectNodes("//*[local-name()='dup']").Count);
+        Assert.Equal(2, pagamentos.Count);
+        Assert.Equal("01", pagamentos[0].SelectSingleNode("*[local-name()='tPag']")?.InnerText);
+        Assert.Equal("50.00", pagamentos[0].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("99", pagamentos[1].SelectSingleNode("*[local-name()='tPag']")?.InnerText);
+        Assert.Equal("NAO INFORMADO", pagamentos[1].SelectSingleNode("*[local-name()='xPag']")?.InnerText);
+        Assert.Equal("50.00", pagamentos[1].SelectSingleNode("*[local-name()='vPag']")?.InnerText);
+        Assert.Equal("30.96", xml.SelectSingleNode("//*[local-name()='det']/*[local-name()='imposto']/*[local-name()='vTotTrib']")?.InnerText);
+        Assert.Equal("0.10", xml.SelectSingleNode("//*[local-name()='gIBSUF']/*[local-name()='vIBSUF']")?.InnerText);
+        Assert.Equal("0.90", xml.SelectSingleNode("//*[local-name()='gCBS']/*[local-name()='vCBS']")?.InnerText);
+        Assert.Equal("100.00", xml.SelectSingleNode("//*[local-name()='ICMSTot']/*[local-name()='vNF']")?.InnerText);
+    }
+
+    /// <summary>
+    /// Deve preservar IPI, item fora do total e Reforma Tributária da NFe 399.
+    /// </summary>
+    [Fact]
+    public void ConverterDevePreservarIpiEItemForaDoTotalDaNfe399()
+    {
+        var resultado = new NFeTxtConverter().Converter(CaminhoArquivo("399_15528301000160_1_11_08_2026-NFE-orig.txt"));
+
+        Assert.True(resultado.Sucesso, resultado.MensagemErro);
+        var xml = new XmlDocument();
+        xml.LoadXml(Assert.Single(resultado.Documentos).Xml);
+        var ipiTrib = xml.SelectSingleNode("//*[local-name()='IPITrib']");
+
+        Assert.Equal("0", xml.SelectSingleNode("//*[local-name()='prod']/*[local-name()='indTot']")?.InnerText);
+        Assert.Equal("50", ipiTrib.SelectSingleNode("*[local-name()='CST']")?.InnerText);
+        Assert.Equal("0.00", ipiTrib.SelectSingleNode("*[local-name()='vBC']")?.InnerText);
+        Assert.Equal("0.0000", ipiTrib.SelectSingleNode("*[local-name()='pIPI']")?.InnerText);
+        Assert.Equal("5.00", ipiTrib.SelectSingleNode("*[local-name()='vIPI']")?.InnerText);
+        Assert.Equal("0.01", xml.SelectSingleNode("//*[local-name()='gIBSUF']/*[local-name()='vIBSUF']")?.InnerText);
+        Assert.Equal("0.05", xml.SelectSingleNode("//*[local-name()='gCBS']/*[local-name()='vCBS']")?.InnerText);
+        Assert.Equal("5.00", xml.SelectSingleNode("//*[local-name()='ICMSTot']/*[local-name()='vIPI']")?.InnerText);
+        Assert.Equal("5.00", xml.SelectSingleNode("//*[local-name()='ICMSTot']/*[local-name()='vNF']")?.InnerText);
+        Assert.Equal("90", xml.SelectSingleNode("//*[local-name()='detPag']/*[local-name()='tPag']")?.InnerText);
+    }
+
+    /// <summary>
+    /// Deve demonstrar que IPI sem ICMS conduz ao ramo de ISSQN do schema e aceitar o bloco de ICMS do Simples Nacional.
+    /// </summary>
+    [Fact]
+    public void Nfe399DeveValidarSchemaQuandoInformarIcmsDoSimplesNacional()
+    {
+        const string namespaceNFe = "http://www.portalfiscal.inf.br/nfe";
+        var conversaoOriginal = new NFeTxtConverter().Converter(CaminhoArquivo("399_15528301000160_1_11_08_2026-NFE-orig.txt"));
+        Assert.True(conversaoOriginal.Sucesso, conversaoOriginal.MensagemErro);
+        var xmlOriginal = new XmlDocument();
+        xmlOriginal.LoadXml(Assert.Single(conversaoOriginal.Documentos).Xml);
+
+        Assert.Null(xmlOriginal.SelectSingleNode("//*[local-name()='imposto']/*[local-name()='ICMS']"));
+        Assert.NotNull(xmlOriginal.SelectSingleNode("//*[local-name()='imposto']/*[local-name()='IPI']"));
+        Assert.NotNull(xmlOriginal.SelectSingleNode("//*[local-name()='imposto']/*[local-name()='PIS']"));
+        var validacaoOriginal = new ValidarSchema();
+        validacaoOriginal.Validar(xmlOriginal, "NFe.nfe_v4.00.xsd", namespaceNFe);
+        Assert.False(validacaoOriginal.Success);
+        Assert.Contains("PIS", validacaoOriginal.ErrorMessage);
+        Assert.Contains("ISSQN", validacaoOriginal.ErrorMessage);
+
+        var linhas = File.ReadAllLines(CaminhoArquivo("399_15528301000160_1_11_08_2026-NFE-orig.txt"));
+        var indiceIpi = Array.FindIndex(linhas, linha => linha.StartsWith("O|", StringComparison.Ordinal));
+        var linhasCorrigidas = new string[linhas.Length + 2];
+        Array.Copy(linhas, 0, linhasCorrigidas, 0, indiceIpi);
+        linhasCorrigidas[indiceIpi] = "N|";
+        linhasCorrigidas[indiceIpi + 1] = "N10d|0|400|";
+        Array.Copy(linhas, indiceIpi, linhasCorrigidas, indiceIpi + 2, linhas.Length - indiceIpi);
+
+        var conversaoCorrigida = ConverterTemporario(linhasCorrigidas);
+        Assert.True(conversaoCorrigida.Sucesso, conversaoCorrigida.MensagemErro);
+        var xmlCorrigido = new XmlDocument();
+        xmlCorrigido.LoadXml(Assert.Single(conversaoCorrigida.Documentos).Xml);
+
+        Assert.Equal("400", xmlCorrigido.SelectSingleNode("//*[local-name()='ICMSSN102']/*[local-name()='CSOSN']")?.InnerText);
+        var validacaoCorrigida = new ValidarSchema();
+        validacaoCorrigida.Validar(xmlCorrigido, "NFe.nfe_v4.00.xsd", namespaceNFe);
+        Assert.False(validacaoCorrigida.Success);
+        Assert.DoesNotContain("elemento filho 'PIS'", validacaoCorrigida.ErrorMessage);
+        Assert.DoesNotContain("child element 'PIS'", validacaoCorrigida.ErrorMessage);
+        Assert.Contains("Signature", validacaoCorrigida.ErrorMessage);
+    }
+
+    /// <summary>
     /// Deve preservar os campos zerados do ICMS cobrado anteriormente quando a operação não é para consumidor final.
     /// </summary>
     [Fact]
@@ -1320,6 +1780,22 @@ public class NFeTxtConverterTest
     {
         var dadosIdentificaveis = new[]
         {
+            "AGILLE COMERCIO DE MEDICAMENTOS LTDA",
+            "OON ONCOLOGIA, ORTOPEDIA E NEUROLOGIA VET LTDA",
+            "cmanhaesvet@gmail.com",
+            "AV DAS AGUIAS",
+            "RUA FELIPE NEVES",
+            "AVENIDA ATLANTICA N 720",
+            "nfe@agillemed.com.br",
+            "OXI GENESES COM.GASES EQUIPAMENTOS LTDA EPP",
+            "METACAULIM BRASIL INDUSTRIA COMERCIO LTDA",
+            "RUA  AGOSTINHO BALESTRIN",
+            "AV.HUMBERTO CERESER",
+            "vendas@metacaulim.com.br",
+            "LOTUS CENTRAL DE DIST DE HIGIENICOS LTDA",
+            "TEXTIL BICOLOR INDUSTRIA E COM DE CONFEC",
+            "R DR JOAO ALTES DE LIMA",
+            "VENDEDOR: VIVIANE",
             "EMERSON SILVA GUEDES",
             "contato@roguelimp.com.br",
             "05976103804",
@@ -1345,6 +1821,53 @@ public class NFeTxtConverterTest
             "1122911633",
             "11997556655",
             "luizlopes.nfe@uol.com.br",
+            "SOC.COM.MAT.P/CONSTR.LUIZ LOPES LTDA",
+            "108680702113",
+            "RUA MAJOR OTAVIANO",
+            "ROD. RAPOSO TAVARES KM-18 5",
+            "100441666118",
+            "60561719000557",
+            "COMERCIO DE PRODUTOS AGROVETERINARIOS LTDA",
+            "CASA DO FAZENDEIRO",
+            "00131341545",
+            "36912368000173",
+            "AV MATO GROSSO 201",
+            "6634381569",
+            "JOSE ADELMO DE JESUS",
+            "45184984100",
+            "RUA JOSE ANDRE VAJAO",
+            "VOL IMPORTS - MG",
+            "0032376020050",
+            "30999720000173",
+            "AV DOUTOR ROFLES CECILIO",
+            "3432124039",
+            "MILLS PESADOS LOCACAO SERVICOS E LOGISTICA SA",
+            "671666958115",
+            "gestaonotas.pesados@mills.com.br",
+            "01633840003099",
+            "R FIORAVANTE MANCINO",
+            "1154306482",
+            "CLIENTE RETIRA",
+            "DHIEFFERSON FELIPE RENDE SANTOS",
+            "5500021454",
+            "SN/013244",
+            "FROTA 1417",
+            "M. L. SCHWERTNER PLANTAS",
+            "MLS PLANTAS",
+            "1280058657",
+            "28508340000147",
+            "PRIMEIRO DE MAIO",
+            "51997012925",
+            "PAULO JAIR HOLDEFER",
+            "05579449020",
+            "2131010863",
+            "R BOA VISTA",
+            "5135624755",
+            "JASMIM PLANTAS ORNAMENTAIS",
+            "00001280019163",
+            "R RS 122 KM 09",
+            "87215802000105",
+            "68711275",
             "VENDEDOR: 0110 WAGNER",
             "AUTO VIDROS PRUDENTE",
             "562319803111",
@@ -1428,7 +1951,31 @@ public class NFeTxtConverterTest
             "103120939",
             "6232081448",
             "6232750800",
-            "420396)"
+            "420396)",
+            "ALTO DA BOA VISTA MATERIAS DE CONSTRUCAO LTDA",
+            "CENTERKASA",
+            "RUA JACINTO RAMOS",
+            "6235133655",
+            "58033)",
+            "TINTA LEINERTEX ACR FOSCA 18L AREIA",
+            "7898360090686",
+            "08561701000101",
+            "082853",
+            "739532",
+            "430893",
+            "526811",
+            "FS HOME SIGNS COMERCIO DE PLASTICOS LTDA",
+            "451219138113",
+            "65624784000174",
+            "RUA MARIO SAURIN",
+            "PARQUE DOS BURITIS",
+            "17991926177",
+            "ORION HOME DESIGN LTDA",
+            "191052997118",
+            "61182144000109",
+            "ESTRADA ARTUR FORNAZARI",
+            "LIMOEIRO",
+            "Referente Pedido Nr.: 828"
         };
 
         var pasta = Path.GetDirectoryName(CaminhoArquivo("novaVersao-nfe.txt"));
@@ -1508,6 +2055,52 @@ public class NFeTxtConverterTest
 
     private static string CaminhoArquivo(string nomeArquivo) =>
         Path.Combine(Environment.CurrentDirectory, @"NFe\Resources\Txt", nomeArquivo);
+
+    private static string NomesElementosFilhos(XmlNode elemento)
+    {
+        var nomes = new StringBuilder();
+        foreach (XmlNode filho in elemento.ChildNodes)
+        {
+            if (filho.NodeType != XmlNodeType.Element)
+            {
+                continue;
+            }
+            if (nomes.Length > 0)
+            {
+                nomes.Append(',');
+            }
+            nomes.Append(filho.LocalName);
+        }
+        return nomes.ToString();
+    }
+
+    private static void ValidarReferenciaProdutorItensEPagamentosDaNfe892(XmlDocument xml)
+    {
+        var referencia = xml.SelectSingleNode("//*[local-name()='ide']/*[local-name()='NFref']/*[local-name()='refNFP']");
+        Assert.NotNull(referencia);
+        Assert.Null(referencia.SelectSingleNode("*[local-name()='CNPJ']"));
+        Assert.Equal("11144477735", referencia.SelectSingleNode("*[local-name()='CPF']")?.InnerText);
+        Assert.Equal("1234567890", referencia.SelectSingleNode("*[local-name()='IE']")?.InnerText);
+        Assert.Equal("04", referencia.SelectSingleNode("*[local-name()='mod']")?.InnerText);
+        Assert.Equal("890", referencia.SelectSingleNode("*[local-name()='serie']")?.InnerText);
+        Assert.Equal("1", referencia.SelectSingleNode("*[local-name()='nNF']")?.InnerText);
+
+        Assert.Equal(6, xml.SelectNodes("//*[local-name()='det']").Count);
+        Assert.Equal(6, xml.SelectNodes("//*[local-name()='ICMSSN102']").Count);
+        Assert.Equal(6, xml.SelectNodes("//*[local-name()='ICMSSN102']/*[local-name()='orig' and text()='0']").Count);
+        Assert.Equal(6, xml.SelectNodes("//*[local-name()='ICMSSN102']/*[local-name()='CSOSN' and text()='102']").Count);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='IPI']/*[local-name()='CNPJProd']").Count);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='prod']/*[local-name()='indEscala']").Count);
+        Assert.Equal("4700.00", xml.SelectSingleNode("//*[local-name()='ICMSTot']/*[local-name()='vNF']")?.InnerText);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='cobr']/*[local-name()='fat']").Count);
+
+        var pagamentos = xml.SelectNodes("//*[local-name()='pag']/*[local-name()='detPag']");
+        Assert.Equal(1, pagamentos.Count);
+        Assert.Equal(1, xml.SelectNodes("//*[local-name()='detPag']/*[local-name()='tPag' and text()='90']").Count);
+        Assert.Equal(1, xml.SelectNodes("//*[local-name()='detPag']/*[local-name()='vPag' and text()='0.00']").Count);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='detPag']/*[local-name()='indPag']").Count);
+        Assert.Equal(0, xml.SelectNodes("//*[local-name()='detPag']/*[local-name()='xPag']").Count);
+    }
 
     private static void ValidarFalhaDeDigitoVerificador(string[] linhas)
     {

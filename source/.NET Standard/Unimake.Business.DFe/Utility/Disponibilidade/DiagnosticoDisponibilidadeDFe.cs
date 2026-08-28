@@ -27,13 +27,15 @@ namespace Unimake.Business.DFe.Utility
 #endif
     public class DiagnosticoDisponibilidadeDFe
     {
-        /// <summary>Conjunto dos quatro documentos atendidos pela primeira versão do motor.</summary>
-        private static readonly HashSet<TipoDFe> DocumentosSuportados = new HashSet<TipoDFe>
+        /// <summary>Documentos para os quais o motor pode executar a consulta explícita de StatusServico.</summary>
+        /// <remarks>A telemetria passiva possui uma lista própria e mais ampla, pois não realiza chamadas adicionais.</remarks>
+        private static readonly HashSet<TipoDFe> DocumentosComConsultaStatus = new HashSet<TipoDFe>
         {
             TipoDFe.NFe,
             TipoDFe.NFCe,
             TipoDFe.CTe,
-            TipoDFe.MDFe
+            TipoDFe.MDFe,
+            TipoDFe.NF3e
         };
         /// <summary>Configuração do contribuinte, documento, UF, ambiente e certificado.</summary>
         private readonly Configuracao configuracao;
@@ -74,7 +76,8 @@ namespace Unimake.Business.DFe.Utility
         }
 
         /// <summary>
-        /// Obtém as evidências passivas e executa DNS, TCP e TLS com cache, sem enviar mensagem fiscal.
+        /// Obtém as evidências passivas e, quando o documento possui uma estratégia de status registrada,
+        /// executa DNS, TCP e TLS com cache, sem enviar mensagem fiscal.
         /// </summary>
         /// <returns>Resultado consolidado.</returns>
         public ResultadoDiagnosticoDisponibilidade Executar()
@@ -82,7 +85,7 @@ namespace Unimake.Business.DFe.Utility
             opcoes.Validar();
             var resultado = CriarResultado();
             var cronometro = Stopwatch.StartNew();
-            if (!DocumentoSuportado())
+            if (!DocumentoComTelemetria())
             {
                 resultado.Sondas.Add(CriarNaoAplicavel("Diagnostico",
                     "O documento ainda não possui uma estratégia de diagnóstico registrada."));
@@ -90,6 +93,12 @@ namespace Unimake.Business.DFe.Utility
                 return resultado;
             }
             AdicionarTelemetria(resultado);
+
+            if (!DocumentoComConsultaStatus())
+            {
+                Finalizar(resultado, cronometro);
+                return resultado;
+            }
 
             Configuracao configuracaoStatus;
             string endpoint;
@@ -133,7 +142,7 @@ namespace Unimake.Business.DFe.Utility
             opcoes.Validar();
             var resultado = CriarResultado();
             var cronometro = Stopwatch.StartNew();
-            if (!DocumentoSuportado())
+            if (!DocumentoComTelemetria())
             {
                 resultado.Sondas.Add(CriarNaoAplicavel("Diagnostico",
                     "O documento ainda não possui uma estratégia de diagnóstico registrada."));
@@ -160,6 +169,16 @@ namespace Unimake.Business.DFe.Utility
                 {
                     cronometro.Stop();
                     resultado.DuracaoTotalMilissegundos += cronometro.ElapsedMilliseconds;
+                    return resultado;
+                }
+
+                if (!DocumentoComConsultaStatus())
+                {
+                    resultado.Sondas.Add(CriarNaoAplicavel("StatusServico",
+                        "A telemetria passiva está disponível, mas a consulta explícita de status ainda não foi registrada para este documento."));
+                    cronometro.Stop();
+                    resultado.DuracaoTotalMilissegundos += cronometro.ElapsedMilliseconds;
+                    AgregadorDisponibilidade.Agregar(resultado);
                     return resultado;
                 }
 
@@ -339,15 +358,20 @@ namespace Unimake.Business.DFe.Utility
             return copia;
         }
 
-        /// <summary>Informa se existe estratégia de diagnóstico para o documento configurado.</summary>
-        /// <returns><see langword="true"/> para NFe, NFCe, CTe e MDFe.</returns>
-        private bool DocumentoSuportado() => DocumentosSuportados.Contains(configuracao.TipoDFe);
+        /// <summary>Informa se as operações reais do documento podem alimentar a telemetria passiva.</summary>
+        /// <returns><see langword="true"/> quando o documento é observado pelo transporte central.</returns>
+        private bool DocumentoComTelemetria() => TelemetriaDisponibilidade.SuportaDocumento(configuracao.TipoDFe);
+
+        /// <summary>Informa se existe estratégia segura de consulta explícita de StatusServico.</summary>
+        /// <returns><see langword="true"/> somente para documentos cujo XML, versão e endpoint já foram registrados.</returns>
+        private bool DocumentoComConsultaStatus() => DocumentosComConsultaStatus.Contains(configuracao.TipoDFe);
 
         /// <summary>Escolhe a versão de schema usada pela consulta de status do documento.</summary>
         /// <returns>Versão fiscal compatível com a configuração atual.</returns>
         private string ObterVersaoStatus()
         {
             if (configuracao.TipoDFe == TipoDFe.MDFe) return "3.00";
+            if (configuracao.TipoDFe == TipoDFe.NF3e) return "1.00";
             if (configuracao.TipoDFe == TipoDFe.CTe) return string.IsNullOrWhiteSpace(configuracao.SchemaVersao) ? "4.00" : configuracao.SchemaVersao;
             return "4.00";
         }
@@ -432,6 +456,12 @@ namespace Unimake.Business.DFe.Utility
                     return new Xml.MDFe.ConsStatServMDFe
                     {
                         Versao = "3.00",
+                        TpAmb = configuracaoStatus.TipoAmbiente
+                    }.GerarXML();
+                case TipoDFe.NF3e:
+                    return new Xml.NF3e.ConsStatServNF3e
+                    {
+                        Versao = "1.00",
                         TpAmb = configuracaoStatus.TipoAmbiente
                     }.GerarXML();
                 default:
@@ -655,7 +685,13 @@ namespace Unimake.Business.DFe.Utility
                 catch (Exception ex)
                 {
                     cronometroTcp.Stop();
-                    var tipo = ex is TimeoutException ? TipoFalhaDisponibilidade.Timeout : TipoFalhaDisponibilidade.Conexao;
+                    var tipo = ex is TimeoutException
+                        ? TipoFalhaDisponibilidade.Timeout
+                        : ClassificadorDisponibilidade.ClassificarSocketException(ex);
+                    if (tipo == TipoFalhaDisponibilidade.Desconhecida)
+                    {
+                        tipo = TipoFalhaDisponibilidade.Conexao;
+                    }
                     resultados.Add(Falha("TCP", endpoint, tipo, ex, cronometroTcp.ElapsedMilliseconds));
                     return resultados;
                 }

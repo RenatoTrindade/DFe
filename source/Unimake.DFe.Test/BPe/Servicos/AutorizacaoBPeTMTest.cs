@@ -33,6 +33,6 @@ namespace Unimake.DFe.Test.BPe.Servicos
             Assert.Equal((int)bpeObjeto.InfBPe.Ide.CUF, configuracao.CodigoUF);
             Assert.Equal(bpeObjeto.InfBPe.Ide.TpAmb, configuracao.TipoAmbiente);
             Assert.IsType<RetBPe>(autorizacao.Result);
-        }
+        }        
     }
 }

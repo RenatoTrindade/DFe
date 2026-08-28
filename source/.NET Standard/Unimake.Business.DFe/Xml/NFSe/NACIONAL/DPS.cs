@@ -1014,6 +1014,11 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL
         [XmlElement("trib")]
         public Trib Trib { get; set; }
 
+        #region Should Serialize
+
+        public bool ShouldSerializeVDedRed() => VDedRed?.TemOpcaoInformada() == true;
+
+        #endregion Should Serialize
     }
 
 #if INTEROP
@@ -1110,6 +1115,36 @@ namespace Unimake.Business.DFe.Xml.NFSe.NACIONAL
 
         [XmlElement("documentos")]
         public Documentos Documentos { get; set; }
+
+        #region Should Serialize
+
+        private bool HasDocumentos() => Documentos?.DocDedRed?.Count > 0;
+
+        internal bool TemOpcaoInformada() => PDR > 0 || VDR > 0 || HasDocumentos();
+
+        private void ValidarPreenchimento()
+        {
+            if (PDR > 0 && VDR > 0 && !HasDocumentos())
+            {
+                throw new InvalidOperationException("O grupo <vDedRed> da NFS-e Nacional aceita somente uma opção entre <pDR>, <vDR> ou <documentos>. Não informe <pDR> e <vDR> simultaneamente.");
+            }
+        }
+
+        public bool ShouldSerializePDRField()
+        {
+            ValidarPreenchimento();
+            return PDR > 0 && VDR <= 0 && !HasDocumentos();
+        }
+
+        public bool ShouldSerializeVDRField()
+        {
+            ValidarPreenchimento();
+            return VDR > 0 && PDR <= 0 && !HasDocumentos();
+        }
+
+        public bool ShouldSerializeDocumentos() => HasDocumentos();
+
+        #endregion Should Serialize
     }
 
 #if INTEROP
